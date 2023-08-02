@@ -1,5 +1,7 @@
 'use strict'
 
+const { log } = require("console");
+
 class Collection {
     constructor(model) {
         this.model = model
@@ -34,6 +36,27 @@ class Collection {
         const found = await this.get(id)
         const deleted = await this.model.destroy({ where: { id } })
         return `this user has been deleted ${found.id}`;
+    }
+
+    async getRelation(id, model) {
+        const records = await this.model.findOne({
+            where: { id },
+            include: model
+        });
+        return records;
+    }
+
+    async getManyRelation(id, model, model2, id2) {
+        const records = await this.model.findOne({
+            where: { id },
+            include: model
+        });
+        const records2 = await this.model2.findOne({
+            where: { id2 },
+            include: model
+        });
+
+        return { records, records2 };
     }
 
 }

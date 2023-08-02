@@ -1,15 +1,12 @@
 const { newSequlize, DataTypes } = require("..")
 
-
-
-
 const postModel = (newSequlize , DataTypes) => newSequlize.define('posts' , {
           imgurl:{
                type : DataTypes.STRING,
                allowNull : false
           },
           userid :{
-               type : DataTypes.STRING
+               type : DataTypes.INTEGER
           },
           title:{
                type : DataTypes.STRING
@@ -22,7 +19,5 @@ const postModel = (newSequlize , DataTypes) => newSequlize.define('posts' , {
           }
      })
      
-
-
 
 module.exports = postModel

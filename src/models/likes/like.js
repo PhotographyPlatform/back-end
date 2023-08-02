@@ -1,11 +1,11 @@
 
-const followerModel = (newSequlize , DataTypes) => newSequlize.define('follower' , {
+const likeModel = (newSequlize , DataTypes) => newSequlize.define('like' , {
           postid:{
-               type : DataTypes.INT,
+               type : DataTypes.INTEGER,
                uniqe : true
           },
           userid:{
-               type : DataTypes.INT,
+               type: DataTypes.INTEGER,
                uniqe : true
           }
      })
@@ -13,4 +13,4 @@ const followerModel = (newSequlize , DataTypes) => newSequlize.define('follower'
 
 
 
-module.exports = followerModel
+module.exports = likeModel;
