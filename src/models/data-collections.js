@@ -20,6 +20,10 @@ class Collection {
         return add;
     }
 
+    // create(record) {
+    //     return this.model.create(record);
+    //   }
+
     async update(id, obj) {
         const updated = await this.model.update(obj, { where: { id } })
         const newRecord = await this.get(id)

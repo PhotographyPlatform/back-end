@@ -3,11 +3,14 @@ require('dotenv').config()
 
 const PORT = process.env.PORT || 3005
 
-const sequlize = require('./src/models/')
+const {newSequlize} = require('./src/models/')
 const { start, app } = require('./src/server')
 
-sequlize.sync().then(() => {
+newSequlize.sync().then(() => {
     start(PORT)
-}).catch((e) => {
+})
+.catch((e) => {
     console.log('error massage:', e.message);
 })
+
+// {force : true}
