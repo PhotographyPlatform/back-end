@@ -48,5 +48,8 @@ module.exports = {
      newCOmCOll,
      newPostCOll,
      newUserCOll,
-     likeCollection
+     likeCollection,
+     post,
+     comment,
+     like
 }  

@@ -114,6 +114,19 @@ async function handlePostComment(req, res) {
 
 
 
+v1Route.get('/getall/:module/:id', allData)
+
+async function allData(req, res) {
+     const id = req.params.id;
+     const model = req.params.module
+     const theRecord = await modules[model].readAll(id, modules.post, modules.comment, modules.like);
+     res.status(200).json(theRecord)
+}
+
+
+
+
+
 
 
 

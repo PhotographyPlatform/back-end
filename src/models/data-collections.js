@@ -59,6 +59,29 @@ class Collection {
         return { records, records2 };
     }
 
+    async readAll(id, model, model2, model3) {
+        const records = await this.model.findOne({
+            where: { id },
+            include: [
+                {
+                    model: model,
+                    include: [
+                        {
+                            model: model2,
+
+                        },
+                        {
+                            model: model3,
+                        },
+
+                    ],
+
+                },
+            ]
+        });
+        return records;
+    }
+
 }
 
 module.exports = Collection;
