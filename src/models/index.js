@@ -43,6 +43,9 @@ const newPostCOll = new Collection(post)
 const newUserCOll = new Collection(user)
 const likeCollection = new Collection(like)
 module.exports = {
+     post,
+     like,
+     comment,
      newSequlize,
      DataTypes,
      newCOmCOll,

@@ -98,35 +98,23 @@ async function handlePostComment(req, res) {
      res.status(200).json(post)
 }
 
-v1Route.get('/getManyRelation/:module/:module2/:id', handlePostComment)
-
-async function handlePostComment(req, res) {
+v1Route.get('/getManyRelation/:id/:module/:module2', getManyRelation)
+async function getManyRelation(req, res) {
+     const collection = req.params.collection;
      const model = req.params.module;
      const model2 = req.params.module2;
-     console.log("-------------------------------");
-     console.log(model)
-     // console.log(model);
      const id = req.params.id;
-     const post = await modules[model2].getRelation(id, model);
+     const post = await modules.newPostCOll.getManyRelation(id, model, model2);
      res.status(200).json(post)
 }
 
-
-
-
-
-
-
-//  router.param('model', (req, res, next) => {
-//      const modelName = req.params.model;
-//      if (dataModules[modelName]) {
-//          req.model = dataModules[modelName];
-//          next();
-//      } else {
-//          next('Invalid Model');
-//      }
-//  });
-
+v1Route.get('/getall/:module/:id', allData)
+async function allData(req, res) {
+     const id = req.params.id;
+     const model = req.params.module
+     const theRecord = await modules[model].readAll(id, modules.post, modules.comment, modules.like);
+     res.status(200).json(theRecord)
+}
 module.exports = v1Route
 
 
