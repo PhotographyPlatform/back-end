@@ -1,22 +1,14 @@
-const { newSequlize , DataTypes} = require("..")
-
-
-
-const commentModel = (newSequlize , DataTypes) => {
-
+const commentModel = (newSequlize , DataTypes) => 
      newSequlize.define('comments' , {
           contant : {
                type : DataTypes.STRING,
                allowNull : false
           },
           userid :{
-               type : DataTypes.STRING
+               type : DataTypes.INTEGER
           },
-          Postid:{
-               type : DataTypes.STRING
+          postid:{
+               type: DataTypes.INTEGER
           }
      })
-}
-
-
 module.exports = commentModel

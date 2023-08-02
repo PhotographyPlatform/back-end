@@ -15,7 +15,8 @@ app.use(express.json())
 app.use(v1Route)
 
 // controller
-app.get('/', bearer ,(req, res) => {
+//bearer
+app.get('/', (req, res) => {
     res.status(200).send('welcome to home page')
 })
 
