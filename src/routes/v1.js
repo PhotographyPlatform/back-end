@@ -85,9 +85,6 @@ v1Route.get('/getRelation/:module/:module2/:id', handlePostComment)
 async function handlePostComment(req, res) {
      const model = req.params.module;
      const model2 = req.params.module2;
-     console.log("-------------------------------");
-     console.log(model)
-     // console.log(model);
      const id = req.params.id;
      const post = await modules[model2].getRelation(id, model);
      res.status(200).json(post)
