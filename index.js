@@ -12,4 +12,3 @@ newSequlize.sync().then(() => {
     console.log('error massage:', e.message);
 })
 
-// {force : true}
