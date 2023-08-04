@@ -36,64 +36,65 @@ v1Route.post('/login', login, async (req, res) => {
 
 
 
-
-v1Route.get('/:module', async (req, res) => {
+v1Route.get('/v1/:module', async (req, res) => {
      const mod = req.params.module
      const data = await modules[mod].get()
      res.status(200).send(data)
 })
 
-v1Route.get('/:module/:id', async (req, res) => {
+v1Route.get('/v1/:module/:id', async (req, res) => {
      const mod = req.params.module
      const id = req.params.id
      const data = await modules[mod].get(id)
      res.status(200).json({
-          message: 'done',
+          message: `done ${mod}`,
           data
      })
 })
 
-v1Route.post('/:module', async (req, res) => {
+v1Route.post('/v1/:module', async (req, res) => {
      const mod = req.params.module
      const obj = req.body
      const data = await modules[mod].create(obj)
      res.status(201).json({
-          message: 'done',
+          message: `done ${mod}`,
           data
      })
 })
-v1Route.put('/:module/:id', async (req, res) => {
+v1Route.put('/v1/:module/:id', async (req, res) => {
      const mod = req.params.module
      const obj = req.body
      const id = req.params.id
 
      const data = await modules[mod].update(id, obj)
      res.status(203).json({
-          message: 'done',
+          message: `done ${mod}`,
           data
      })
 })
 
-v1Route.delete('/:module/:id', async (req, res) => {
+v1Route.delete('/v1/:module/:id', async (req, res) => {
      const mod = req.params.module
      const id = req.params.id
 
      const data = await modules[mod].delete(id)
      res.status(204).json({
-          message: 'done',
+          message: `done ${mod}`,
           data
      })
 })
+
+
+
+// Relations Routes for post
 
 v1Route.get('/getRelation/:module/:module2/:id', handlePostComment)
 
 async function handlePostComment(req, res) {
      const model = req.params.module;
      const model2 = req.params.module2;
-     console.log("-------------------------------");
-     console.log(model)
-     // console.log(model);
      const id = req.params.id;
+
      const post = await modules[model2].getRelation(id, model);
      res.status(200).json(post)
 }
@@ -115,6 +116,56 @@ async function allData(req, res) {
      const theRecord = await modules[model].readAll(id, modules.post, modules.comment, modules.like);
      res.status(200).json(theRecord)
 }
+
+
+
+
+// Relations Routes for chat
+
+
+// v1Route.get('/send/:senderID/:reciverID', async (req, res) => {
+//      const reciverID = req.params.reciverID
+//      const senderID = req.params.senderID
+//      const data = await modules.newUserCOll.SendandRecieveMessage(senderID , reciverID)
+
+//      res.status(200).json({
+//           respones : data
+//      })
+// })
+
+
+
+
+// v1Route.get('/re/:id', async (req, res) => {
+//      // const mod = req.params.module
+//      const id = req.params.id
+//      const data = await modules.newUserCOll.RecieveMessage(id)
+//      res.status(200).json({
+//           // message: `done ${mod}`,
+//           respones : data
+//      })
+// })
+
+// v1Route.get('/mix/:id/:id2', async (req, res) => {
+//      // const mod = req.params.module
+//      const id = req.params.id
+//      const id2 = req.params.id2
+//      const data = await modules.newUserCOll.SendMessage(id)
+//      const data1 = await modules.newUserCOll.RecieveMessage(id2)
+//      res.status(200).json({
+//           // message: `done ${mod}`,
+//           data,
+//           data1
+//      })
+// })
+
+
+
+
+
+
+
+
 module.exports = v1Route
 
 
