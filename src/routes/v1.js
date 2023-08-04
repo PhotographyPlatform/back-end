@@ -2,8 +2,7 @@ const express = require('express')
 const modules = require('../models')
 const v1Route = express.Router()
 const login = require('../auth/models/authMiddleWare/login')
-
-
+const { newPostCOll } = require('../models/index')
 v1Route.get('/signup', (req, res) => {
      res.status(200).send('sign up page')
 })
@@ -16,7 +15,6 @@ v1Route.post('/signup', async (req, res) => {
           name: createUSer.username
      })
 })
-
 
 v1Route.get('/login', async (req, res) => {
 
@@ -36,7 +34,9 @@ v1Route.post('/login', login, async (req, res) => {
 
 
 
+
 v1Route.get('/v1/:module', async (req, res) => {
+
      const mod = req.params.module
      const data = await modules[mod].get()
      res.status(200).send(data)
@@ -120,6 +120,7 @@ async function allData(req, res) {
 
 
 
+
 // Relations Routes for chat
 
 
@@ -161,9 +162,31 @@ async function allData(req, res) {
 
 
 
+v1Route.get('/Followers/:module/:id', Followers)
+async function Followers(req, res) {
+     const id = req.params.id;
+     const type = req.params.type
+     const model = req.params.module
 
+     const theRecord = await modules[model].followers(id, modules.user);
+     res.status(200).json(theRecord)
+}
+v1Route.get('/Following/:module/:id', following)
+async function following(req, res) {
+     const id = req.params.id;
+     const type = req.params.type
+     const model = req.params.module
 
+     const theRecord = await modules[model].following(id, modules.user);
+     res.status(200).json(theRecord)
+}
 
+v1Route.get('/home/:module/:id', async (req, res) => {
+     const id = req.params.id;
+     const model = req.params.module
+     const theRecord = await modules[model].Feeds(id, newPostCOll.model);
+     res.status(200).json(theRecord)
+})
 
 
 module.exports = v1Route

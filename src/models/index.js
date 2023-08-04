@@ -7,6 +7,7 @@ const postModel = require('./post/post');
 const userModel = require('../auth/models/user.model')
 const likeModel = require('../models/likes/like');
 const chatModel = require('./message/message');
+const FollowersModel = require('./followers/follower')
 require('dotenv').config();
 
 const DB = process.env.NODE_ENV === 'test' ? 'sqlite:memory' : process.env.DATABASE_URL
@@ -18,6 +19,7 @@ const post = postModel(newSequlize, DataTypes)
 const comment = commentModel(newSequlize, DataTypes);
 const like = likeModel(newSequlize, DataTypes);
 const chat = chatModel(newSequlize , DataTypes)
+const Followers = FollowersModel(newSequlize, DataTypes)
 
 
 
@@ -57,14 +59,30 @@ chat.belongsTo(user, { foreignKey: 'receiverId', as: 'receiver' });
 
 
 
+user.belongsToMany(user, {
+     as: 'Followers',
+     through: Followers,
+     foreignKey: 'following_id',
+     otherKey: 'me_id'
+});
+
+user.belongsToMany(user, {
+     as: 'Following',
+     through: Followers,
+     foreignKey: 'me_id',
+     otherKey: 'following_id'
+});
+
+Followers.belongsTo(user, { foreignKey: 'following_id', as: 'FollowerUser' });
+Followers.belongsTo(user, { foreignKey: 'me_id', as: 'FollowedUser' });
+
 
 const newCOmCOll = new Collection(comment)
 const newPostCOll = new Collection(post)
 const newUserCOll = new Collection(user)
 const likeCollection = new Collection(like)
 const chatCollection = new Collection(chat)
-
-
+const FollowersColl = new Collection(Followers)
 module.exports = {
      post,
      like,
@@ -76,4 +94,7 @@ module.exports = {
      newUserCOll,
      likeCollection,
      chatCollection
+     FollowersColl,
+     Followers,
+     user
 }  
