@@ -16,7 +16,6 @@ app.use(cors())
 app.use(logger)
 
 
-
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
@@ -45,7 +44,11 @@ app.use(followRoute);
 
 // controller
 app.get('/', (req, res) => {
+try{
     res.status(200).send('welcome to home page')
+} catch (err) {
+    next(err)
+}
 })
 
 // error handler

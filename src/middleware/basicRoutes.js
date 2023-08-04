@@ -84,17 +84,25 @@ async function handleGetAllPostUser(req, res, next) {
     }
 }
 async function handleGetAllPostData(req, res) {
+    try {
     const id = req.params.Postid;
     const post = await modules.newPostCOll.getManyRelation(id, modules.like, modules.comment);
-    res.status(200).json(post)
+        res.status(200).json(post)
+    } catch (err) {
+        next(err)
+    }
 }
 
 async function handleGetRelation(req, res) {
+try{
     const model = req.params.module;
     const collection = req.params.collection;
     const id = req.params.idCollection;
     const post = await modules[collection].getRelation(id, model);
     res.status(200).json(post)
+} catch (err) {
+    next(err)
+}
 }
 
 module.exports= {
