@@ -1,8 +1,8 @@
 'use strict'
 const base = require('base-64')
 const bcrypt = require('bcrypt')
-const { newUserCOll, newSequlize, DataTypes } = require('../../../models')
-const userModel = require('../user.model')
+const { newUserCOll, newSequlize, DataTypes } = require('../../models')
+const userModel = require('../models/user.model')
 
 let user = userModel(newSequlize , DataTypes)
 

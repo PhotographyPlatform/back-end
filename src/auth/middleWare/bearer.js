@@ -1,6 +1,6 @@
 const jwt = require ('jsonwebtoken')
-const { newSequlize, DataTypes } = require('../../../models')
-const userModel = require('../user.model')
+const { newSequlize, DataTypes } = require('../../models')
+const userModel = require("../models/user.model")
 let user = userModel(newSequlize , DataTypes)
 
 module.exports = async(req , res , next) =>{
