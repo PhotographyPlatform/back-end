@@ -40,12 +40,6 @@ like.belongsTo(post, { foreignKey: 'postid', targetKey: 'id' })
 // // |user| one to many |like| 
 user.hasMany(like, { foreignKey: 'userid', sourceKey: 'id' })
 like.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' })
-// // user has many messages
-// user.hasMany(chat, {foreignKey : 'senderid' , sourceKey : 'id'})
-// chat.belongsTo(user, {foreignKey : 'senderid' , targetKey : 'id'})
-// // // user has many messages
-// user.hasMany(chat, {foreignKey : 'receiverid' , sourceKey : 'id'})
-// chat.belongsTo(user, {foreignKey : 'receiverid' , targetKey : 'id'})
 
 // ------------------------------------------------------------------------------------
 // A user can send multiple messages (one-to-many relationship)
@@ -58,7 +52,7 @@ chat.belongsTo(user, { foreignKey: 'senderId', as: 'sender' });
 chat.belongsTo(user, { foreignKey: 'receiverId', as: 'receiver' });
 
 
-
+// Follwo Relations
 user.belongsToMany(user, {
      as: 'Followers',
      through: Followers,

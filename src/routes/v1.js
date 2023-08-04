@@ -1,88 +1,28 @@
 const express = require('express')
 const modules = require('../models')
 const v1Route = express.Router()
-const login = require('../auth/models/authMiddleWare/login')
+const middleware = require('../middleware/basicRoutes');
+
 const { newPostCOll } = require('../models/index')
-v1Route.get('/signup', (req, res) => {
-     res.status(200).send('sign up page')
-})
-
-v1Route.post('/signup', async (req, res) => {
-     const obj = req.body
-     const createUSer = await modules.newUserCOll.create(obj)
-     res.status(201).json({
-          message: 'user created',
-          name: createUSer.username
-     })
-})
-
-v1Route.get('/login', async (req, res) => {
-
-     res.status(200).json({
-          message: 'user login page',
-     })
-})
-
-v1Route.post('/login', login, async (req, res) => {
-
-     res.status(200).json({
-          message: 'user created',
-          token: req.user.token
-
-     })
-})
 
 
+v1Route.param('model', (req, res, next) => {
+     const modelName = req.params.model;
+     if (modules[modelName]) {
+          req.model = modules[modelName];
+          req.modelName = modelName;
+          next();
+     } else {
+          next('Invalid Model');
+     }
+});
 
-
-v1Route.get('/v1/:module', async (req, res) => {
-
-     const mod = req.params.module
-     const data = await modules[mod].get()
-     res.status(200).send(data)
-})
-
-v1Route.get('/v1/:module/:id', async (req, res) => {
-     const mod = req.params.module
-     const id = req.params.id
-     const data = await modules[mod].get(id)
-     res.status(200).json({
-          message: `done ${mod}`,
-          data
-     })
-})
-
-v1Route.post('/v1/:module', async (req, res) => {
-     const mod = req.params.module
-     const obj = req.body
-     const data = await modules[mod].create(obj)
-     res.status(201).json({
-          message: `done ${mod}`,
-          data
-     })
-})
-v1Route.put('/v1/:module/:id', async (req, res) => {
-     const mod = req.params.module
-     const obj = req.body
-     const id = req.params.id
-
-     const data = await modules[mod].update(id, obj)
-     res.status(203).json({
-          message: `done ${mod}`,
-          data
-     })
-})
-
-v1Route.delete('/v1/:module/:id', async (req, res) => {
-     const mod = req.params.module
-     const id = req.params.id
-
-     const data = await modules[mod].delete(id)
-     res.status(204).json({
-          message: `done ${mod}`,
-          data
-     })
-})
+// Basic Routes
+v1Route.get('/v1/:model', middleware.handleGetOne);
+v1Route.get('/v1/:model/:id', middleware.handleGetAll);
+v1Route.post('/v1/:model', middleware.handleCreate);
+v1Route.put('/v1/:model/:id', middleware.handleUpdate);
+v1Route.delete('/v1/:model/:id', middleware.handleDelete);
 
 
 
@@ -116,10 +56,6 @@ async function allData(req, res) {
      const theRecord = await modules[model].readAll(id, modules.post, modules.comment, modules.like);
      res.status(200).json(theRecord)
 }
-
-
-
-
 
 // Relations Routes for chat
 
