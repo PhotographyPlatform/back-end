@@ -62,9 +62,7 @@ class Collection {
                         {
                             model: model3,
                         },
-
                     ],
-
                 },
             ]
         });

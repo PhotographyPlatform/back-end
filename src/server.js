@@ -8,10 +8,13 @@ const bearer = require("./auth/middleWare/bearer")
 const chatRoute = require('./routes/chat');
 const logger = require('./middleware/logger');
 const authRoutes = require('./auth/routes');
-
+const followRoute = require('./routes/follow');
+const erorr404 = require("./error-handlers/404")
+const erorr500 = require("./error-handlers/500")
 const app = express();
 app.use(cors())
 app.use(logger)
+
 
 
 const server = require('http').createServer(app)
@@ -19,54 +22,41 @@ const io = require('socket.io')(server)
 
 io.on('connection', socket => {
     console.log('connect to the main ', socket.id);
-
     socket.on('joinRoom', (message) => {
         const room = `room users ${message.receiverId} - ${message.senderId}`
-
         // socket.join(room);
         socket.join(room);
-
         console.log(room, ' joined');
     })
-
-
-
     socket.on('message', (data) => {
         const room = `room users ${data.receiverId} - ${data.senderId}`
-
         // socket.emit('sendRoom' , room)
-
         io.to(room).emit('test', data.content);
     });
-
-
 })
 
 
 // using in app
-
 app.use(express.json())
 app.use(v1Route)
 app.use(chatRoute)
 app.use(authRoutes)
+app.use(followRoute);
 
 // controller
 app.get('/', (req, res) => {
     res.status(200).send('welcome to home page')
 })
 
-
-
-
-
+// error handler
+app.use('*',erorr404);
+app.use(erorr500);
 // listing to the server
-
 function start(PORT) {
     server.listen(PORT, () => {
         console.log('running on port', PORT)
     })
 }
-
 module.exports = {
     start,
     server,
