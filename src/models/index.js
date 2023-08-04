@@ -18,7 +18,7 @@ const user = userModel(newSequlize, DataTypes);
 const post = postModel(newSequlize, DataTypes)
 const comment = commentModel(newSequlize, DataTypes);
 const like = likeModel(newSequlize, DataTypes);
-const chat = chatModel(newSequlize , DataTypes)
+const chat = chatModel(newSequlize, DataTypes)
 const Followers = FollowersModel(newSequlize, DataTypes)
 
 
@@ -93,7 +93,7 @@ module.exports = {
      newPostCOll,
      newUserCOll,
      likeCollection,
-     chatCollection
+     chatCollection,
      FollowersColl,
      Followers,
      user
