@@ -30,7 +30,7 @@ const userModel = (newSequlize , DataTypes) => newSequlize.define('users' , {
                type: DataTypes.BLOB('long')
           },
           gender:{
-               type : DataTypes.ENUM('male,female')
+               type : DataTypes.ENUM('male','female')
           }
 })
 

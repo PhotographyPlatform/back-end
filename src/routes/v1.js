@@ -18,6 +18,7 @@ v1Route.get('/v1/:model', middleware.handleGetOne);
 v1Route.get('/v1/:model/:id', middleware.handleGetAll);
 v1Route.post('/v1/:model', middleware.handleCreate);
 v1Route.put('/v1/:model/:id', middleware.handleUpdate);
+v1Route.patch('/v1/:model/:id', middleware.handlePatch);
 v1Route.delete('/v1/:model/:id', middleware.handleDelete);
 v1Route.get('/getallPostUser/:userid', middleware.handleGetAllPostUser);
 v1Route.get('/getAllPostData/:Postid', middleware.handleGetAllPostData)

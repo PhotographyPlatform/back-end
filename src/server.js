@@ -11,6 +11,7 @@ const authRoutes = require('./auth/routes');
 const followRoute = require('./routes/follow');
 const erorr404 = require("./error-handlers/404")
 const erorr500 = require("./error-handlers/500")
+const profileRoute = require("./routes/profile");
 const app = express();
 app.use(cors())
 app.use(logger)
@@ -41,7 +42,7 @@ app.use(v1Route)
 app.use(chatRoute)
 app.use(authRoutes)
 app.use(followRoute);
-
+app.use(profileRoute);
 // controller
 app.get('/', (req, res) => {
 try{
