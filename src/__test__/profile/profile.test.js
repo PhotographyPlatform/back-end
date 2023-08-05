@@ -15,9 +15,6 @@ beforeAll(async () => {
     await modules.FollowersColl.create({ "following_id": 1, "me_id": 2 })
     await modules.FollowersColl.create({ "following_id": 2, "me_id": 1 })
 })
-afterAll(async () => {
-    await newSequlize.drop();
-});
 
 
 describe('GET /profile/:userid', () => {
@@ -48,3 +45,6 @@ describe('GET /profile/:userid', () => {
     })
 
 })
+afterAll(async () => {
+    await newSequlize.drop();
+});
