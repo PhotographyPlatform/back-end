@@ -34,7 +34,7 @@ class Collection {
         return `this user has been deleted ${found.id}`;
     }
 
-    async getRelation(id, model,) {
+    async getRelation(id, model) {
         const records = await this.model.findOne({
             where: { id },
             include: model
@@ -60,7 +60,6 @@ class Collection {
                     include: [
                         {
                             model: model2,
-
                         },
                         {
                             model: model3,
@@ -79,6 +78,7 @@ class Collection {
         const user = records.Followers.map(ele => { return [{ id: ele.id, name: ele.username }] })
         return [{ userID: records.id, username: records.username, followers: user }]
     }
+
     async following(id, model) {
         const records = await this.model.findOne({
             where: { id },
@@ -109,15 +109,6 @@ class Collection {
         }
     }
 
-
-    // async SendandRecieveMessage(senderId){
-
-    //     const data = await this.model.findByPk(senderId, { include: 'sentMessages' })
-    //     const data2 = await this.model.findByPk(senderId, { include: 'receivedMessages' })
-
-    //     return {data , data2}
-    // }
-
     async SendandRecieveMessage(senderID, reciveId) {
 
         const sendData = await this.model.findByPk(senderID, { include: 'sentMessages' })
@@ -141,6 +132,17 @@ class Collection {
 
         const data = await this.model.findByPk(receiverId, { include: 'receivedMessages' })
         return data
+    }
+
+    async getUserPost(userid) {
+        const records = await this.model.findAll(
+            {
+                where: { userid },
+                include: ['comments', 'likes']
+            }
+            
+        );
+        return records;
     }
 }
 

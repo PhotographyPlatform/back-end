@@ -59,6 +59,22 @@ async function handleUpdate(req, res, next) {
     }
 }
 
+async function handlePatch(req, res, next) {
+    try {
+        const mod = req.model;
+        const obj = req.body;
+        const id = req.params.id;
+        const data = await mod.update(id, obj);
+        res.status(203).json({
+            message: req.modelName,
+            data
+        });
+    } catch (err) {
+        next(err);
+    }
+    
+}
+
 async function handleDelete(req, res, next) {
     try {
         const mod = req.model;
@@ -111,6 +127,7 @@ module.exports= {
     handleCreate,
     handleUpdate,
     handleDelete,
+    handlePatch,
     handleGetAllPostUser,
     handleGetAllPostData,
     handleGetRelation
