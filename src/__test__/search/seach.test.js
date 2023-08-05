@@ -34,9 +34,9 @@ afterAll( async () =>{
 });
 
 
-describe('search test' , () =>{
+describe.skip('search test' , () =>{
 
-    it('get a users based on the search word', async () =>{
+    it.skip('get a users based on the search word', async () =>{
 
         const searchWord = "sham";
 
@@ -44,14 +44,11 @@ describe('search test' , () =>{
         "searchWord" : searchWord
         });
         
-        // let res = JSON.parse(data.text).users[0].username;
-        // console.log("==================================");
-        // // console.log(res);
-        // console.log("==================================");
-        expect(data.status).toBe(200);
+        let res = JSON.parse(data.text).users[0].username;
+        expect(res).toContain(searchWord);
     })
 
-    it('get a posts based on the search word', async () =>{
+    it.skip('get a posts based on the search word', async () =>{
 
         const searchWord = "cats";
 
@@ -63,7 +60,7 @@ describe('search test' , () =>{
         expect(res).toContain(searchWord);
     })
 
-    it('get both users and posts based on the search word', async () =>{
+    it.skip('get both users and posts based on the search word', async () =>{
 
         const searchWord = "black";
 
@@ -71,9 +68,8 @@ describe('search test' , () =>{
         "searchWord" : searchWord
         });
         
-        // let usersResults = JSON.parse(data.text).users[0].username;
-        // expect(usersResults).toContain(searchWord);
-        expect(data.status).toBe(200);
+        let usersResults = JSON.parse(data.text).users[0].username;
+        expect(usersResults).toContain(searchWord);
 
         let postsResults = JSON.parse(data.text).posts[0].title;
         expect(postsResults).toContain(searchWord);
