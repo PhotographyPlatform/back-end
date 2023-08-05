@@ -4,6 +4,7 @@
 const express = require('express')
 const cors = require('cors');
 const v1Route = require('./routes/v1');
+const router = require('./routes/v2')
 const bearer = require("./auth/middleWare/bearer")
 const chatRoute = require('./routes/chat');
 const logger = require('./middleware/logger');
@@ -41,18 +42,19 @@ app.use(v1Route)
 app.use(chatRoute)
 app.use(authRoutes)
 app.use(followRoute);
+app.use(router)
 
 // controller
 app.get('/', (req, res) => {
-try{
-    res.status(200).send('welcome to home page')
-} catch (err) {
-    next(err)
-}
+    try {
+        res.status(200).send('welcome to home page')
+    } catch (err) {
+        next(err)
+    }
 })
 
 // error handler
-app.use('*',erorr404);
+app.use('*', erorr404);
 app.use(erorr500);
 // listing to the server
 function start(PORT) {

@@ -52,7 +52,7 @@ chat.belongsTo(user, { foreignKey: 'senderId', as: 'sender' });
 chat.belongsTo(user, { foreignKey: 'receiverId', as: 'receiver' });
 
 
-// Follwo Relations
+// Followo Relations
 user.belongsToMany(user, {
      as: 'Followers',
      through: Followers,
