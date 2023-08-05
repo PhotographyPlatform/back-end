@@ -1,12 +1,11 @@
-const { json } = require("sequelize");
+'use strict';
 const { newSequlize, newPostCOll } = require("../../models");
-const modules = require('../../models/index');
+const modules = require('../../models');
 const { app } = require("../../server");
 const supertest = require('supertest')
 const req = supertest(app)
 
-
-beforeAll(async () => {
+beforeAll(async connected => {
     await newSequlize.sync();
     await modules.newUserCOll.create({ username: 'hamza', password: "123", email: "moh@getMaxListeners.com" })
     await modules.newUserCOll.create({ username: 'sham', password: "123", email: "moh@getMaxListeners.com" })
@@ -14,10 +13,12 @@ beforeAll(async () => {
     await modules.bioCollection.create({ "contant": "welcome", userid: "1", })
     await modules.FollowersColl.create({ "following_id": 1, "me_id": 2 })
     await modules.FollowersColl.create({ "following_id": 2, "me_id": 1 })
+
+    connected();
 })
-afterAll(async ()=> {
+afterAll(async done => {
     await newSequlize.drop();
-    
+    done();
 });
 
 
