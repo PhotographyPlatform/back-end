@@ -14,7 +14,10 @@ class Collection {
             return findAll
         }
     }
-
+    async getEmail(email) {
+        const fineOne = await this.model.findOne({ where: { email } })
+        return fineOne
+    }
     async create(obj) {
         const add = await this.model.create(obj);
         return add;
@@ -115,27 +118,27 @@ class Collection {
     //     return {data , data2}
     // }
 
-    async SendandRecieveMessage(senderID , reciveId ){
+    async SendandRecieveMessage(senderID, reciveId) {
 
         const sendData = await this.model.findByPk(senderID, { include: 'sentMessages' })
         const resieveData = await this.model.findByPk(senderID, { include: 'receivedMessages' })
 
         // return {sendData : sendData.sentMessages.filter(ele => ele.receiverId == reciveId ) , resieveData : resieveData.receivedMessages.filter(ele => ele.senderId == senderID ) }
         return {
-            sendData : sendData.sentMessages.filter(ele => ele.receiverId == reciveId ) ,
-            resieveData : resieveData.receivedMessages.filter(ele => ele.receiverId  == senderID  && ele.senderId == reciveId )
-         }
+            sendData: sendData.sentMessages.filter(ele => ele.receiverId == reciveId),
+            resieveData: resieveData.receivedMessages.filter(ele => ele.receiverId == senderID && ele.senderId == reciveId)
+        }
     }
 
-    async SendMessage(senderId){
+    async SendMessage(senderId) {
 
         const data = await this.model.findByPk(senderId, { include: 'sentMessages' })
 
-        return data 
+        return data
     }
 
-    async RecieveMessage(receiverId){
-        
+    async RecieveMessage(receiverId) {
+
         const data = await this.model.findByPk(receiverId, { include: 'receivedMessages' })
         return data
     }
