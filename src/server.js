@@ -7,6 +7,7 @@ const v1Route = require('./routes/v1');
 const router = require('./routes/v2')
 const bearer = require("./auth/middleWare/bearer")
 const chatRoute = require('./routes/chat');
+const searchRoute = require('./routes/search');
 const logger = require('./middleware/logger');
 const authRoutes = require('./auth/routes');
 const followRoute = require('./routes/follow');
@@ -40,6 +41,7 @@ io.on('connection', socket => {
 app.use(express.json())
 app.use(v1Route)
 app.use(chatRoute)
+app.use(searchRoute);
 app.use(authRoutes)
 app.use(followRoute);
 app.use(router)
