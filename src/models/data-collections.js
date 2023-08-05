@@ -14,7 +14,10 @@ class Collection {
             return findAll
         }
     }
-
+    async getEmail(email) {
+        const fineOne = await this.model.findOne({ where: { email } })
+        return fineOne
+    }
     async create(obj) {
         const add = await this.model.create(obj);
         return add;
