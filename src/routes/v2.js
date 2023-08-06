@@ -6,9 +6,8 @@ const story = require('../middleware/stories')
 const isAuth = require('../auth/middleWare/bearer')
 const authHome = require('../middleware/authHome')
 const nonAuthHome = require('../middleware/nonAuthHome')
-const checkEmail = require('../middleware/restPass/restPass')
 const changePass = require('../middleware/restPass/changePass')
-const change = require('../middleware/nodemailer')
+const change = require('../middleware/restPass/nodemailer')
 
 // controller
 router.get('/v2/home', isAuth, authHome)
