@@ -7,11 +7,8 @@ const userModel = require('../auth/models/user.model')
 const likeModel = require('../models/likes/like');
 const chatModel = require('./message/message');
 const FollowersModel = require('./followers/follower')
-<<<<<<< HEAD
 const bioModel = require('./bio');
-=======
 const storyModel = require('./stories/story')
->>>>>>> origin/main
 require('dotenv').config();
 
 
@@ -24,12 +21,10 @@ const comment = commentModel(newSequlize, DataTypes);
 const like = likeModel(newSequlize, DataTypes);
 const chat = chatModel(newSequlize, DataTypes)
 const Followers = FollowersModel(newSequlize, DataTypes)
-<<<<<<< HEAD
 const bio = bioModel(newSequlize, DataTypes)
-=======
 const stories = storyModel(newSequlize, DataTypes)
 
->>>>>>> origin/main
+
 
 
 
@@ -96,11 +91,8 @@ const newUserCOll = new Collection(user)
 const likeCollection = new Collection(like)
 const chatCollection = new Collection(chat)
 const FollowersColl = new Collection(Followers)
-<<<<<<< HEAD
 const bioCollection = new Collection(bio)
-=======
 const StoriesColl = new Collection(stories)
->>>>>>> origin/main
 module.exports = {
      post,
      like,
@@ -115,11 +107,9 @@ module.exports = {
      FollowersColl,
      Followers,
      user,
-<<<<<<< HEAD
      bioCollection,
-     bio
-=======
+     bio,
      StoriesColl,
      stories
->>>>>>> origin/main
+
 }  
