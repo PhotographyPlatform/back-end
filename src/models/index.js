@@ -14,7 +14,17 @@ require('dotenv').config();
 
 
 const DB = process.env.NODE_ENV === 'test' ? 'sqlite:memory' : process.env.DATABASE_URL
-const newSequlize = new Sequelize(DB, {})
+const DATABASE_CONFIG = process.env.NODE_ENV === 'production' ? {
+     dialectOptions: {
+          ssl: {
+               require: true,
+               rejectUnauthorized: false,
+          }
+     }
+} : {};
+
+
+const newSequlize = new Sequelize(DB, DATABASE_CONFIG)
 const user = userModel(newSequlize, DataTypes);
 const post = postModel(newSequlize, DataTypes)
 const comment = commentModel(newSequlize, DataTypes);
@@ -66,7 +76,7 @@ bio.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' });
 
 
 
-// Followo Relations
+// Follow Relations
 user.belongsToMany(user, {
      as: 'Followers',
      through: Followers,

@@ -3,42 +3,37 @@
 // import { io } from 'socket.io-client';
 
 
- 
+
 
 // console.log('hello');
 
-const host = 'http://localhost:4001'
+const host = 'http://localhost:3001'
 const socket = io.connect(host, { transports: ['websocket'] });
 
-
-
-
-
-
-let btn = document.createElement('button')
+let btn = document.createElement('button');
 document.body.append(btn)
-btn.innerText = 'join'
+btn.innerText = 'sent'
 
 let input = document.querySelector('.input')
 
 const obj = {
-     content  : '',
-     receiverId : 1,
-     senderId : 3
+     content: '',
+     receiverId: 1,
+     senderId: 3
 }
 
-socket.emit('joinRoom' , obj)
+socket.emit('joinRoom', obj)
 
 
-btn.onclick = () =>{
-     obj.content  = input.value
-     socket.emit('message' ,obj)
+btn.onclick = () => {
+     obj.content = input.value
+     socket.emit('message', obj)
 }
 
 
-socket.on('test' , message =>{
+socket.on('test', message => {
      console.log(message);
 })
 
 
-socket.emit('test_1' , 'hello from the client side')
+socket.emit('test_1', 'hello from the client side')
