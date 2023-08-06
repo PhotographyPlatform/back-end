@@ -28,6 +28,7 @@ v1Route.get('/getRelation/:collection/:module/:idCollection', middleware.handleG
 
 
 
+
 module.exports = v1Route
 
 

@@ -15,7 +15,14 @@ const postModel = (newSequlize , DataTypes) => newSequlize.define('posts' , {
                type : DataTypes.STRING
           },
           category :{
-               type : DataTypes.ENUM('animal')
+               type : DataTypes.STRING,
+
+               set(category){
+                    const arr = JSON.stringify(category)
+                    this.setDataValue("category" , arr)
+
+                    console.log(JSON.parse("[\"animal\",\"summer\",\"black\"]"));
+               }
           }
      })
      
