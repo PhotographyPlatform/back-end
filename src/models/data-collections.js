@@ -51,6 +51,17 @@ class Collection {
         });
         return records1;
     }
+
+    async getAllManyRelation(model1, model2) {
+        const records1 = await this.model.findAll({
+            include: [model1, model2]
+
+        });
+        return records1;
+    }
+
+
+
     async readAll(id, model, model2, model3) {
         const records = await this.model.findOne({
             where: { id },
@@ -70,6 +81,8 @@ class Collection {
         });
         return records;
     }
+
+
     async followers(id, model) {
         const records = await this.model.findOne({
             where: { id },
@@ -79,6 +92,7 @@ class Collection {
         return [{ userID: records.id, username: records.username, followers: user }]
     }
 
+    
     async following(id, model) {
         const records = await this.model.findOne({
             where: { id },

@@ -12,8 +12,8 @@ const logger = require('./middleware/logger');
 const authRoutes = require('./auth/routes');
 const followRoute = require('./routes/follow');
 const erorr404 = require("./error-handlers/404")
-const erorr500 = require("./error-handlers/500")
-const profileRoute = require("./routes/profile");
+const erorr500 = require("./error-handlers/500");
+const postPageRoute = require('./routes/RequestPhotogrpher/post_page');
 const app = express();
 app.use(cors())
 app.use(logger)
@@ -30,10 +30,17 @@ io.on('connection', socket => {
         socket.join(room);
         console.log(room, ' joined');
     })
+    
     socket.on('message', (data) => {
         const room = `room users ${data.receiverId} - ${data.senderId}`
         // socket.emit('sendRoom' , room)
         io.to(room).emit('test', data.content);
+        socket.broadcast.to(room).emit('notificaton' , data.counter);
+
+        socket.on('applyRemove' , () =>{
+            data.counter = 0    
+            socket.broadcast.to(room).emit('removeCounter' , data.counter);
+        })
     });
 })
 
@@ -45,6 +52,8 @@ app.use(chatRoute)
 app.use(searchRoute);
 app.use(authRoutes)
 app.use(followRoute);
+app.use(postPageRoute);
+
 app.use(router)
 app.use(profileRoute);
 // controller
