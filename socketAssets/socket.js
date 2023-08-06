@@ -8,7 +8,7 @@ const socket = io.connect(host, { transports: ['websocket'] });
 
 let btn = document.createElement('button')
 document.body.append(btn)
-btn.innerText = 'join'
+btn.innerText = 'sent'
 
 let input = document.querySelector('.input')
 let counterEle = document.querySelector('.counter')
@@ -46,7 +46,7 @@ btn.onclick = () =>{
 }
 
 
-socket.on('test' , message =>{
+socket.on('test', message => {
      console.log(message);
 })
 
@@ -57,4 +57,4 @@ socket.on('notificaton' , message =>{
 })
 
 
-socket.emit('test_1' , 'hello from the client side')
+socket.emit('test_1', 'hello from the client side')
