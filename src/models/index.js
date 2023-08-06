@@ -7,7 +7,11 @@ const userModel = require('../auth/models/user.model')
 const likeModel = require('../models/likes/like');
 const chatModel = require('./message/message');
 const FollowersModel = require('./followers/follower')
+<<<<<<< HEAD
 const bioModel = require('./bio');
+=======
+const storyModel = require('./stories/story')
+>>>>>>> origin/main
 require('dotenv').config();
 
 
@@ -20,7 +24,12 @@ const comment = commentModel(newSequlize, DataTypes);
 const like = likeModel(newSequlize, DataTypes);
 const chat = chatModel(newSequlize, DataTypes)
 const Followers = FollowersModel(newSequlize, DataTypes)
+<<<<<<< HEAD
 const bio = bioModel(newSequlize, DataTypes)
+=======
+const stories = storyModel(newSequlize, DataTypes)
+
+>>>>>>> origin/main
 
 
 
@@ -40,7 +49,12 @@ like.belongsTo(post, { foreignKey: 'postid', targetKey: 'id' })
 // // |user| one to many |like| 
 user.hasMany(like, { foreignKey: 'userid', sourceKey: 'id' })
 like.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' })
-
+// user one to many to stories
+user.hasMany(stories, { foreignKey: 'userid', sourceKey: 'id' })
+stories.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' })
+// stories one to many to likes
+stories.hasMany(like, { foreignKey: 'storyID', sourceKey: 'id' })
+like.belongsTo(stories, { foreignKey: 'storyID', targetKey: 'id' })
 // ------------------------------------------------------------------------------------
 // A user can send multiple messages (one-to-many relationship)
 user.hasMany(chat, { foreignKey: 'senderId', as: 'sentMessages' });
@@ -82,7 +96,11 @@ const newUserCOll = new Collection(user)
 const likeCollection = new Collection(like)
 const chatCollection = new Collection(chat)
 const FollowersColl = new Collection(Followers)
+<<<<<<< HEAD
 const bioCollection = new Collection(bio)
+=======
+const StoriesColl = new Collection(stories)
+>>>>>>> origin/main
 module.exports = {
      post,
      like,
@@ -97,6 +115,11 @@ module.exports = {
      FollowersColl,
      Followers,
      user,
+<<<<<<< HEAD
      bioCollection,
      bio
+=======
+     StoriesColl,
+     stories
+>>>>>>> origin/main
 }  
