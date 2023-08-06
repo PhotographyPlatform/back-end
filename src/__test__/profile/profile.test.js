@@ -7,15 +7,14 @@ const req = supertest(app)
 
 beforeAll(async () => {
     await newSequlize.sync();
-    await modules.newUserCOll.create({ username: 'hamza', password: "123", email: "moh@getMaxListeners.com" })
-    await modules.newUserCOll.create({ username: 'sham', password: "123", email: "moh@getMaxListeners.com" })
-    await modules.newPostCOll.create({ imgurl: "moh@getMaxListeners.com", userid: "1", title: "nice photo" })
-    await modules.bioCollection.create({ "contant": "welcome", userid: "1", })
-    await modules.FollowersColl.create({ "following_id": 1, "me_id": 2 })
-    await modules.FollowersColl.create({ "following_id": 2, "me_id": 1 })
-
+    await modules.newUserCOll.create({ username: 'hamza', password: "123", email: "moh@getMaxListeners.com" });
+    await modules.newUserCOll.create({ username: 'sham', password: "123", email: "moh@getMaxListeners.com" });
+    await modules.newPostCOll.create({ imgurl: "moh@getMaxListeners.com", userid: "1", title: "nice photo" });
+    await modules.bioCollection.create({ "contant": "welcome", userid: "1", });
+    await modules.FollowersColl.create({ "following_id": 1, "me_id": 2 });
+    await modules.FollowersColl.create({ "following_id": 2, "me_id": 1 });
 })
-afterAll(async () => {
+afterAll(async ()=> {
     await newSequlize.drop();
 });
 

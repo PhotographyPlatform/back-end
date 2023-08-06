@@ -67,7 +67,7 @@ bio.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' });
 
 
 
-// Followo Relations
+// Follow Relations
 user.belongsToMany(user, {
      as: 'Followers',
      through: Followers,
