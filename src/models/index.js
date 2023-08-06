@@ -8,6 +8,7 @@ const userModel = require('../auth/models/user.model')
 const likeModel = require('../models/likes/like');
 const chatModel = require('./message/message');
 const FollowersModel = require('./followers/follower')
+const storyModel = require('./stories/story')
 require('dotenv').config();
 
 const DB = process.env.NODE_ENV === 'test' ? 'sqlite:memory' : process.env.DATABASE_URL
@@ -20,6 +21,7 @@ const comment = commentModel(newSequlize, DataTypes);
 const like = likeModel(newSequlize, DataTypes);
 const chat = chatModel(newSequlize, DataTypes)
 const Followers = FollowersModel(newSequlize, DataTypes)
+const stories = storyModel(newSequlize, DataTypes)
 
 
 
@@ -40,7 +42,12 @@ like.belongsTo(post, { foreignKey: 'postid', targetKey: 'id' })
 // // |user| one to many |like| 
 user.hasMany(like, { foreignKey: 'userid', sourceKey: 'id' })
 like.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' })
-
+// user one to many to stories
+user.hasMany(stories, { foreignKey: 'userid', sourceKey: 'id' })
+stories.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' })
+// stories one to many to likes
+stories.hasMany(like, { foreignKey: 'storyID', sourceKey: 'id' })
+like.belongsTo(stories, { foreignKey: 'storyID', targetKey: 'id' })
 // ------------------------------------------------------------------------------------
 // A user can send multiple messages (one-to-many relationship)
 user.hasMany(chat, { foreignKey: 'senderId', as: 'sentMessages' });
@@ -77,6 +84,7 @@ const newUserCOll = new Collection(user)
 const likeCollection = new Collection(like)
 const chatCollection = new Collection(chat)
 const FollowersColl = new Collection(Followers)
+const StoriesColl = new Collection(stories)
 module.exports = {
      post,
      like,
@@ -90,5 +98,7 @@ module.exports = {
      chatCollection,
      FollowersColl,
      Followers,
-     user
+     user,
+     StoriesColl,
+     stories
 }  
