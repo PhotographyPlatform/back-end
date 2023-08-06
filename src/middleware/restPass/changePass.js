@@ -7,7 +7,7 @@ module.exports = async (req, res, next) => {
     const newPass = body.newPassword;
     const confirm = body.confirmPass;
     if (newPass === confirm) {
-        const id = req.users.id
+        const id = req.params.id
         const user = await newUserCOll.get(id)
         if (user) {
             await user.update({ password: newPass });
