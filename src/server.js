@@ -14,6 +14,7 @@ const followRoute = require('./routes/follow');
 const erorr404 = require("./error-handlers/404")
 const erorr500 = require("./error-handlers/500");
 const postPageRoute = require('./routes/RequestPhotogrpher/post_page');
+const profileRoute = require('./routes/profile');
 const app = express();
 app.use(cors())
 app.use(logger)
@@ -26,21 +27,21 @@ io.on('connection', socket => {
     console.log('connect to the main ', socket.id);
     socket.on('joinRoom', (message) => {
         const room = `room users ${message.receiverId} - ${message.senderId}`
-        // socket.join(room);
         socket.join(room);
         console.log(room, ' joined');
     })
-    
+    let count = 0
     socket.on('message', (data) => {
         const room = `room users ${data.receiverId} - ${data.senderId}`
-        // socket.emit('sendRoom' , room)
         io.to(room).emit('test', data.content);
-        socket.broadcast.to(room).emit('notificaton' , data.counter);
 
-        socket.on('applyRemove' , () =>{
-            data.counter = 0    
-            socket.broadcast.to(room).emit('removeCounter' , data.counter);
+        socket.on('zero', () =>{
+            count = 0
         })
+
+        count++
+        socket.to(room).emit('notificaton' , count);
+
     });
 })
 
@@ -68,6 +69,8 @@ app.get('/', (req, res) => {
 // error handler
 app.use('*', erorr404);
 app.use(erorr500);
+
+
 // listing to the server
 function start(PORT) {
     server.listen(PORT, () => {

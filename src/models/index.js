@@ -12,7 +12,7 @@ const req_ph_comments = require('./R_PH_post/R_Ph_comment');
 const R_Ph_Likes_Model = require('./R_PH_post/R_Ph_Likes');
 
 
-const FollowersModel = require('./followers/follower')
+// const FollowersModel = require('./followers/follower')
 const bioModel = require('./bio');
 const storyModel = require('./stories/story')
 require('dotenv').config();

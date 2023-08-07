@@ -7,8 +7,8 @@ const req = supertest(app)
 
 beforeAll( async () =>{
     await newSequlize.sync()
-    await newUserCOll.create({username : 'hamza', password : "123"})
-    await newUserCOll.create({username : 'sham', password : "123"})
+    await newUserCOll.create({username : 'hamza', password : "123" , email : 'ehab@gmail.com'})
+    await newUserCOll.create({username : 'sham', password : "123", email : 'ehab@gmail.com'})
 })
 
 afterAll(async () =>{
