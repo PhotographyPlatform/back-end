@@ -13,22 +13,12 @@ let input = document.querySelector('.input')
 let counterEle = document.querySelector('.counter')
 
 
-const obj = {  
+const obj = {
      content  : '',
-     receiverId : 1,
-     senderId : 3,
+     receiverId : 3,
+     senderId : 1,
      counter : 0
 }
-
-counterEle.onclick = (e) =>{
-     counterEle.innerHTML = 0
-     socket.emit('zero')
-}
-
-socket.on('notificaton' , (count) =>{
-
-     counterEle.innerHTML = count
-})
 
 
 socket.emit('joinRoom' , obj)
@@ -40,6 +30,13 @@ btn.onclick = () =>{
 }
 
 
+socket.on('notificaton' , (count) =>{
+     counterEle.innerHTML = count
+     // socket.emit('zero')
+
+})
+
+
 
 socket.on('test', message => {
      console.log(message , 'message');
@@ -47,4 +44,10 @@ socket.on('test', message => {
 })
 
 
-socket.emit('test_1', 'hello from the client side')
+counterEle.onclick = (e) =>{
+     counterEle.innerHTML = 0
+     socket.emit('zero')
+}
+
+
+// socket.emit('test_1', 'hello from the client side')

@@ -1,5 +1,4 @@
 'use strict'
-
 // importing..
 const express = require('express')
 const cors = require('cors');
@@ -15,6 +14,8 @@ const erorr404 = require("./error-handlers/404")
 const erorr500 = require("./error-handlers/500");
 const postPageRoute = require('./routes/RequestPhotogrpher/post_page');
 const profileRoute = require('./routes/profile');
+const axios = require('axios');
+const multerRoute = require('./middleware/multer/multer');
 const app = express();
 app.use(cors())
 app.use(logger)
@@ -30,19 +31,36 @@ io.on('connection', socket => {
         socket.join(room);
         console.log(room, ' joined');
     })
+    // socket.on('message', (data) => {
+    //     const room = `room users ${data.receiverId} - ${data.senderId}`
+    //     io.to(room).emit('test', data.content);
+
+    //     socket.on('zero', () =>{
+    //         count = 0
+    //     })
+
+    //     count++
+    //     socket.to(room).emit('notificaton' , count);
+
+    // });
     let count = 0
-    socket.on('message', (data) => {
+    
+    socket.on('zero', () =>{
+        count = 0
+    })
+
+    socket.on('message', async (data) => {
         const room = `room users ${data.receiverId} - ${data.senderId}`
         io.to(room).emit('test', data.content);
 
-        socket.on('zero', () =>{
-            count = 0
-        })
+        const result = await axios.post(`http://localhost:4001/chat/${data.senderId}/${data.receiverId}`, data)
+            console.log(result.data);
 
         count++
         socket.to(room).emit('notificaton' , count);
 
     });
+
 })
 
 
@@ -57,6 +75,8 @@ app.use(postPageRoute);
 
 app.use(router)
 app.use(profileRoute);
+app.use(multerRoute);
+
 // controller
 app.get('/', (req, res) => {
     try {

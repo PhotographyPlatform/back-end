@@ -1,8 +1,12 @@
 'use strict'
 const data = require('../models/index')
 const jwt = require('jsonwebtoken')
+
+
+
 module.exports = async (req, res, next) => {
     const decode = await jwt.decode(req.token)
+    console.log(decode);
     const id = decode.userId
     console.log('this is id', id);
     const record = await data.newUserCOll.getRelation(id, data.stories)
