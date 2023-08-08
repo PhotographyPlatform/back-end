@@ -51,7 +51,7 @@ notificationName.on('connection', socket => {
     socket.on("comment", payload => {
 
         const commentEvent = `comment-${payload.userid}`;
-        notificationName.emit(commentEvent, payload)
+        notificationName.emit(commentEvent, payload);
     })
     socket.on("update", (payload => {
         notificationName.emit("update", payload);
