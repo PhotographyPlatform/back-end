@@ -2,7 +2,8 @@ const express = require('express')
 const modules = require('../models')
 const v1Route = express.Router()
 const middleware = require('../middleware/basicRoutes');
-const handlecomment = require('../middleware/comment')
+// const { handlecomment, handleFollowing } = require('../middleware/comment')
+const { handleComment, handleFollowing } = require('../middleware/comment')
 
 v1Route.param('model', (req, res, next) => {
      const modelName = req.params.model;
@@ -32,7 +33,9 @@ v1Route.get('/getAllPostData/:Postid', middleware.handleGetAllPostData)
 v1Route.get('/getRelation/:collection/:module/:idCollection', middleware.handleGetRelation)
 
 // comment
-v1Route.post('/comment', handlecomment);
+v1Route.post('/comment', handleComment);
+v1Route.post('/follow', handleFollowing)
+
 
 // v1Route.get('/Notification', middleware.handleNotification);
 

@@ -7,7 +7,7 @@ const io = require('socket.io-client');
 
 require('dotenv').config();
 const port = process.env.PORT || 5000;
-const nameSpacehost = `http://localhost:3007/notification`;
+const nameSpacehost = `http://localhost:${port}/notification`;
 const nameSpaceSocket = io.connect(nameSpacehost);
 notifiRoute.get('/notification/:userid', async (req, res, next) => {
     try {
@@ -45,10 +45,10 @@ notifiRoute.get('/notification/:userid', async (req, res, next) => {
 
 
 async function updateRead(payload) {
-    
-        console.log(payload.id)
-        const res = await modules.notificationCollection.update(payload.object.id, { read: true });
-        return "Updated successfully"
+
+    console.log(payload.id)
+    const res = await modules.notificationCollection.update(payload.object.id, { read: true });
+    return "Updated successfully"
 }
 
 
