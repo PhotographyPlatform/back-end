@@ -10,13 +10,10 @@ const FollowersModel = require('./followers/follower');
 const R_PH_Post_Model = require('./R_PH_post/R_Ph_Post');
 const req_ph_comments = require('./R_PH_post/R_Ph_comment');
 const R_Ph_Likes_Model = require('./R_PH_post/R_Ph_Likes');
-
-
-const FollowersModel = require('./followers/follower')
+const notificationModel = require('./notifications')
 const bioModel = require('./bio');
 const storyModel = require('./stories/story')
 require('dotenv').config();
-
 
 
 const DB = process.env.NODE_ENV === 'test' ? 'sqlite:memory' : process.env.DATABASE_URL
@@ -42,7 +39,7 @@ const req_ph_comment = req_ph_comments(newSequlize, DataTypes)
 const R_Ph_Likes = R_Ph_Likes_Model(newSequlize, DataTypes)
 const bio = bioModel(newSequlize, DataTypes)
 const stories = storyModel(newSequlize, DataTypes)
-
+const notification = notificationModel(newSequlize, DataTypes);
 
 
 
@@ -138,9 +135,10 @@ const FollowersColl = new Collection(Followers)
 const R_PH_PostColl = new Collection(R_PH_Post)
 const req_ph_commentsColl = new Collection(req_ph_comment)
 const R_Ph_LikesColl = new Collection(R_Ph_Likes)
-
 const bioCollection = new Collection(bio)
 const StoriesColl = new Collection(stories)
+const notificationCollection = new Collection(notification);
+
 module.exports = {
      post,
      like,
@@ -164,6 +162,7 @@ module.exports = {
      bioCollection,
      bio,
      StoriesColl,
-     stories
-
+     stories,
+     notificationCollection,
+     notification
 }  

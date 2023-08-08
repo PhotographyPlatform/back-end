@@ -2,6 +2,8 @@ const express = require('express')
 const modules = require('../models')
 const v1Route = express.Router()
 const middleware = require('../middleware/basicRoutes');
+const handlecomment = require('../middleware/comment')
+
 v1Route.param('model', (req, res, next) => {
      const modelName = req.params.model;
      if (modules[modelName]) {
@@ -13,6 +15,8 @@ v1Route.param('model', (req, res, next) => {
      }
 });
 
+
+
 // Basic Routes
 v1Route.get('/v1/:model', middleware.handleGetOne);
 v1Route.get('/v1/:model/:id', middleware.handleGetAll);
@@ -23,8 +27,15 @@ v1Route.delete('/v1/:model/:id', middleware.handleDelete);
 v1Route.get('/getallPostUser/:userid', middleware.handleGetAllPostUser);
 v1Route.get('/getAllPostData/:Postid', middleware.handleGetAllPostData)
 
+
 // Get Data between two relation collection and modle
 v1Route.get('/getRelation/:collection/:module/:idCollection', middleware.handleGetRelation)
+
+// comment
+v1Route.post('/comment', handlecomment);
+
+// v1Route.get('/Notification', middleware.handleNotification);
+
 
 
 

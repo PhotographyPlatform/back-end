@@ -14,8 +14,10 @@ const followRoute = require('./routes/follow');
 const erorr404 = require("./error-handlers/404")
 const erorr500 = require("./error-handlers/500");
 const postPageRoute = require('./routes/RequestPhotogrpher/post_page');
+const profileRoute = require('./routes/profile')
+const notifiRoute = require("./routes/notification");
 const app = express();
-app.use(cors())
+// app.use(cors())
 app.use(logger)
 
 
@@ -30,19 +32,32 @@ io.on('connection', socket => {
         socket.join(room);
         console.log(room, ' joined');
     })
-    
+
     socket.on('message', (data) => {
         const room = `room users ${data.receiverId} - ${data.senderId}`
         // socket.emit('sendRoom' , room)
         io.to(room).emit('test', data.content);
-        socket.broadcast.to(room).emit('notificaton' , data.counter);
+        socket.broadcast.to(room).emit('notificaton', data.counter);
 
-        socket.on('applyRemove' , () =>{
-            data.counter = 0    
-            socket.broadcast.to(room).emit('removeCounter' , data.counter);
+        socket.on('applyRemove', () => {
+            data.counter = 0
+            socket.broadcast.to(room).emit('removeCounter', data.counter);
         })
     });
 })
+const notificationName = io.of('/notification');
+
+notificationName.on('connection', socket => {
+    socket.on("comment", payload => {
+
+        const commentEvent = `comment-${payload.userid}`;
+        notificationName.emit(commentEvent, payload)
+    })
+    socket.on("update", (payload => {
+        notificationName.emit("update", payload);
+    }))
+    console.log('((notification)) connected with ID of ', socket.id);
+});
 
 
 // using in app
@@ -56,6 +71,7 @@ app.use(postPageRoute);
 
 app.use(router)
 app.use(profileRoute);
+app.use(notifiRoute);
 // controller
 app.get('/', (req, res) => {
     try {
