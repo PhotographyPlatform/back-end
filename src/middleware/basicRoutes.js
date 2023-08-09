@@ -2,7 +2,6 @@
 
 const modules = require('../models')
 
-
 async function handleGetAll(req, res, next) {
     try {
         const mod = req.model;
@@ -27,6 +26,8 @@ async function handleGetOne(req, res, next) {
     }
 }
 
+// let objNot = {};
+
 async function handleCreate(req, res, next) {
     try {
         const mod = req.model;
@@ -37,10 +38,16 @@ async function handleCreate(req, res, next) {
             message: req.modelName,
             data
         });
+        // objNot = data
     } catch (err) {
         next(err);
     }
 }
+
+
+
+
+
 
 
 async function handleUpdate(req, res, next) {
@@ -54,6 +61,7 @@ async function handleUpdate(req, res, next) {
             message: req.modelName,
             data
         });
+
     } catch (err) {
         next(err);
     }
@@ -72,7 +80,7 @@ async function handlePatch(req, res, next) {
     } catch (err) {
         next(err);
     }
-    
+
 }
 
 async function handleDelete(req, res, next) {
@@ -101,8 +109,8 @@ async function handleGetAllPostUser(req, res, next) {
 }
 async function handleGetAllPostData(req, res) {
     try {
-    const id = req.params.Postid;
-    const post = await modules.newPostCOll.getManyRelation(id, modules.like, modules.comment);
+        const id = req.params.Postid;
+        const post = await modules.newPostCOll.getManyRelation(id, modules.like, modules.comment);
         res.status(200).json(post)
     } catch (err) {
         next(err)
@@ -110,18 +118,18 @@ async function handleGetAllPostData(req, res) {
 }
 
 async function handleGetRelation(req, res) {
-try{
-    const model = req.params.module;
-    const collection = req.params.collection;
-    const id = req.params.idCollection;
-    const post = await modules[collection].getRelation(id, model);
-    res.status(200).json(post)
-} catch (err) {
-    next(err)
-}
+    try {
+        const model = req.params.module;
+        const collection = req.params.collection;
+        const id = req.params.idCollection;
+        const post = await modules[collection].getRelation(id, model);
+        res.status(200).json(post)
+    } catch (err) {
+        next(err)
+    }
 }
 
-module.exports= {
+module.exports = {
     handleGetAll,
     handleGetOne,
     handleCreate,
@@ -130,5 +138,5 @@ module.exports= {
     handlePatch,
     handleGetAllPostUser,
     handleGetAllPostData,
-    handleGetRelation
+    handleGetRelation,
 }

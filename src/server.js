@@ -16,8 +16,9 @@ const postPageRoute = require('./routes/RequestPhotogrpher/post_page');
 const profileRoute = require('./routes/profile');
 const axios = require('axios');
 const multerRoute = require('./middleware/multer/multer');
+const notifiRoute = require("./routes/notification");
 const app = express();
-app.use(cors())
+// app.use(cors())
 app.use(logger)
 
 
@@ -59,10 +60,35 @@ io.on('connection', socket => {
 
         count++
         socket.to(room).emit('notificaton' , count);
+    })
 
-    });
+
+    // socket.on('message', (data) => {
+    //     const room = `room users ${data.receiverId} - ${data.senderId}`
+    //     // socket.emit('sendRoom' , room)
+    //     io.to(room).emit('test', data.content);
+    //     socket.broadcast.to(room).emit('notificaton', data.counter);
+
+    //     socket.on('applyRemove', () => {
+    //         data.counter = 0
+    //         socket.broadcast.to(room).emit('removeCounter', data.counter);
+    //     })
+    // });
 
 })
+const notificationName = io.of('/notification');
+
+notificationName.on('connection', socket => {
+    socket.on("comment", payload => {
+
+        const commentEvent = `comment-${payload.userid}`;
+        notificationName.emit(commentEvent, payload);
+    })
+    socket.on("update", (payload => {
+        notificationName.emit("update", payload);
+    }))
+    console.log('((notification)) connected with ID of ', socket.id);
+});
 
 
 // using in app
@@ -78,6 +104,7 @@ app.use(router)
 app.use(profileRoute);
 app.use(multerRoute);
 
+app.use(notifiRoute);
 // controller
 app.get('/', (req, res) => {
     try {

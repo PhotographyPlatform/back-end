@@ -84,21 +84,24 @@ class Collection {
 
 
     async followers(id, model) {
-        const records = await this.model.findOne({
+        const records = await this.model.findAll({
             where: { id },
             include: [{ model: model, as: 'Followers' }]
         });
-        const user = records.Followers.map(ele => { return [{ id: ele.id, name: ele.username }] })
-        return [{ userID: records.id, username: records.username, followers: user }]
+        console.log(records)
+        return records;
+        // const user = records.map(ele => { return [{ id: ele.id, name: ele.username }] })
+        // return [{ userID: records.id, username: records.username, followers: user }]
     }
 
     
     async following(id, model) {
-        const records = await this.model.findOne({
+        const records = await this.model.findAll({
             where: { id },
             include: [{ model: model, as: 'Following' }]
         });
-        const user = records.Following.map(ele => { return [{ id: ele.id, name: ele.username }] })
+        console.log(records)
+        const user = records.map(ele => { return [{ id: ele.id, name: ele.username }] })
         return [{ userID: records.id, username: records.username, Following: user, Count: user.length }]
     }
 
