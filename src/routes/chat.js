@@ -14,7 +14,7 @@ chatRoute.get('/chat/:senderID/:reciverID', async (req, res) => {
 })
 
 
-chatRoute.post('/chat/:senderID/:reciverID', async (req, res) => {
+chatRoute.post('/chat/:senderID/:reciverID', async (req, res,  next) => {
      try {
           const content = req.body.content
           const reciverID = req.params.reciverID
@@ -34,7 +34,7 @@ chatRoute.post('/chat/:senderID/:reciverID', async (req, res) => {
      }
 })
 
-chatRoute.put('/chat/:id/:senderID/:reciverID', async (req, res) => {
+chatRoute.put('/chat/:id/:senderID/:reciverID', async (req, res,  next) => {
      try {
           const id = req.params.id
           const content = req.body.content
@@ -56,7 +56,7 @@ chatRoute.put('/chat/:id/:senderID/:reciverID', async (req, res) => {
      }
 })
 
-chatRoute.delete('/chat/:id/:senderID/:reciverID', async (req, res) => {
+chatRoute.delete('/chat/:id/:senderID/:reciverID', async (req, res,  next) => {
      try {
           const id = req.params.id
 
@@ -69,7 +69,7 @@ chatRoute.delete('/chat/:id/:senderID/:reciverID', async (req, res) => {
      }
 })
 
-chatRoute.get('/getmessages/:senderID/:reciverID', async (req, res) => {
+chatRoute.get('/getmessages/:senderID/:reciverID', async (req, res,  next) => {
      try {
           const reciverID = req.params.reciverID
           const senderID = req.params.senderID

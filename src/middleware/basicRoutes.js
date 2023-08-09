@@ -1,6 +1,5 @@
 'use strict'
 
-
 const modules = require('../models')
 
 async function handleGetAll(req, res, next) {
@@ -33,6 +32,7 @@ async function handleCreate(req, res, next) {
     try {
         const mod = req.model;
         const obj = req.body;
+        
         const data = await mod.create(obj);
         res.status(201).json({
             message: req.modelName,

@@ -10,6 +10,9 @@ const FollowersModel = require('./followers/follower');
 const R_PH_Post_Model = require('./R_PH_post/R_Ph_Post');
 const req_ph_comments = require('./R_PH_post/R_Ph_comment');
 const R_Ph_Likes_Model = require('./R_PH_post/R_Ph_Likes');
+
+
+// const FollowersModel = require('./followers/follower')
 const notificationModel = require('./notifications')
 const bioModel = require('./bio');
 const storyModel = require('./stories/story')
@@ -60,6 +63,8 @@ like.belongsTo(post, { foreignKey: 'postid', targetKey: 'id' })
 // // |user| one to many |like| 
 user.hasMany(like, { foreignKey: 'userid', sourceKey: 'id' })
 like.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' })
+
+// ------------------------------------------------------------------------------------
 // user one to many to stories
 user.hasMany(stories, { foreignKey: 'userid', sourceKey: 'id' })
 stories.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' })
@@ -67,6 +72,7 @@ stories.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' })
 stories.hasMany(like, { foreignKey: 'storyID', sourceKey: 'id' })
 like.belongsTo(stories, { foreignKey: 'storyID', targetKey: 'id' })
 // ------------------------------------------------------------------------------------
+
 // A user can send multiple messages (one-to-many relationship)
 user.hasMany(chat, { foreignKey: 'senderId', as: 'sentMessages' });
 user.hasMany(chat, { foreignKey: 'receiverId', as: 'receivedMessages' });
@@ -80,6 +86,7 @@ chat.belongsTo(user, { foreignKey: 'receiverId', as: 'receiver' });
 user.hasOne(bio, { foreignKey: 'userid', targetKey: 'id' });
 bio.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' });
 
+// ------------------------------------------------------------------------------------
 
 // Follwo Relations
 
@@ -124,6 +131,7 @@ R_Ph_Likes.belongsTo(R_PH_Post, { foreignKey: 'postid', targetKey: 'id' })
 user.hasMany(R_Ph_Likes, { foreignKey: 'userid', sourceKey: 'id' })
 R_Ph_Likes.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' })
 
+// ------------------------------------------------------------------------------------
 
 
 const newCOmCOll = new Collection(comment)
