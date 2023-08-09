@@ -7,7 +7,9 @@ const io = require('socket.io-client');
 
 require('dotenv').config();
 const port = process.env.PORT || 5000;
+
 const nameSpacehost = `http://localhost:${port}/notification`;
+
 const nameSpaceSocket = io.connect(nameSpacehost);
 notifiRoute.get('/notification/:userid', async (req, res, next) => {
     try {

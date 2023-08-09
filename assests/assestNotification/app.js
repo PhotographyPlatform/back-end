@@ -8,6 +8,4 @@ socket.on(commentEvent, (payload) => {
     console.log("------------")
     console.log(payload)
     if (payload.object !== null) socket.emit('update', payload);
-})
-
-
+});
