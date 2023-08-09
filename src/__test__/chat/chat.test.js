@@ -88,8 +88,6 @@ describe('chat test', () => {
            expect(res.statusCode).toBe(200)
            expect(JSON.parse(res.text).message).toBe('get post with its likes and comments')
      })
-
-
 })
 
 })
