@@ -3,7 +3,6 @@
 const nodemailer = require('nodemailer');
 const { newUserCOll } = require('../../models');
 require('dotenv').config()
-const crypto = require('crypto');
 
 const user = process.env.EMAIL
 console.log(user);
