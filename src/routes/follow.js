@@ -7,7 +7,7 @@ followRoute.get('/Followers/:id', Followers)
 followRoute.get('/Following/:id', following)
 followRoute.get('/home/:id', homeHandler)
 
-async function Followers(req, res) {
+async function Followers(req, res, next) {
     try {
         const id = req.params.id;
         const theRecord = await newUserCOll.followers(id, modules.user);
@@ -17,7 +17,7 @@ async function Followers(req, res) {
     }
 }
 
-async function following(req, res) {
+async function following(req, res, next) {
     try {
         const id = req.params.id;
         const theRecord = await newUserCOll.following(id, modules.user);
@@ -27,7 +27,7 @@ async function following(req, res) {
     }
 }
 
-async function homeHandler(req, res) {
+async function homeHandler(req, res, next) {
     try {
         const id = req.params.id;
         const theRecord = await newUserCOll.Feeds(id, newPostCOll.model);

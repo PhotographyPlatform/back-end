@@ -2,7 +2,7 @@
 const port = 3000;
 const nameSpacehost = `http://localhost:${port}/notification`;
 const socket = io.connect(nameSpacehost, { transports: ['websocket'] });
-const userid = 1;
+const userid = 6;
 const commentEvent = `comment-${userid}`;
 socket.on(commentEvent, (payload) => {
     console.log("------------")
