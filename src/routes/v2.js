@@ -18,7 +18,7 @@ router.post('/forgetPassword', change, (req, res) => {
 router.post('/resetPassword/:id', changePass, (req, res) => {
     res.status(200).json('password changed successfully')
 })
-// router.get('/story/:id', isAuth, story, (req, res) => res.status(200).json(req.data))
+
 router.get('/story', isAuth, story, (req, res) => res.status(200).json(req.data))
 
 module.exports = router
