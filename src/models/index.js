@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 const { Sequelize, DataTypes } = require('sequelize');
 const Collection = require('./data-collections');
 const commentModel = require('./comments/comment');
@@ -10,6 +11,7 @@ const FollowersModel = require('./followers/follower');
 const R_PH_Post_Model = require('./R_PH_post/R_Ph_Post');
 const req_ph_comments = require('./R_PH_post/R_Ph_comment');
 const R_Ph_Likes_Model = require('./R_PH_post/R_Ph_Likes');
+const favoritesModel = require('./favorites/favorites');
 
 
 // const FollowersModel = require('./followers/follower')
@@ -43,6 +45,7 @@ const R_Ph_Likes = R_Ph_Likes_Model(newSequlize, DataTypes)
 const bio = bioModel(newSequlize, DataTypes)
 const stories = storyModel(newSequlize, DataTypes)
 const notification = notificationModel(newSequlize, DataTypes);
+const favorites = favoritesModel(newSequlize, DataTypes);
 
 
 
@@ -146,6 +149,7 @@ const R_Ph_LikesColl = new Collection(R_Ph_Likes)
 const bioCollection = new Collection(bio)
 const StoriesColl = new Collection(stories)
 const notificationCollection = new Collection(notification);
+const favoritesCollection = new Collection(favorites);
 
 module.exports = {
      post,
@@ -172,5 +176,7 @@ module.exports = {
      StoriesColl,
      stories,
      notificationCollection,
-     notification
+     notification,
+     favorites,
+     favoritesCollection
 }  

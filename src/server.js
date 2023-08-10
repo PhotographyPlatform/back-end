@@ -17,6 +17,7 @@ const profileRoute = require('./routes/profile');
 const axios = require('axios');
 const multerRoute = require('./middleware/multer/multer');
 const notifiRoute = require("./routes/notification");
+const favoritesRoute = require("./routes/favorites");
 const app = express();
 // app.use(cors())
 app.use(logger)
@@ -103,8 +104,9 @@ app.use(postPageRoute);
 app.use(router)
 app.use(profileRoute);
 app.use(multerRoute);
-
 app.use(notifiRoute);
+app.use(favoritesRoute);
+
 // controller
 app.get('/', (req, res) => {
     try {
