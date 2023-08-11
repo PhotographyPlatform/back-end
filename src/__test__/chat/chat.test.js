@@ -8,15 +8,27 @@ const req = supertest(app)
 
 
 
+
 beforeAll(async () => {
      await newSequlize.sync();
      await newUserCOll.create({ username: 'hamza', password: "123", email: "hamza@gmail.com" })
      await newUserCOll.create({ username: 'sham', password: "123", email: "sham@gmail.com" })
 
+     // const io = require('socket.io-client');
+     // const port = process.env.PORT || 4001;
+     // const nameSpacehost = `http://localhost:4001/notification`;
+     // const nameSpaceSocket = io.connect(nameSpacehost);
+
 })
 
 afterAll(async () => {
      await newSequlize.drop();
+
+     // if(nameSpaceSocket){
+
+     //      nameSpaceSocket.disconnect();
+     // }
+
 });
 
 
