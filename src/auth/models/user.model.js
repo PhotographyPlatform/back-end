@@ -20,7 +20,7 @@ const userModel = (newSequlize, DataTypes) => newSequlize.define('users', {
      token: {
           type: DataTypes.VIRTUAL,
           get() {
-               return jwt.sign({ username: this.username, userId: this.id }, process.env.SECRET)
+               return jwt.sign({ userId: this.id }, process.env.SECRET)
           }
      },
      birthday: {
