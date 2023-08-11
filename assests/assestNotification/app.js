@@ -1,28 +1,49 @@
-// import io from ('socket.io-client');
-const port = 3001;
+
+const port = 3000;
 const nameSpacehost = `http://localhost:${port}/notification`;
-const socket = io.connect(nameSpacehost, { transports: ['websocket'] });
-const userid = 1;
-const notificationEvent = `notification-${userid}`;
+let userId = null
+
+let inputText = document.querySelector('.id-input');
+
+inputText.onchange = () => {
+    const socket = io.connect(nameSpacehost, { transports: ['websocket'] });
+
+    userId = parseInt(inputText.value);
+    console.log(inputText.value)
+    socket.emit("notification", userId);
+    const notificationEvent = `notification-${userId}`;
+
+    // socket.emit("notification", userid);
+    socket.on(notificationEvent, (payload) => {
+        console.log(payload);
+        socket.emit("update", payload);
+    })
+
+
+    socket.on(`newRecord-${notificationEvent}`, payload => {
+        console.log(payload);
+    })
+
+
+}
+
+
+
+
+
+
 
 // const commentInput = document.querySelector("#commentInput")
-const button = document.querySelector(".btn")
-const commentInput = document.querySelector(".comment-input");
+// const button = document.querySelector(".btn")
+// const commentInput = document.querySelector(".comment-input");
 // console.log(button)
 
-
-
-
-
-
-
-
-let commentDetails = {
-    "contant": "nicePhoto",
-    "sender": null,
-    "resever": 3
-    // "type":""
-}
+// let commentDetails = {
+//     "contant": "nicePhoto",
+//     "sender": null,
+//     "resever": 3
+//     // "type":""
+// }
 
 // let value = null;
 // commentInput.onchange = () => {
@@ -38,28 +59,4 @@ let commentDetails = {
 // socket.on('send', payload => {
 //     console.log(payload)
 // })
-
-
-
-
-
-
-
-
-
-
-
 // socket.emit = ("notification", commentDetails);
-
-socket.emit("notification", userid);
-
-socket.on(notificationEvent, (payload) => {
-
-    console.log(payload);
-    // socket.emit("update", payload);
-})
-
-socket.on(`newRecord-${ notificationEvent }`, payload => {
-    console.log(payload);
-})
-
