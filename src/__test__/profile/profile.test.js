@@ -20,12 +20,8 @@ beforeAll(async () => {
     await modules.bioCollection.create({ "contant": "welcome", userid: "1", });
     await modules.FollowersColl.create({ "following_id": 1, "me_id": 2 });
     await modules.FollowersColl.create({ "following_id": 2, "me_id": 1 });
- 
+});
 
-    //  nameSpaceSocket = io.connect(nameSpacehost);
-
-
-})
 afterAll(async () => {
     await db.drop();
  

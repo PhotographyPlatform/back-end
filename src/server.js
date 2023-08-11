@@ -17,16 +17,21 @@ const profileRoute = require('./routes/profile');
 const axios = require('axios');
 const multerRoute = require('./middleware/multer/multer');
 const notifiRoute = require("./routes/notification");
+
+const modules = require("./models")
+
 const favoritesRoute = require("./routes/favorites");
 const { chatCollection } = require('./models');
+
 const app = express();
+const { getNotificationById, updateNotification } = require('./middleware/notification/modleHandle')
 app.use(cors())
 app.use(logger)
-
 
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
+// Messages Socket
 io.on('connection', socket => {
     console.log('connect to the main ', socket.id);
     socket.on('joinRoom', (message) => {
@@ -34,22 +39,8 @@ io.on('connection', socket => {
         socket.join(room);
         console.log(room, ' joined');
     })
-    // socket.on('message', (data) => {
-    //     const room = `room users ${data.receiverId} - ${data.senderId}`
-    //     io.to(room).emit('test', data.content);
-
-    //     socket.on('zero', () =>{
-    //         count = 0
-    //     })
-
-    //     count++
-    //     socket.to(room).emit('notificaton' , count);
-
-    // });
-    
     let count = 0
-    
-    socket.on('zero', () =>{
+    socket.on('zero', () => {
         count = 0
     })
 
@@ -70,34 +61,90 @@ io.on('connection', socket => {
 
 
     })
-
-
-    // socket.on('message', (data) => {
-    //     const room = `room users ${data.receiverId} - ${data.senderId}`
-    //     // socket.emit('sendRoom' , room)
-    //     io.to(room).emit('test', data.content);
-    //     socket.broadcast.to(room).emit('notificaton', data.counter);
-
-    //     socket.on('applyRemove', () => {
-    //         data.counter = 0
-    //         socket.broadcast.to(room).emit('removeCounter', data.counter);
-    //     })
-    // });
-
 })
+
+// // Notification Socket
+
+
+
+// notificationName.on('connection', socket => {
+//     socket.on('join-room', (payload) => {
+//         console.log(payload);
+//         const room = `notification room ${payload.sender} - ${payload.resever}`
+
+//         console.log(room, "from Join room---------------------------1")
+//         console.log()
+//     })
+
+//     socket.on('send-notification', payload => {
+//         console.log(payload)
+//         const room = `notification room ${payload.sender} - ${payload.resever}`
+//         // socket.join(room)
+//         console.log(room, "from Notification---------------------------2")
+//         socket.to(room).emit("send", payload)
+//     })
+
+// })
+
+// const notificationName = io.of('/notification');
+// notificationName.on('connection', socket => {
+//     socket.on('join-room', (payload) => {
+//         // const room = `notification room ${payload.sender} - ${payload.resever}`;
+//         socket.join(payload); // Join the room
+//         console.log(payload);
+//         // notificationName.to(room).emit("send", payload);
+//     });
+
+
+//     socket.on('send-notification', payload => {
+
+//         console.log(typeof(payload.resever));
+//         socket.join(payload.resever);
+//         notificationName.to(payload.resever).emit("send", payload);
+//     });
+// });
+
+
 const notificationName = io.of('/notification');
+// notificationName.setMaxListeners(20);
+
 
 notificationName.on('connection', socket => {
-    socket.on("comment", payload => {
 
-        const commentEvent = `comment-${payload.userid}`;
-        notificationName.emit(commentEvent, payload);
-    })
-    socket.on("update", (payload => {
-        notificationName.emit("update", payload);
-    }))
     console.log('((notification)) connected with ID of ', socket.id);
+    socket.on('notification', async (payload) => {
+        try {
+            // Get all notifications for the user ID from the model 'notification'
+            const respons = await getNotificationById(payload);
+            // Once a new record is created in the notification model, it is sent via emit directly
+            const notificationEvent = `notification-${payload}`;
+            if (respons.length !== 0) {
+                respons.map(async ele => {
+                    socket.emit(notificationEvent, ele);
+                    socket.on('update', async (payload) => {
+                        await updateNotification(payload);
+                    })
+                })
+            } else {
+                socket.emit(notificationEvent, "Notification is Empty");
+            }
+
+            await modules.notification.addHook('afterCreate', async (record) => {
+                if (record.receiverId === payload) {
+                    socket.emit(`newRecord-${notificationEvent}`, (record));
+                }
+            });
+
+        } catch (err) {
+            console.error('error processing notification:', err);
+        }
+    });
+
 });
+
+
+
+
 
 
 // using in app

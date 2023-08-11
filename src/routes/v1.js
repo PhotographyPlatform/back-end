@@ -1,25 +1,21 @@
 "use strict";
 
-const express = require("express");
-const modules = require("../models");
-const v1Route = express.Router();
-const middleware = require("../middleware/basicRoutes");
-const {
-  handleComment,
-  handleFollowing,
-  handlePost,
-  handlelikes,
-} = require("../middleware/comment");
+const express = require('express')
+const modules = require('../models')
+const v1Route = express.Router()
+const middleware = require('../middleware/basicRoutes');
 
-v1Route.param("model", (req, res, next) => {
-  const modelName = req.params.model;
-  if (modules[modelName]) {
-    req.model = modules[modelName];
-    req.modelName = modelName;
-    next();
-  } else {
-    next("Invalid Model");
-  }
+
+
+v1Route.param('model', (req, res, next) => {
+     const modelName = req.params.model;
+     if (modules[modelName]) {
+          req.model = modules[modelName];
+          req.modelName = modelName;
+          next();
+     } else {
+          next('Invalid Model');
+     }
 });
 
 // Basic Routes
@@ -43,12 +39,6 @@ v1Route.get(
   middleware.handleGetRelation
 );
 
-// comment
-v1Route.post("/comment", handleComment);
 
-v1Route.post("/follow", handleFollowing);
-v1Route.post("/post", handlePost);
-
-v1Route.post("/likes", handlelikes);
 
 module.exports = v1Route;

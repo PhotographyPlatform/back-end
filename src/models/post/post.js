@@ -34,3 +34,4 @@ const postModel = (newSequlize, DataTypes) =>
   });
 
 module.exports = postModel;
+
