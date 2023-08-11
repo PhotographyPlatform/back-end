@@ -5,6 +5,13 @@ const { app } = require("../../server");
 const supertest = require('supertest')
 const req = supertest(app)
 
+// const io = require('socket.io-client');
+// const port = process.env.PORT || 4001;
+// const nameSpacehost = `http://localhost:4001/notification`;
+// const nameSpaceSocket = io.connect(nameSpacehost);
+
+
+
 beforeAll(async () => {
     await db.sync();
     await modules.newUserCOll.create({ username: 'hamza', password: "123", email: "moh@getMaxListeners.com" });
@@ -13,10 +20,18 @@ beforeAll(async () => {
     await modules.bioCollection.create({ "contant": "welcome", userid: "1", });
     await modules.FollowersColl.create({ "following_id": 1, "me_id": 2 });
     await modules.FollowersColl.create({ "following_id": 2, "me_id": 1 });
-    
+ 
+
+    //  nameSpaceSocket = io.connect(nameSpacehost);
+
+
 })
 afterAll(async () => {
     await db.drop();
+ 
+    // if (nameSpaceSocket) {
+    //     nameSpaceSocket.disconnect();
+    // }
 });
 
 

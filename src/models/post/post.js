@@ -21,7 +21,8 @@ const postModel = (newSequlize , DataTypes) => newSequlize.define('posts' , {
                     const arr = JSON.stringify(category)
                     this.setDataValue("category" , arr)
 
-                    console.log(JSON.parse("[\"animal\",\"summer\",\"black\"]"));
+                    // console.log(JSON.parse("[\"animal\",\"summer\",\"black\"]"));
+                    console.log(JSON.parse(arr));
                }
           }
      })

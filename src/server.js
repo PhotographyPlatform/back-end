@@ -18,8 +18,9 @@ const axios = require('axios');
 const multerRoute = require('./middleware/multer/multer');
 const notifiRoute = require("./routes/notification");
 const favoritesRoute = require("./routes/favorites");
+const { chatCollection } = require('./models');
 const app = express();
-// app.use(cors())
+app.use(cors())
 app.use(logger)
 
 
@@ -55,12 +56,19 @@ io.on('connection', socket => {
     socket.on('message', async (data) => {
         const room = `room users ${data.receiverId} - ${data.senderId}`
         io.to(room).emit('test', data.content);
+        
+        const result = await chatCollection.create(data)
 
-        const result = await axios.post(`http://localhost:4001/chat/${data.senderId}/${data.receiverId}`, data)
-            console.log(result.data);
+        console.log(result);
 
         count++
         socket.to(room).emit('notificaton' , count);
+
+        socket.broadcast.to(room).emit('outgoing' , 'outgoing');
+        socket.emit('incoming' , 'incoming');
+
+
+
     })
 
 
