@@ -3,7 +3,7 @@ const modules = require('../models')
 const notifiRoute = express.Router()
 require('dotenv').config();
 // notification Route
-const { handleComment, handleFollowing, handlePost, handlelikes } = require('../middleware/notification')
+const { handleComment, handleFollowing, handlePost, handlelikes } = require('../middleware/notification/routeHandle')
 
 notifiRoute.post('/notification/comment', handleComment);
 

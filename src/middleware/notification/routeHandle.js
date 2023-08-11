@@ -1,20 +1,20 @@
 const { where } = require('sequelize');
-const modules = require('../models')
+const modules = require('../../models')
 
 async function handleComment(req, res, next) {
     try {
         const record = req.body;
         const model = modules.newCOmCOll
         const respons = await model.create(record);
-        
         const commentOwner = await modules.user.findByPk(respons.dataValues.userid);
-        const postOwner = await modules.user.findByPk(respons.dataValues.postid); // Assuming the user with ID "like.postid" exists
+        const postOwner = (await modules.post.findByPk(respons.dataValues.postid)).userid; // Assuming the user with ID "like.postid" exists
+
         if (respons) {
+
             const message = `${commentOwner.username} Add comment on your post`;
-            createNotificationRecord(postOwner.id, commentOwner.id, message);
+            createNotificationRecord(postOwner, commentOwner.id, message, respons.id);
         }
         res.status(201).json(respons);
-
     } catch (err) {
         next(err)
     }
@@ -27,9 +27,8 @@ async function handleFollowing(req, res, next) {
         const followingOwner = await modules.user.findByPk(respons.dataValues.following_id);
         const followersOwner = await modules.user.findByPk(respons.dataValues.me_id);
         if (respons) {
-            console.log("++++++++++++++++++++++++++++++++++")
             const message = `${followersOwner.username} followed you`;
-            console.log(await createNotificationRecord(followingOwner.id, followersOwner.id,  message));
+            await createNotificationRecord(followingOwner.id, followersOwner.id, message, respons.id);
         }
         res.status(201).json(respons);
     } catch (err) {
@@ -44,15 +43,17 @@ async function handlePost(req, res, next) {
         const postOwner = await modules.user.findByPk(respons.dataValues.userid);
         const followingPostOwner = await modules.Followers.findAll({ where: { following_id: postOwner.dataValues.id } });
         followingPostOwner.map(ele => {
+            console.log("-----------------------------------------")
+            console.log("followingPostOwner------------------", ele.me_id)
+            console.log("postOwner---------------------------", postOwner.id);
             let message = `${postOwner.username} added new photo`;
-            createNotificationRecord(ele.me_id, postOwner.id, message);
+            createNotificationRecord(ele.me_id, postOwner.id, message, respons.id);
         });
         res.status(201).json(respons);
     } catch (err) {
         next(err)
     }
 }
-
 
 async function handlelikes(req, res, next) {
     try {
@@ -61,12 +62,11 @@ async function handlelikes(req, res, next) {
         const respons = await mod.create(record);
         const likesOwner = await modules.user.findByPk(respons.dataValues.userid);
         // Post Owner
-        const postOwner = await modules.user.findByPk(respons.dataValues.postid); // Assuming the user with ID "like.postid" exists
+        const postOwner = (await modules.post.findByPk(respons.dataValues.postid)).userid; // Assuming the user with ID "like.postid" exists
 
-        console.log(postOwner.id);
         if (respons) {
             const message = `${likesOwner.username} liked your post`;
-            createNotificationRecord(postOwner.id, likesOwner.id, message);
+            createNotificationRecord(postOwner, likesOwner.id, message, respons.id);
         }
         res.status(201).json(respons);
     } catch (err) {
@@ -75,12 +75,18 @@ async function handlelikes(req, res, next) {
 }
 
 
-async function createNotificationRecord(ownerid, senderId, message) {
-    await modules.notificationCollection.create({
-        message: message,
-        senderId: senderId,
-        receiverId: ownerid
-    })
+async function createNotificationRecord(receiverId, senderId, message, actionId) {
+    try {
+        await modules.notificationCollection.create({
+            message: message,
+            actionId: actionId,
+            senderId: senderId,
+            receiverId: receiverId
+        })
+    } catch (err) {
+        console.log('There is an error when creating a notification record:: ', err)
+    }
+
     return "Create Data sucsufully";
 }
 

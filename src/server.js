@@ -19,6 +19,7 @@ const multerRoute = require('./middleware/multer/multer');
 const notifiRoute = require("./routes/notification");
 const modules = require("./models")
 const app = express();
+const { getNotificationById, updateNotification } = require('./middleware/notification/modleHandle')
 app.use(cors())
 app.use(logger)
 
@@ -82,7 +83,7 @@ io.on('connection', socket => {
 //         // notificationName.to(room).emit("send", payload);
 //     });
 
-    
+
 //     socket.on('send-notification', payload => {
 
 //         console.log(typeof(payload.resever));
@@ -92,38 +93,43 @@ io.on('connection', socket => {
 // });
 
 
+const notificationName = io.of('/notification');
+// notificationName.setMaxListeners(20);
 
 
 notificationName.on('connection', socket => {
 
     console.log('((notification)) connected with ID of ', socket.id);
     socket.on('notification', async (payload) => {
-
-        const notificationEvent = `notification-${payload}`;
-        const respons = await modules.notification.findAll({
-            where: {
-                receiverId: payload, read: false
-            }
-            // get all notification for userid
-        })
-        modules.notification.addHook('afterCreate', async (record) => {
-            socket.emit(`newRecord-${notificationEvent}`, { message: 'A new record was added.', record });
-        });
-
-        if (respons.length !== 0) {
-            respons.map(async  ele => {
-                socket.emit(notificationEvent, ele);
-                socket.on('update', async (payload) => {
-                    console.log(payload.id)
-                    await modules.notificationCollection.update(payload.id, { read: true });
-                    return "Updated successfully"
+        try {
+            // Get all notifications for the user ID from the model 'notification'
+            const respons = await getNotificationById(payload);
+            // Once a new record is created in the notification model, it is sent via emit directly
+            const notificationEvent = `notification-${payload}`;
+            if (respons.length !== 0) {
+                respons.map(async ele => {
+                    socket.emit(notificationEvent, ele);
+                    socket.on('update', async (payload) => {
+                        await updateNotification(payload);
+                    })
                 })
-            })
-        } else {
-            socket.emit(notificationEvent, "Notification is Empty");
+            } else {
+                socket.emit(notificationEvent, "Notification is Empty");
+            }
+
+            await modules.notification.addHook('afterCreate', async (record) => {
+                if (record.receiverId === payload) {
+                    socket.emit(`newRecord-${notificationEvent}`, (record));
+                }
+            });
+
+        } catch (err) {
+            console.error('error processing notification:', err);
         }
-    })
-})
+    });
+
+});
+
 
 
 
