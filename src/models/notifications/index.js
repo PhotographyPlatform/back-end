@@ -3,7 +3,15 @@ const notificationModel = (newSequlize, DataTypes) => newSequlize.define('notifi
         type: DataTypes.STRING,
         allowNull: false,
     },
-    userid: {
+    actionId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    senderId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    receiverId: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
