@@ -32,8 +32,6 @@ authRoutes.post('/signup', sendCode, async (req, res) => {
 
 authRoutes.post('/signup/confirm', async (req, res) => {
     const code = req.body.codes
-    console.log(codeObj);
-    console.log(code);
     if (code === codeObj) {
         const createUSer = await modules.newUserCOll.create(obj)
         obj = null

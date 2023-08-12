@@ -67,8 +67,6 @@ multerRoute.post('/uploadPost',upload.single('image') ,  (req , res) =>{
      cloudinary.uploader.upload(req.file.path, function ( result){
 
           imgUrl = result.secure_url
-
-          console.log(result , '================================');
           console.log(imgUrl);
           res.status(200).json({
             success: true,

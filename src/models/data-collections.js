@@ -82,27 +82,24 @@ class Collection {
         return records;
     }
 
-
+    // fixed the followers to return the correct data and take the id from the token 
     async followers(id, model) {
         const records = await this.model.findAll({
             where: { id },
-            include: [{ model: model, as: 'Followers' }]
+            include: { model: model, as: 'Followers' }
         });
-        console.log(records)
-        return records;
-        // const user = records.map(ele => { return [{ id: ele.id, name: ele.username }] })
-        // return [{ userID: records.id, username: records.username, followers: user }]
+        const user = records[0].Followers.map(ele => { return { id: ele.id, name: ele.username } })
+        return { followers: user }
     }
 
-    
+    // fixed the following to return the correct data and take the id from the token 
     async following(id, model) {
         const records = await this.model.findAll({
             where: { id },
-            include: [{ model: model, as: 'Following' }]
-        });
-        console.log(records)
-        const user = records.map(ele => { return [{ id: ele.id, name: ele.username }] })
-        return [{ userID: records.id, username: records.username, Following: user, Count: user.length }]
+            include: { model: model, as: 'Following' }
+        })
+        const user = records[0].Following.map(ele => { return { id: ele.id, name: ele.username } })
+        return { Following: user, Count: user.length }
     }
 
 
@@ -157,7 +154,7 @@ class Collection {
                 where: { userid },
                 include: ['comments', 'likes']
             }
-            
+
         );
         return records;
     }

@@ -17,6 +17,7 @@ const profileRoute = require('./routes/profile');
 const axios = require('axios');
 const multerRoute = require('./middleware/multer/multer');
 const notifiRoute = require("./routes/notification");
+
 const app = express();
 // app.use(cors())
 app.use(logger)
@@ -44,10 +45,10 @@ io.on('connection', socket => {
     //     socket.to(room).emit('notificaton' , count);
 
     // });
-    
+
     let count = 0
-    
-    socket.on('zero', () =>{
+
+    socket.on('zero', () => {
         count = 0
     })
 
@@ -56,10 +57,10 @@ io.on('connection', socket => {
         io.to(room).emit('test', data.content);
 
         const result = await axios.post(`http://localhost:4001/chat/${data.senderId}/${data.receiverId}`, data)
-            console.log(result.data);
+        console.log(result.data);
 
         count++
-        socket.to(room).emit('notificaton' , count);
+        socket.to(room).emit('notificaton', count);
     })
 
 
@@ -103,7 +104,6 @@ app.use(postPageRoute);
 app.use(router)
 app.use(profileRoute);
 app.use(multerRoute);
-
 app.use(notifiRoute);
 // controller
 app.get('/', (req, res) => {
