@@ -23,6 +23,7 @@ const modules = require("./models")
 const favoritesRoute = require("./routes/favorites");
 const { chatCollection } = require('./models');
 
+
 const app = express();
 const { getNotificationById, updateNotification } = require('./middleware/notification/modleHandle')
 app.use(cors())
@@ -39,7 +40,22 @@ io.on('connection', socket => {
         socket.join(room);
         console.log(room, ' joined');
     })
+
+    // socket.on('message', (data) => {
+    //     const room = `room users ${data.receiverId} - ${data.senderId}`
+    //     io.to(room).emit('test', data.content);
+
+    //     socket.on('zero', () =>{
+    //         count = 0
+    //     })
+
+    //     count++
+    //     socket.to(room).emit('notificaton' , count);
+
+    // });
+
     let count = 0
+
     socket.on('zero', () => {
         count = 0
     })
@@ -49,12 +65,10 @@ io.on('connection', socket => {
         io.to(room).emit('test', data.content);
         
         const result = await chatCollection.create(data)
-
         console.log(result);
 
         count++
         socket.to(room).emit('notificaton' , count);
-
         socket.broadcast.to(room).emit('outgoing' , 'outgoing');
         socket.emit('incoming' , 'incoming');
 

@@ -92,36 +92,25 @@ class Collection {
     return records;
   }
 
-  async followers(id, model) {
-    const records = await this.model.findAll({
-      where: { id },
-      include: [{ model: model, as: "Followers" }],
-    });
-    console.log(records);
-    return records;
-    // const user = records.map(ele => { return [{ id: ele.id, name: ele.username }] })
-    // return [{ userID: records.id, username: records.username, followers: user }]
-  }
+   // fixed the followers to return the correct data and take the id from the token 
+    async followers(id, model) {
+        const records = await this.model.findAll({
+            where: { id },
+            include: { model: model, as: 'Followers' }
+        });
+        const user = records[0].Followers.map(ele => { return { id: ele.id, name: ele.username } })
+        return { followers: user }
+    }
 
-  async following(id, model) {
-    const records = await this.model.findAll({
-      where: { id },
-      include: [{ model: model, as: "Following" }],
-    });
-    console.log(records);
-    const user = records.map((ele) => {
-      return [{ id: ele.id, name: ele.username }];
-    });
-    return [
-      {
-        userID: records.id,
-        username: records.username,
-        Following: user,
-        Count: user.length,
-      },
-    ];
-  }
-
+    // fixed the following to return the correct data and take the id from the token 
+    async following(id, model) {
+        const records = await this.model.findAll({
+            where: { id },
+            include: { model: model, as: 'Following' }
+        })
+        const user = records[0].Following.map(ele => { return { id: ele.id, name: ele.username } })
+        return { Following: user, Count: user.length }
+    }
   async Feeds(id, model) {
     try {
       const records = await this.model.findOne({

@@ -38,4 +38,5 @@ router.patch('/profile', isAuth, userProfile, updateProfile, (req, res) => {
 // story 
 router.get('/story', isAuth, story, (req, res) => res.status(200).json(req.data))
 
+
 module.exports = router
