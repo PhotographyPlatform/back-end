@@ -35,6 +35,12 @@ router.patch('/profile', isAuth, userProfile, updateProfile, (req, res) => {
     res.status(200).json('Profile updated')
 })
 
+router.delete('/comment', isAuth, deleteComment)
+
+async function deleteComment(req, res) {
+
+}
+
 // story 
 router.get('/story', isAuth, story, (req, res) => res.status(200).json(req.data))
 
