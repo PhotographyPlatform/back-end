@@ -17,7 +17,6 @@ const profileRoute = require('./routes/profile');
 const axios = require('axios');
 const multerRoute = require('./middleware/multer/multer');
 const notifiRoute = require("./routes/notification");
-
 const modules = require("./models")
 
 const favoritesRoute = require("./routes/favorites");
@@ -25,7 +24,8 @@ const { chatCollection } = require('./models');
 
 
 const app = express();
-const { getNotificationById, updateNotification } = require('./middleware/notification/modleHandle')
+const { getNotificationById, updateNotification } = require('./middleware/notification/modleHandle');
+const deleteRouter = require('./routes/delete.route');
 app.use(cors())
 app.use(logger)
 
@@ -158,9 +158,6 @@ notificationName.on('connection', socket => {
 
 
 
-
-
-
 // using in app
 app.use(express.json())
 app.use(v1Route)
@@ -169,7 +166,7 @@ app.use(searchRoute);
 app.use(authRoutes)
 app.use(followRoute);
 app.use(postPageRoute);
-
+app.use(deleteRouter)
 app.use(router)
 app.use(profileRoute);
 app.use(multerRoute);

@@ -42,7 +42,6 @@ async function homeHandler(req, res, next) {
 
 async function unFollowHandler(req, res, next) {
     try {
-
         // if the following id is exists in the body thats mean the user is in their following table and need to delete a folllowing id
         const following_id = req.body.following_id
 
@@ -54,18 +53,18 @@ async function unFollowHandler(req, res, next) {
 
         // check if the user is in the following table so excute this code 
         if (following_id) {
-            const followRecord = await data.Followers.findOne({
+            const followRecord = await modules.Followers.findOne({
                 where: {
                     following_id: following_id,
                     me_id: id
                 }
             });
             await followRecord.destroy();
-            res.status(200).json(`${followRecord}following deleted`)
+            res.status(200).json(`following deleted`)
 
             // check if the user is in the followers table so excute this code 
         } else if (followers_id) {
-            const followRecord = await data.Followers.findOne({
+            const followRecord = await modules.Followers.findOne({
                 where: {
                     following_id: id,
                     me_id: followers_id
@@ -74,7 +73,7 @@ async function unFollowHandler(req, res, next) {
 
             });
             await followRecord.destroy();
-            res.status(200).json(`${followRecord}following deleted`)
+            res.status(200).json(`followers deleted`)
         }
     } catch (err) {
         next(err);
