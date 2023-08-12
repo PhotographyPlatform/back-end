@@ -16,14 +16,7 @@ const postModel = (newSequlize, DataTypes) =>
       type: DataTypes.STRING,
     },
     category: {
-      type: DataTypes.STRING,
-      set(category) {
-        const arr = JSON.stringify(category);
-        this.setDataValue("category", arr);
-
-        // console.log(JSON.parse("[\"animal\",\"summer\",\"black\"]"));
-        console.log(JSON.parse(arr));
-      },
+      type: DataTypes.ARRAY(DataTypes.STRING),
     },
     challengeName: {
       type: DataTypes.STRING,
