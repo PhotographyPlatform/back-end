@@ -10,6 +10,8 @@ const changePass = require('../middleware/restPass/changePass')
 const forgetPassword = require('../middleware/restPass/nodemailer')
 const userProfile = require('../middleware/profile/profile')
 const updateProfile = require('../middleware/profile/updateProfile')
+const { uploadProfile, profileUpload, uploadStory, storyUpload } = require('../middleware/multer/multer')
+const models = require('../models/')
 // controller
 router.get('/v2/home', isAuth, authHome)
 router.get('/home', nonAuthHome)
@@ -31,7 +33,8 @@ router.get('/profile', isAuth, userProfile, (req, res) => {
 })
 
 // profile dashboard updating username---password---gender----birthday
-router.patch('/profile', isAuth, userProfile, updateProfile, (req, res) => {
+router.patch('/profile', isAuth, userProfile, profileUpload.single('image'), uploadProfile, updateProfile, (req, res) => {
+
     res.status(200).json('Profile updated')
 })
 
@@ -43,6 +46,35 @@ async function deleteComment(req, res) {
 
 // story 
 router.get('/story', isAuth, story, (req, res) => res.status(200).json(req.data))
+
+router.post('/story', isAuth, storyUpload.single('image'), uploadStory, async (req, res, next) => {
+    try {
+        const obj = req.body;
+        obj.storyUrl = req.image
+        obj.userid = req.users.userId
+        console.log(obj);
+        const data = await models.StoriesColl.create(obj);
+        res.status(201).json({
+            data
+        });
+    } catch (err) {
+        next(err);
+    }
+})
+router.post('/createPost', isAuth, storyUpload.single('image'), uploadStory, async (req, res, next) => {
+    try {
+        const obj = req.body;
+        obj.imgurl = req.image
+        obj.userid = req.users.userId
+        console.log(obj);
+        const data = await models.newPostCOll.create(obj);
+        res.status(201).json({
+            data
+        });
+    } catch (err) {
+        next(err);
+    }
+})
 
 
 module.exports = router

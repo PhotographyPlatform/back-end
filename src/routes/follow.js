@@ -60,7 +60,7 @@ async function unFollowHandler(req, res, next) {
                 }
             });
             await followRecord.destroy();
-            res.status(200).json(`following deleted`)
+            res.status(204).json(`following deleted`)
 
             // check if the user is in the followers table so excute this code 
         } else if (followers_id) {
@@ -73,7 +73,7 @@ async function unFollowHandler(req, res, next) {
 
             });
             await followRecord.destroy();
-            res.status(200).json(`followers deleted`)
+            res.status(204).json(`followers deleted`)
         }
     } catch (err) {
         next(err);
