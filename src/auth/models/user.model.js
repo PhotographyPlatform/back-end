@@ -17,10 +17,26 @@ const userModel = (newSequlize, DataTypes) => newSequlize.define('users', {
           }
 
      },
+     role: {
+          type: DataTypes.ENUM("admin", "user"),
+          required: true,
+          defaultValue: 'user'
+
+     },
+     capabilities: {
+          type: DataTypes.VIRTUAL,
+          get() {
+               const acl = {
+                    user: ['user'],
+                    admin: ['admin']
+               };
+               return acl[this.role];
+          }
+     },
      token: {
           type: DataTypes.VIRTUAL,
           get() {
-               return jwt.sign({ userId: this.id }, process.env.SECRET)
+               return jwt.sign({ userId: this.id, role: this.role}, process.env.SECRET)
           }
      },
      birthday: {

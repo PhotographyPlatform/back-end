@@ -4,7 +4,6 @@ const express = require('express')
 const cors = require('cors');
 const v1Route = require('./routes/v1');
 const router = require('./routes/v2')
-const bearer = require("./auth/middleWare/bearer")
 const chatRoute = require('./routes/chat');
 const searchRoute = require('./routes/search');
 const logger = require('./middleware/logger');
@@ -14,17 +13,18 @@ const erorr404 = require("./error-handlers/404")
 const erorr500 = require("./error-handlers/500");
 const postPageRoute = require('./routes/RequestPhotogrpher/post_page');
 const profileRoute = require('./routes/profile');
-const axios = require('axios');
-const multerRoute = require('./middleware/multer/multer');
+const {multerRoute} = require('./middleware/multer/multer');
 const notifiRoute = require("./routes/notification");
-
+const adminRoute = require("./routes/admin");
 const modules = require("./models")
 
 const favoritesRoute = require("./routes/favorites");
 const { chatCollection } = require('./models');
 
+
 const app = express();
-const { getNotificationById, updateNotification } = require('./middleware/notification/modleHandle')
+const { getNotificationById, updateNotification } = require('./middleware/notification/modleHandle');
+const deleteRouter = require('./routes/delete.route');
 app.use(cors())
 app.use(logger)
 
@@ -39,7 +39,22 @@ io.on('connection', socket => {
         socket.join(room);
         console.log(room, ' joined');
     })
+
+    // socket.on('message', (data) => {
+    //     const room = `room users ${data.receiverId} - ${data.senderId}`
+    //     io.to(room).emit('test', data.content);
+
+    //     socket.on('zero', () =>{
+    //         count = 0
+    //     })
+
+    //     count++
+    //     socket.to(room).emit('notificaton' , count);
+
+    // });
+
     let count = 0
+
     socket.on('zero', () => {
         count = 0
     })
@@ -49,12 +64,10 @@ io.on('connection', socket => {
         io.to(room).emit('test', data.content);
         
         const result = await chatCollection.create(data)
-
         console.log(result);
 
         count++
         socket.to(room).emit('notificaton' , count);
-
         socket.broadcast.to(room).emit('outgoing' , 'outgoing');
         socket.emit('incoming' , 'incoming');
 
@@ -144,9 +157,6 @@ notificationName.on('connection', socket => {
 
 
 
-
-
-
 // using in app
 app.use(express.json())
 app.use(v1Route)
@@ -155,12 +165,13 @@ app.use(searchRoute);
 app.use(authRoutes)
 app.use(followRoute);
 app.use(postPageRoute);
-
+app.use(deleteRouter)
 app.use(router)
 app.use(profileRoute);
 app.use(multerRoute);
 app.use(notifiRoute);
 app.use(favoritesRoute);
+app.use(adminRoute);
 
 // controller
 app.get('/', (req, res) => {
