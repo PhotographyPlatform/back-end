@@ -15,12 +15,11 @@ const userModel = (newSequlize, DataTypes) => newSequlize.define('users', {
                const hashPass = bcrypt.hashSync(password, 5);
                this.setDataValue('password', hashPass)
           }
-
      },
      token: {
           type: DataTypes.VIRTUAL,
           get() {
-               return jwt.sign({ userId: this.id }, process.env.SECRET)
+               return jwt.sign({ userId: this.id, role: this.role }, process.env.SECRET)
           }
      },
      birthday: {
@@ -38,11 +37,6 @@ const userModel = (newSequlize, DataTypes) => newSequlize.define('users', {
           allowNull: false
      }
 })
-
-
-
-
-
 
 
 module.exports = userModel

@@ -20,6 +20,8 @@ inputText.onchange = () => {
     })
 
 
+    
+
     socket.on(`newRecord-${notificationEvent}`, payload => {
         console.log(payload);
     })

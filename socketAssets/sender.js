@@ -1,7 +1,7 @@
 // const io  = require('socket.io-client');
 // import io  from './node_modules/socket.io-client';
-
-const host = "http://localhost:4001";
+const PORT = 3000;
+const host = `http://localhost:${PORT}`;
 const socket = io.connect(host, { transports: ["websocket"] });
 
 // let btn = document.createElement('button')
@@ -17,7 +17,7 @@ let chat = document.querySelector(".chat");
 
 const obj = {
   content: "",
-  receiverId: 3,
+  receiverId: 4,
   senderId: 1,
   counter: 0,
 };
@@ -64,5 +64,7 @@ counterEle.onclick = (e) => {
   counterEle.innerHTML = 0;
   socket.emit("zero");
 };
+
+socket.emit('read');
 
 // socket.emit('test_1', 'hello from the client side')

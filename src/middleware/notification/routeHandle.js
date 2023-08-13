@@ -28,7 +28,7 @@ async function handleFollowing(req, res, next) {
         const followersOwner = await modules.user.findByPk(respons.dataValues.me_id);
         if (respons) {
             const message = `${followersOwner.username} followed you`;
-            await createNotificationRecord(followingOwner.id, followersOwner.id, message, respons.id);
+            await createNotificationRecord(followingOwner.id, followersOwner.id, message, followersOwner.id);
         }
         res.status(201).json(respons);
     } catch (err) {
@@ -43,9 +43,6 @@ async function handlePost(req, res, next) {
         const postOwner = await modules.user.findByPk(respons.dataValues.userid);
         const followingPostOwner = await modules.Followers.findAll({ where: { following_id: postOwner.dataValues.id } });
         followingPostOwner.map(ele => {
-            console.log("-----------------------------------------")
-            console.log("followingPostOwner------------------", ele.me_id)
-            console.log("postOwner---------------------------", postOwner.id);
             let message = `${postOwner.username} added new photo`;
             createNotificationRecord(ele.me_id, postOwner.id, message, respons.id);
         });

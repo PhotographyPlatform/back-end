@@ -2,10 +2,11 @@ const express = require('express')
 const modules = require('../models/index')
 const { newPostCOll, newUserCOll } = require("../models")
 const followRoute = express.Router()
-
 followRoute.get('/Followers/:id', Followers)
 followRoute.get('/Following/:id', following)
 followRoute.get('/home/:id', homeHandler)
+// followRoute.delete('/unfollow/:meId/:following_id', unFollowHandler)
+
 
 async function Followers(req, res, next) {
     try {

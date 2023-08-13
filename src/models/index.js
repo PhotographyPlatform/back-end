@@ -14,7 +14,6 @@ const R_Ph_Likes_Model = require('./R_PH_post/R_Ph_Likes');
 const favoritesModel = require('./favorites/favorites');
 
 
-// const FollowersModel = require('./followers/follower')
 const notificationModel = require('./notifications')
 const bioModel = require('./bio');
 const storyModel = require('./stories/story')
@@ -130,14 +129,18 @@ req_ph_comment.belongsTo(R_PH_Post, { foreignKey: 'postid', targetKey: 'id' })
 R_PH_Post.hasMany(R_Ph_Likes, { foreignKey: 'postid', sourceKey: 'id' })
 R_Ph_Likes.belongsTo(R_PH_Post, { foreignKey: 'postid', targetKey: 'id' })
 
-// // |user| one to many |likes| 
+// |user| one to many |likes| 
 user.hasMany(R_Ph_Likes, { foreignKey: 'userid', sourceKey: 'id' })
 R_Ph_Likes.belongsTo(user, { foreignKey: 'userid', targetKey: 'id' })
 
 //|user|one to many |Notification|
 user.hasMany(notification, { foreignKey: 'receiverId', sourceKey: 'id' });
-notification.belongsTo(notification, { foreignKey: 'receiverId', targetKey: 'id' })
+notification.belongsTo(user, { foreignKey: 'receiverId', targetKey: 'id' })
+
+
 // ------------------------------------------------------------------------------------
+
+
 
 
 const newCOmCOll = new Collection(comment)
@@ -153,6 +156,7 @@ const bioCollection = new Collection(bio)
 const StoriesColl = new Collection(stories)
 const notificationCollection = new Collection(notification);
 const favoritesCollection = new Collection(favorites);
+
 
 module.exports = {
      post,
@@ -181,5 +185,5 @@ module.exports = {
      notificationCollection,
      notification,
      favorites,
-     favoritesCollection
+     favoritesCollection,
 }  

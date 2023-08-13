@@ -87,7 +87,6 @@ async function handleDelete(req, res, next) {
     try {
         const mod = req.model;
         const id = req.params.id;
-
         const data = await mod.delete(id);
         res.status(204).json({
             message: req.modelName,

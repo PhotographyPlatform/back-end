@@ -14,9 +14,9 @@ const erorr404 = require("./error-handlers/404")
 const erorr500 = require("./error-handlers/500");
 const postPageRoute = require('./routes/RequestPhotogrpher/post_page');
 const profileRoute = require('./routes/profile');
-const axios = require('axios');
 const multerRoute = require('./middleware/multer/multer');
 const notifiRoute = require("./routes/notification");
+
 
 const modules = require("./models")
 
@@ -47,20 +47,18 @@ io.on('connection', socket => {
     socket.on('message', async (data) => {
         const room = `room users ${data.receiverId} - ${data.senderId}`
         io.to(room).emit('test', data.content);
-        
+
         const result = await chatCollection.create(data)
 
         console.log(result);
 
         count++
-        socket.to(room).emit('notificaton' , count);
+        socket.to(room).emit('notificaton', count);
 
-        socket.broadcast.to(room).emit('outgoing' , 'outgoing');
-        socket.emit('incoming' , 'incoming');
-
-
-
+        socket.broadcast.to(room).emit('outgoing', 'outgoing');
+        socket.emit('incoming', 'incoming');
     })
+
 })
 
 // // Notification Socket
@@ -161,7 +159,6 @@ app.use(profileRoute);
 app.use(multerRoute);
 app.use(notifiRoute);
 app.use(favoritesRoute);
-
 // controller
 app.get('/', (req, res) => {
     try {
