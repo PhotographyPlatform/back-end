@@ -17,6 +17,7 @@ const profileRoute = require('./routes/profile');
 const axios = require('axios');
 const multerRoute = require('./middleware/multer/multer');
 const notifiRoute = require("./routes/notification");
+const adminRoute = require("./routes/admin");
 const modules = require("./models")
 
 const favoritesRoute = require("./routes/favorites");
@@ -172,6 +173,7 @@ app.use(profileRoute);
 app.use(multerRoute);
 app.use(notifiRoute);
 app.use(favoritesRoute);
+app.use(adminRoute);
 
 // controller
 app.get('/', (req, res) => {

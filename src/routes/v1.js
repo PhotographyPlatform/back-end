@@ -28,16 +28,10 @@ v1Route.delete("/v1/:model/:id", middleware.handleDelete);
 v1Route.get("/getallPostUser/:userid", middleware.handleGetAllPostUser);
 v1Route.get("/getAllPostData/:Postid", middleware.handleGetAllPostData);
 
-v1Route.get(
-  "/getAllPostDataWithReplies",
-  middleware.handleGetAllPostDataWithReplies
-);
+v1Route.get("/getAllPostDataWithReplies",middleware.handleGetAllPostDataWithReplies);
 
 // Get Data between two relation collection and modle
-v1Route.get(
-  "/getRelation/:collection/:module/:idCollection",
-  middleware.handleGetRelation
-);
+v1Route.get("/getRelation/:collection/:module/:idCollection",middleware.handleGetRelation);
 
 
 
