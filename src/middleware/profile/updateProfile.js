@@ -1,7 +1,6 @@
 'use strict'
 
 const { user } = require("../../models")
-
 module.exports = async (req, res, next) => {
     const data = req.data
     const body = req.body
@@ -13,6 +12,9 @@ module.exports = async (req, res, next) => {
         await data.update({ password: body.password })
         await data.update({ birthday: body.birthday })
         await data.update({ gender: body.gender })
+        console.log(req.image);
+        await data.update({ img: req.image })
+
     }
     next()
 }
