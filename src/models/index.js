@@ -12,6 +12,8 @@ const R_PH_Post_Model = require("./reqPhotographerPost/R_Ph_Post");
 const req_ph_comments = require("./reqPhotographerPost/R_Ph_comment");
 const R_Ph_Likes_Model = require("./reqPhotographerPost/R_Ph_Likes");
 const favoritesModel = require("./favorites/favorites");
+const reportModel = require('./report');
+
 
 // const FollowersModel = require('./followers/follower')
 const notificationModel = require("./notifications");
@@ -51,6 +53,7 @@ const notification = notificationModel(newSequlize, DataTypes);
 const favorites = favoritesModel(newSequlize, DataTypes);
 const challenages = challenage(newSequlize, DataTypes);
 const replys = reply(newSequlize, DataTypes);
+const report = reportModel(newSequlize, DataTypes);
 
 // Relationship
 // |user| one to many |post|
@@ -89,6 +92,10 @@ chat.belongsTo(user, { foreignKey: "receiverId", as: "receiver" });
 // |user| one to one  |bio|
 user.hasOne(bio, { foreignKey: "userid", targetKey: "id" });
 bio.belongsTo(user, { foreignKey: "userid", targetKey: "id" });
+
+// A user can send multiple report (one-to-many relationship)
+user.hasMany(report, { foreignKey: 'userId', sourceKey: 'id' });
+report.belongsTo(user, { foreignKey: 'userId', targetKey: 'id' })
 
 // ------------------------------------------------------------------------------------
 
@@ -137,7 +144,7 @@ R_Ph_Likes.belongsTo(user, { foreignKey: "userid", targetKey: "id" });
 
 //|user|one to many |Notification|
 user.hasMany(notification, { foreignKey: 'receiverId', sourceKey: 'id' });
-notification.belongsTo(notification, { foreignKey: 'receiverId', targetKey: 'id' })
+notification.belongsTo(user, { foreignKey: 'receiverId', targetKey: 'id' })
 // ------------------------------------------------------------------------------------
 // // challenage relations
 
@@ -168,6 +175,7 @@ const notificationCollection = new Collection(notification);
 const favoritesCollection = new Collection(favorites);
 const challenagesCollection = new Collection(challenages);
 const replysCollection = new Collection(replys);
+const reportCollection = new Collection(report);
 
 module.exports = {
   post,
@@ -201,4 +209,7 @@ module.exports = {
   challenages,
   replys,
   replysCollection,
+  reportModel,
+  report,
+  reportCollection
 };
