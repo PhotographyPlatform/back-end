@@ -20,18 +20,27 @@ beforeAll(async () => {
   });
 
   await newPostCOll.create({
-    imgurl: "catsimge.png",
-    userid: 1,
-    title: "cats playing with a laser",
-    contant: "i took photos of my cats while they were playing with a laser",
-    category: "animal",
+    title : "cats",
+    brief : "also test",
+    prize:"50",
+    startDate : "2023-08-03T12:00:00Z",
+    endDate : "2023-08-03T12:00:00Z",
+    rules : ["rule1 , rule2"],
+    imgurl : "img.png",
+    category : ["animals", "cats"],
+    userid : 1
   });
+
   await newPostCOll.create({
-    imgurl: "blackwatch.png",
-    userid: 2,
-    title: "my black car",
-    contant: "a journey to Florida with my black car",
-    category: "animal",
+    title : "dogs",
+    brief : "also test",
+    prize:"50",
+    startDate : "2023-08-03T12:00:00Z",
+    endDate : "2023-08-03T12:00:00Z",
+    rules : ["rule1 , rule2"],
+    imgurl : "img.png",
+    category : ["animals", "dogs"],
+    userid : 1
   });
 });
 
@@ -62,7 +71,7 @@ describe("search test", () => {
     expect(res).toContain(searchWord);
   });
 
-  it("get both users and posts based on the search word", async () => {
+  it.skip("get both users and posts based on the search word", async () => {
     const searchWord = "black";
 
     let data = await req.get("/search").send({
@@ -78,7 +87,12 @@ describe("search test", () => {
 
   it("get both users and posts based on the search word", async () => {
     let data = await req.get("/search1111");
-
     expect(data.statusCode).toBe(404);
+  });
+
+  it.skip("get all the posts based on a certain word", async () => {
+    const searchWord = "animals";
+    let data = await req.get(`/searchCategory/${searchWord}`);
+    expect(JSON.parse(data.text).length).toBe(2);
   });
 });

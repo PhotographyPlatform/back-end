@@ -16,7 +16,9 @@ const profileRoute = require('./routes/profile');
 const {multerRoute} = require('./middleware/multer/multer');
 const notifiRoute = require("./routes/notification");
 const adminRoute = require("./routes/admin");
-const modules = require("./models")
+const modules = require("./models");
+const searchCategoryRoute = require("./routes/searchCategory");
+
 
 const favoritesRoute = require("./routes/favorites");
 const { chatCollection } = require('./models');
@@ -172,6 +174,7 @@ app.use(multerRoute);
 app.use(notifiRoute);
 app.use(favoritesRoute);
 app.use(adminRoute);
+app.use(searchCategoryRoute);
 
 // controller
 app.get('/', (req, res) => {
