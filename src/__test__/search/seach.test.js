@@ -76,7 +76,7 @@ describe("search test", () => {
     expect(postsResults).toContain(searchWord);
   });
 
-  it("get both users and posts based on the search word", async () => {
+  it("get both useWWrs and posts based on the search word", async () => {
     let data = await req.get("/search1111");
 
     expect(data.statusCode).toBe(404);

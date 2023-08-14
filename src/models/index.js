@@ -136,8 +136,11 @@ user.hasMany(R_Ph_Likes, { foreignKey: "userid", sourceKey: "id" });
 R_Ph_Likes.belongsTo(user, { foreignKey: "userid", targetKey: "id" });
 
 //|user|one to many |Notification|
-user.hasMany(notification, { foreignKey: 'receiverId', sourceKey: 'id' });
-notification.belongsTo(notification, { foreignKey: 'receiverId', targetKey: 'id' })
+user.hasMany(notification, { foreignKey: "receiverId", sourceKey: "id" });
+notification.belongsTo(notification, {
+  foreignKey: "receiverId",
+  targetKey: "id",
+});
 // ------------------------------------------------------------------------------------
 // // challenage relations
 

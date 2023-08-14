@@ -15,23 +15,25 @@ const postModel = (newSequlize, DataTypes) =>
     contant: {
       type: DataTypes.STRING,
     },
-    category: {
-      type: DataTypes.STRING,
-      set(category) {
-        const arr = JSON.stringify(category);
-        this.setDataValue("category", arr);
+    // category: {
+    //   type: DataTypes.STRING,
+    //   set(category) {
+    //     const arr = JSON.stringify(category);
+    //     this.setDataValue("category", arr);
 
-        // console.log(JSON.parse("[\"animal\",\"summer\",\"black\"]"));
-        console.log(JSON.parse(arr));
-      },
-    },
+    //     // console.log(JSON.parse("[\"animal\",\"summer\",\"black\"]"));
+    //     console.log(JSON.parse(arr));
+    //   },
+    // },
     challengeName: {
       type: DataTypes.STRING,
     },
     challengeID: {
       type: DataTypes.INTEGER,
     },
+    category: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+    },
   });
 
 module.exports = postModel;
-
