@@ -52,7 +52,6 @@ router.post('/story', isAuth, storyUpload.single('image'), uploadStory, async (r
         const obj = req.body;
         obj.storyUrl = req.image
         obj.userid = req.users.userId
-        console.log(obj);
         const data = await models.StoriesColl.create(obj);
         res.status(201).json({
             data
@@ -66,7 +65,6 @@ router.post('/createPost', isAuth, storyUpload.single('image'), uploadStory, asy
         const obj = req.body;
         obj.imgurl = req.image
         obj.userid = req.users.userId
-        console.log(obj);
         const data = await models.newPostCOll.create(obj);
         res.status(201).json({
             data

@@ -10,7 +10,6 @@ async function handleComment(req, res, next) {
         const postOwner = (await modules.post.findByPk(respons.dataValues.postid)).userid; // Assuming the user with ID "like.postid" exists
 
         if (respons) {
-
             const message = `${commentOwner.username} Add comment on your post`;
             createNotificationRecord(postOwner, commentOwner.id, message, respons.id);
         }
