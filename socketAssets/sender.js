@@ -15,17 +15,31 @@ let counterEle = document.querySelector(".counter");
 let chatBOx = document.querySelector(".chatbox");
 let chat = document.querySelector(".chat");
 
+// let sender = window.location.pathname.split("/");
+let sender = window.location.search;
+let reqx = /[0-9]+/g;
+let values = sender.match(reqx);
+console.log(values);
+
 const obj = {
   content: "",
   receiverId: 3,
   senderId: 1,
   counter: 0,
+  read: false,
 };
 
 socket.emit("joinRoom", obj);
 
 btn.onclick = () => {
   obj.content = input.value;
+
+  // let text = document.createElement("div");
+  // text.classList.add("message");
+  // text.classList.add("outgoing");
+  // text.innerText = input.value;
+  // chat.append(text);
+
   socket.emit("message", obj);
 };
 
@@ -40,21 +54,21 @@ socket.on("test", (message) => {
 
   let text = document.createElement("div");
 
-  // text.classList.add('message')
-  // text.classList.add('incoming')
-  // text.innerText = message
-  // chat.append(text)
-
-  socket.on("outgoing", (outgoing) => {
-    text.classList.add("message");
-    text.classList.add("outgoing");
-    text.innerText = message;
-    chat.append(text);
-  });
+  // text.classList.add("message");
+  // text.classList.add("incoming");
+  // text.innerText = message;
+  // chat.append(text);
 
   socket.on("incoming", (incoming) => {
     text.classList.add("message");
     text.classList.add("incoming");
+    text.innerText = message;
+    chat.append(text);
+  });
+
+  socket.on("outgoing", (outgoing) => {
+    text.classList.add("message");
+    text.classList.add("outgoing");
     text.innerText = message;
     chat.append(text);
   });

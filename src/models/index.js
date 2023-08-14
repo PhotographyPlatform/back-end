@@ -12,8 +12,7 @@ const R_PH_Post_Model = require("./reqPhotographerPost/R_Ph_Post");
 const req_ph_comments = require("./reqPhotographerPost/R_Ph_comment");
 const R_Ph_Likes_Model = require("./reqPhotographerPost/R_Ph_Likes");
 const favoritesModel = require("./favorites/favorites");
-const reportModel = require('./report');
-
+const reportModel = require("./report");
 
 // const FollowersModel = require('./followers/follower')
 const notificationModel = require("./notifications");
@@ -93,8 +92,8 @@ user.hasOne(bio, { foreignKey: "userid", targetKey: "id" });
 bio.belongsTo(user, { foreignKey: "userid", targetKey: "id" });
 
 // A user can send multiple report (one-to-many relationship)
-user.hasMany(report, { foreignKey: 'userId', sourceKey: 'id' });
-report.belongsTo(user, { foreignKey: 'userId', targetKey: 'id' })
+user.hasMany(report, { foreignKey: "userId", sourceKey: "id" });
+report.belongsTo(user, { foreignKey: "userId", targetKey: "id" });
 
 // ------------------------------------------------------------------------------------
 
@@ -142,8 +141,8 @@ user.hasMany(R_Ph_Likes, { foreignKey: "userid", sourceKey: "id" });
 R_Ph_Likes.belongsTo(user, { foreignKey: "userid", targetKey: "id" });
 
 //|user|one to many |Notification|
-user.hasMany(notification, { foreignKey: 'receiverId', sourceKey: 'id' });
-notification.belongsTo(user, { foreignKey: 'receiverId', targetKey: 'id' })
+user.hasMany(notification, { foreignKey: "receiverId", sourceKey: "id" });
+notification.belongsTo(user, { foreignKey: "receiverId", targetKey: "id" });
 // ------------------------------------------------------------------------------------
 // // challenage relations
 
@@ -210,5 +209,5 @@ module.exports = {
   replysCollection,
   reportModel,
   report,
-  reportCollection
+  reportCollection,
 };
