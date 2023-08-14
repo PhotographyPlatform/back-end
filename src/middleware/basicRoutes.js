@@ -29,19 +29,18 @@ async function handleGetOne(req, res, next) {
 // let objNot = {};
 
 async function handleCreate(req, res, next) {
-    try {
-        const mod = req.model;
-        const obj = req.body;
-        const data = await mod.create(obj);
-        res.status(201).json({
-            message: req.modelName,
-            data
-        });
-        // objNot = data
-    } catch (err) {
-        next(err);
-    }
-
+  try {
+    const mod = req.model;
+    const obj = req.body;
+    const data = await mod.create(obj);
+    res.status(201).json({
+      message: req.modelName,
+      data,
+    });
+    // objNot = data
+  } catch (err) {
+    next(err);
+  }
 }
 
 async function handleUpdate(req, res, next) {
@@ -144,6 +143,21 @@ async function handleGetRelation(req, res, next) {
   }
 }
 
+async function handleGetRelationWithComAndLikes(req, res, next) {
+  try {
+    const id = req.params.idCollection;
+    const post = await modules.challenagesCollection.readAll(
+      id,
+      modules.post,
+      modules.comment,
+      modules.like
+    );
+    res.status(200).json(post);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   handleGetAll,
   handleGetOne,
@@ -155,4 +169,5 @@ module.exports = {
   handleGetAllPostData,
   handleGetRelation,
   handleGetAllPostDataWithReplies,
+  handleGetRelationWithComAndLikes,
 };

@@ -23,9 +23,8 @@ const reply = require("./reply/reply");
 require("dotenv").config();
 
 const DB =
-  process.env.NODE_ENV === "test"
-    ? "sqlite::memory:"
-    : process.env.DATABASE_URL;
+  process.env.NODE_ENV === 'test' ? 'sqlite:memory' : process.env.DATABASE_URL;
+  
 const DATABASE_CONFIG =
   process.env.NODE_ENV === "production"
     ? {

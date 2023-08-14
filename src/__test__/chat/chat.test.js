@@ -6,32 +6,30 @@ const supertest = require("supertest");
 const req = supertest(app);
 
 beforeAll(async () => {
-  await newSequlize.sync();
-  await newUserCOll.create({
-    username: "hamza",
-    password: "123",
-    email: "hamza@gmail.com",
-  });
-  await newUserCOll.create({
-    username: "sham",
-    password: "123",
-    email: "sham@gmail.com",
-  });
+  try {
+    
+    await newSequlize.sync();
+    await newUserCOll.create({
+      username: "hamza",
+      password: "123",
+      email: "hamza@gmail.com",
+    });
+    await newUserCOll.create({
+      username: "sham",
+      password: "123",
+      email: "sham@gmail.com",
+    });
+  } catch (err) {
+    console.log(err);
+  }
 
-  // const io = require('socket.io-client');
-  // const port = process.env.PORT || 4001;
-  // const nameSpacehost = `http://localhost:4001/notification`;
-  // const nameSpaceSocket = io.connect(nameSpacehost);
 });
 
 afterAll(async () => {
   await newSequlize.drop();
-
-  // if(nameSpaceSocket){
-
-  //      nameSpaceSocket.disconnect();
-  // }
 });
+
+let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjkyMDI0NzYxfQ._kuAsG2EWmJsdrwzvSQ3OFONqSehei1AgQKZvQdIQnM'
 
 describe("chat test", () => {
   it("test 1", () => {
@@ -41,13 +39,15 @@ describe("chat test", () => {
   it("add messages ", async () => {
     let data = await req
       .post("/chat/1/2")
-      .send({ content: "5 hi from sham to hamza by socket " });
+      .send({ content: "5 hi from sham to hamza by socket " })
+      .set('Authorization' , `Basic ${token}`)
     let res = JSON.parse(data.text).data.content;
     expect(res).toBe("5 hi from sham to hamza by socket ");
   });
 
   it("get sender and reciver messages ", async () => {
-    let data = await req.get("/chat/1/2");
+    let data = await req.get("/chat/2")
+      .set('Authorization', `Basic ${token}`);
 
     let res = JSON.parse(data.text).sendData[0].content;
     expect(res).toBe("5 hi from sham to hamza by socket ");
@@ -56,7 +56,8 @@ describe("chat test", () => {
   it("get sender and reciver messages ", async () => {
     let data = await req
       .put("/chat/1/1/2")
-      .send({ content: "hi from sham to hamza by socket " });
+      .send({ content: "hi from sham to hamza by socket " })
+      .set('Authorization' , `Basic ${token}`);
     let res = JSON.parse(data.text).data.content;
 
     expect(res).toBe("hi from sham to hamza by socket ");
@@ -64,7 +65,8 @@ describe("chat test", () => {
   });
 
   it("get sender and reciver messages ", async () => {
-    let data = await req.delete("/chat/1/1/2");
+    let data = await req.delete("/chat/1")
+    .set('Authorization' , `Basic ${token}`);
 
     expect(data.statusCode).toBe(204);
   });
