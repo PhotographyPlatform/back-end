@@ -23,14 +23,16 @@ async function handleComment(req, res, next) {
 async function handleFollowing(req, res, next) {
     try {
         const record = req.body;
-        const respons = await modules.FollowersColl.create(record);
-        const followingOwner = await modules.user.findByPk(respons.dataValues.following_id);
-        const followersOwner = await modules.user.findByPk(respons.dataValues.me_id);
-        if (respons) {
-            const message = `${followersOwner.username} followed you`;
-            await createNotificationRecord(followingOwner.id, followersOwner.id, message, respons.id);
-        }
-        res.status(201).json(respons);
+        if (record.following_id !== record.me_id) {
+            const respons = await modules.FollowersColl.create(record);
+            const followingOwner = await modules.user.findByPk(respons.dataValues.following_id);
+            const followersOwner = await modules.user.findByPk(respons.dataValues.me_id);
+            if (respons) {
+                const message = `${followersOwner.username} followed you`;
+                await createNotificationRecord(followingOwner.id, followersOwner.id, message, followersOwner.id);
+            }
+            res.status(201).json(respons);
+        } else res.status(200).json('you cant follow yourself')
     } catch (err) {
         next(err)
     }
@@ -43,9 +45,6 @@ async function handlePost(req, res, next) {
         const postOwner = await modules.user.findByPk(respons.dataValues.userid);
         const followingPostOwner = await modules.Followers.findAll({ where: { following_id: postOwner.dataValues.id } });
         followingPostOwner.map(ele => {
-            console.log("-----------------------------------------")
-            console.log("followingPostOwner------------------", ele.me_id)
-            console.log("postOwner---------------------------", postOwner.id);
             let message = `${postOwner.username} added new photo`;
             createNotificationRecord(ele.me_id, postOwner.id, message, respons.id);
         });
@@ -59,16 +58,21 @@ async function handlelikes(req, res, next) {
     try {
         const record = req.body;
         const mod = modules.likeCollection;
-        const respons = await mod.create(record);
-        const likesOwner = await modules.user.findByPk(respons.dataValues.userid);
-        // Post Owner
-        const postOwner = (await modules.post.findByPk(respons.dataValues.postid)).userid; // Assuming the user with ID "like.postid" exists
+        const validLike = await modules.like.findOne({ where: { postid: record.postid, userid: record.userid } })
+        if (!validLike) {
+            const respons = await mod.create(record);
+            const likesOwner = await modules.user.findByPk(respons.dataValues.userid);
+            // Post Owner
+            const postOwner = (await modules.post.findByPk(respons.dataValues.postid)).userid; // Assuming the user with ID "like.postid" exists
 
-        if (respons) {
-            const message = `${likesOwner.username} liked your post`;
-            createNotificationRecord(postOwner, likesOwner.id, message, respons.id);
+            if (respons) {
+                const message = `${likesOwner.username} liked your post`;
+                createNotificationRecord(postOwner, likesOwner.id, message, respons.id);
+            }
+            res.status(201).json(respons);
+        } else {
+            res.status(200).json('you already liked this post')
         }
-        res.status(201).json(respons);
     } catch (err) {
         next(err)
     }

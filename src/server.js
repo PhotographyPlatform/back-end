@@ -1,10 +1,10 @@
 "use strict";
 // importing..
+
 const express = require("express");
 const cors = require("cors");
 const v1Route = require("./routes/v1");
 const router = require("./routes/v2");
-const bearer = require("./auth/middleWare/bearer");
 const chatRoute = require("./routes/chat");
 const searchRoute = require("./routes/search");
 const logger = require("./middleware/logger");
@@ -14,11 +14,12 @@ const erorr404 = require("./error-handlers/404");
 const erorr500 = require("./error-handlers/500");
 const postPageRoute = require("./routes/RequestPhotogrpher/post_page");
 const profileRoute = require("./routes/profile");
-const axios = require("axios");
-const multerRoute = require("./middleware/multer/multer");
+const { multerRoute } = require("./middleware/multer/multer");
 const notifiRoute = require("./routes/notification");
-const path = require("path");
+const adminRoute = require("./routes/admin");
 const modules = require("./models");
+const searchCategoryRoute = require("./routes/searchCategory");
+const path = require("path");
 
 const favoritesRoute = require("./routes/favorites");
 const { chatCollection } = require("./models");
@@ -141,12 +142,14 @@ app.use(searchRoute);
 app.use(authRoutes);
 app.use(followRoute);
 app.use(postPageRoute);
-
+// app.use(deleteRouter);
 app.use(router);
 app.use(profileRoute);
 app.use(multerRoute);
 app.use(notifiRoute);
 app.use(favoritesRoute);
+app.use(adminRoute);
+app.use(searchCategoryRoute);
 
 // controller
 app.get("/", (req, res) => {
