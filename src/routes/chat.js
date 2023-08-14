@@ -1,11 +1,13 @@
 const express = require('express')
 const { chatCollection, newUserCOll } = require('../models')
 const chatRoute = express.Router()
+const isAuth = require('../auth/middleWare/bearer');
 
-chatRoute.get('/chat/:senderID/:reciverID', async (req, res) => {
+
+chatRoute.get('/chat/:reciverID', isAuth , async (req, res , next) => {
      try {
           const reciverID = req.params.reciverID
-          const senderID = req.params.senderID
+          const senderID = req.users.userId
           const data = await newUserCOll.SendandRecieveMessage(senderID, reciverID)
           res.status(200).send(data)
      } catch (err) {
@@ -14,7 +16,7 @@ chatRoute.get('/chat/:senderID/:reciverID', async (req, res) => {
 })
 
 
-chatRoute.post('/chat/:senderID/:reciverID', async (req, res,  next) => {
+chatRoute.post('/chat/:senderID/:reciverID',isAuth , async (req, res,  next) => {
      try {
           const content = req.body.content
           const reciverID = req.params.reciverID
@@ -34,7 +36,7 @@ chatRoute.post('/chat/:senderID/:reciverID', async (req, res,  next) => {
      }
 })
 
-chatRoute.put('/chat/:id/:senderID/:reciverID', async (req, res,  next) => {
+chatRoute.put('/chat/:id/:senderID/:reciverID',isAuth , async (req, res,  next) => {
      try {
           const id = req.params.id
           const content = req.body.content
@@ -56,7 +58,7 @@ chatRoute.put('/chat/:id/:senderID/:reciverID', async (req, res,  next) => {
      }
 })
 
-chatRoute.delete('/chat/:id/:senderID/:reciverID', async (req, res,  next) => {
+chatRoute.delete('/chat/:id',isAuth , async (req, res,  next) => {
      try {
           const id = req.params.id
 
@@ -69,18 +71,18 @@ chatRoute.delete('/chat/:id/:senderID/:reciverID', async (req, res,  next) => {
      }
 })
 
-chatRoute.get('/getmessages/:senderID/:reciverID', async (req, res,  next) => {
-     try {
-          const reciverID = req.params.reciverID
-          const senderID = req.params.senderID
-          const data = await newUserCOll.SendandRecieveMessage(senderID, reciverID)
+// chatRoute.get('/getmessages/:senderID/:reciverID', async (req, res,  next) => {
+//      try {
+//           const reciverID = req.params.reciverID
+//           const senderID = req.params.senderID
+//           const data = await newUserCOll.SendandRecieveMessage(senderID, reciverID)
 
-          res.status(200).json({
-               respones: data
-          })
-     } catch (err) {
-          next(err)
-     }
-})
+//           res.status(200).json({
+//                respones: data
+//           })
+//      } catch (err) {
+//           next(err)
+//      }
+// })
 
 module.exports = chatRoute;

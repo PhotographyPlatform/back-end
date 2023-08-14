@@ -1,19 +1,22 @@
 const express = require('express');
 const profileRoute = express.Router();
 const modules = require("../models");
-const { log } = require('console');
-profileRoute.get("/profile/:userid", handleProfile)
-profileRoute.get("/profile/Bio/:userid", handleBio)
-profileRoute.get("/profile/userBio/:userid", handleUserBio)
-profileRoute.get("/profile/userPost/:userid", handleUserPost)
-profileRoute.get("/profile/followers/:userid", handleUserFollowers)
-profileRoute.get("/profile/following/:userid", handleUserFollowing)
+const isAuth = require('../auth/middleWare/bearer')
+// profileRoute.get("/profile/:userid", handleProfile)// not work
+profileRoute.get("/profile/Bio", isAuth, handleBio)
+profileRoute.get("/profile/userBio", isAuth, handleUserBio)
+profileRoute.get("/profile/userPost", isAuth, handleUserPost)
+profileRoute.get("/profile/followers/:userid", handleUserFollowers)// not work
+profileRoute.get("/profile/following/:userid", handleUserFollowing)// not work
+
 
 
 async function handleBio(req, res, next) {
     try {
-        const id = req.params.userid;
+        console.log()
+        const id = req.users.userId;
         const record = await modules.bioCollection.get(id);
+
         res.status(200).json(record);
     } catch (err) {
         next(err);
@@ -22,7 +25,7 @@ async function handleBio(req, res, next) {
 
 async function handleProfile(req, res, next) {
     try {
-        const id = req.params.userid;
+        const id = req.users.userId;
         const user = await modules.newUserCOll.get(id);
         const record = await modules.newPostCOll.getUserPost(id);
         const bio = await modules.bioCollection.get(id);
@@ -44,7 +47,7 @@ async function handleProfile(req, res, next) {
 
 async function handleUserPost(req, res, next) {
     try {
-        const id = req.params.userid;
+        const id = req.users.userId;
         const record = await modules.newPostCOll.getUserPost(id)
         res.status(200).json(record);
     } catch (err) {
@@ -55,7 +58,7 @@ async function handleUserPost(req, res, next) {
 
 async function handleUserBio(req, res, next) {
     try {
-        const id = req.params.userid
+        const id = req.users.userId;
         const record = await modules.newUserCOll.getRelation(id, modules.bio)
         res.status(200).json(record)
     } catch (err) {

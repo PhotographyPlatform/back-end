@@ -1,55 +1,55 @@
 // const { newSequlize } = require("../models");
-const {
-  newUserCOll,
-  newSequlize,
-  newPostCOll,
-  challenagesCollection,
-} = require("../../models/index");
+const {newUserCOll,newSequlize,newPostCOll,challenagesCollection,} = require("../../models/index");
 const { app } = require("../../server");
 const supertest = require("supertest");
 const req = supertest(app);
-
 beforeAll(async () => {
-  await newSequlize.sync();
+  try {
+      
+    await newSequlize.sync();
 
-  await newUserCOll.create({
-    username: "hamza",
-    password: "123",
-    email: "ehab@gmail.com",
-  });
-  await newUserCOll.create({
-    username: "sham",
-    password: "123",
-    email: "ehab@gmail.com",
-  });
+    await newUserCOll.create({
+      username: "hamza",
+      password: "123",
+      email: "ehab@gmail.com",
+    });
+    await newUserCOll.create({
+      username: "sham",
+      password: "123",
+      email: "ehab@gmail.com",
+    });
 
-  await challenagesCollection.create({
-    imgurl: "img.png",
-    title: " challenge 1",
-    brief: "  any thing",
-    startDate: null,
-    endDate: null,
-    rules: ["rule 1", "rule 2"],
-  });
-  await challenagesCollection.create({
-    imgurl: "img.png",
-    title: " challenge 2",
-    brief: "  any thing",
-    startDate: null,
-    endDate: null,
-    rules: ["rule 1", "rule 2"],
-  });
+    await challenagesCollection.create({
+      imgurl: "img.png",
+      title: " challenge 1",
+      brief: "  any thing",
+      startDate: null,
+      endDate: null,
+      rules: ["rule 1", "rule 2"],
+    });
+    await challenagesCollection.create({
+      imgurl: "img.png",
+      title: " challenge 2",
+      brief: "  any thing",
+      startDate: null,
+      endDate: null,
+      rules: ["rule 1", "rule 2"],
+    });
 
-  await newPostCOll.create({
-    imgurl: "img.png",
-    userid: 1,
-    title: "any thing",
-    contant: "for challenge 1",
-    category: null,
-    challengeName: null,
-    challengeID: 1,
-  });
-});
+    await newPostCOll.create({
+      imgurl: "img.png",
+      userid: 1,
+      title: "any thing",
+      contant: "for challenge 1",
+      category: null,
+      challengeName: null,
+      challengeID: 1,
+    });
+  } catch (err) {
+    console.log(err);
+    }
+  }); 
+
 
 afterAll(async () => {
   await newSequlize.drop();

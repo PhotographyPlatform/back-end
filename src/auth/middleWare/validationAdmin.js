@@ -5,9 +5,9 @@ const { newUserCOll } = require('../../models');
 const data = require('../../models/')
 require('dotenv').config()
 
-const user = process.env.EMAIL
+const user = process.env.COMPANY_EMAIL
 console.log(user);
-const pass = process.env.PASS
+const pass = process.env.COMPANY_PASS
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -23,19 +23,20 @@ module.exports = async (req, res, next) => {
         const email = req.body.email;
         const validEmail = await newUserCOll.getEmail(email)
         const validUser = await data.user.findOne({ where: { username: req.body.username } })
-        console.log(validUser);
-        if (!validUser) {
-            if (!validEmail) {
-                // generate 4 random numbers function            
+        //!validUser
+        if (true) {
+            //!validEmail
+            if (true) {
+                // generate 4 random numbers function
                 function randomCodes() {
-                    return Math.floor(1000 + Math.random() * 9000);
+                    return Math.floor(1000 + Math.random() * 90000);
                 }
                 const randomNumbers = randomCodes()
-                console.log(randomNumbers);
+                console.log(randomNumbers)
                 req.users = randomNumbers
                 const mailOptions = {
-                    from: user,
-                    to: email,
+                    from: email,
+                    to: user,
                     subject: 'verify Email',
                     html: `<h2> to verify your email use these codes and don't share them with anyone</h2>' \n \n \n <h1>${randomNumbers}</h1>`,
                 };
@@ -56,5 +57,3 @@ module.exports = async (req, res, next) => {
         res.status(500).send('Server error');
     }
 };
-
-

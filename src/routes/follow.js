@@ -7,7 +7,7 @@ const isAuth = require('../auth/middleWare/bearer')
 followRoute.get('/Followers', isAuth, Followers)
 followRoute.get('/Following', isAuth, following)
 followRoute.get('/home', isAuth, homeHandler)
-followRoute.delete('/profile', isAuth, unFollowHandler)
+followRoute.delete('/unfollow', isAuth, unFollowHandler)
 
 async function Followers(req, res, next) {
     try {
@@ -38,7 +38,6 @@ async function homeHandler(req, res, next) {
         next(err)
     }
 }
-
 
 async function unFollowHandler(req, res, next) {
     try {
@@ -81,7 +80,6 @@ async function unFollowHandler(req, res, next) {
 }
 
 module.exports = followRoute;
-
 
 // another correct way if needed in front end this way is from the headers to delete a followers or following
 // const followingId = req.params.following_id;

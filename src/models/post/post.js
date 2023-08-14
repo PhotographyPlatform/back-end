@@ -15,20 +15,15 @@ const postModel = (newSequlize, DataTypes) =>
     contant: {
       type: DataTypes.STRING,
     },
-    category: {
-      type: DataTypes.STRING,
-      set(category) {
-        const arr = JSON.stringify(category);
-        this.setDataValue("category", arr);
-      },
-    },
     challengeName: {
       type: DataTypes.STRING,
     },
     challengeID: {
       type: DataTypes.INTEGER,
     },
+    category: {
+      type: process.env.NODE_ENV === 'test' ? DataTypes.STRING : DataTypes.ARRAY(DataTypes.STRING)
+    },
   });
 
 module.exports = postModel;
-

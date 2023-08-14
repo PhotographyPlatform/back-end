@@ -1,6 +1,6 @@
-const { newSequlize } = require("../models");
-const { newUserCOll } = require("../models/index");
-const { app } = require("../server");
+const { newSequlize } = require("../../models");
+const { newUserCOll } = require("../../models/index");
+const { app } = require("../../server");
 const supertest = require("supertest");
 const req = supertest(app);
 
