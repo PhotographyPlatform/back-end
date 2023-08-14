@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Document</title>
+     <link rel="stylesheet" href="../socketAssets/chat.css">
+</head>
+<body>
+
+     
+     <div class="chat-contianer">
+          <div class="chatbox">
+
+          </div>
+     </div>
+
+     <div class="chat-container">
+          <div class="notifications"> notifications <span class="counter"></span></div>
+
+          <div class="chat">
+              <!-- <div class="message">send hi</div> -->
+              <!-- <div class="message outgoing">Hi there! I have a question.</div>
+              <div class="message incoming">Sure, feel free to ask.</div> -->
+              <!-- More messages can be added here -->
+          </div>
+          <div class="input-field">
+
+               <input type="text" class="input">
+               <button class="btn">Send</button>
+          </div>
+     </div>
+
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+     <script  src="../socketAssets/sender.js" type="module"></script>
+</body>
+</html>

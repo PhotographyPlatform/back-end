@@ -24,7 +24,9 @@ const postModel = (newSequlize, DataTypes) =>
     challengeID: {
       type: DataTypes.INTEGER,
     },
+    category: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+    },
   });
 
 module.exports = postModel;
-
