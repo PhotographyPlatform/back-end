@@ -15,9 +15,6 @@ const postModel = (newSequlize, DataTypes) =>
     contant: {
       type: DataTypes.STRING,
     },
-    category: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-    },
     challengeName: {
       type: DataTypes.STRING,
     },
@@ -25,7 +22,7 @@ const postModel = (newSequlize, DataTypes) =>
       type: DataTypes.INTEGER,
     },
     category: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: process.env.NODE_ENV === 'test' ? DataTypes.STRING : DataTypes.ARRAY(DataTypes.STRING)
     },
   });
 

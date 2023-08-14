@@ -29,6 +29,7 @@ const {
   getNotificationById,
   updateNotification,
 } = require("./middleware/notification/modleHandle");
+const deleteRouter = require("./routes/delete.route");
 app.use(cors());
 app.use(logger);
 
@@ -142,7 +143,7 @@ app.use(searchRoute);
 app.use(authRoutes);
 app.use(followRoute);
 app.use(postPageRoute);
-// app.use(deleteRouter);
+app.use(deleteRouter);
 app.use(router);
 app.use(profileRoute);
 app.use(multerRoute);
@@ -159,8 +160,6 @@ app.get("/", (req, res) => {
     next(err);
   }
 });
-
-// app.use(express.static(path.join(__dirname, "..", "socketAssets")));
 
 app.get("/chat_test/:id/:id2", (req, res) => {
   const filePath = path.join(__dirname, "..", "socketAssets", "sender.html");
