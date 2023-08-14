@@ -1,21 +1,19 @@
 "use strict";
 
-const express = require('express')
-const modules = require('../models')
-const v1Route = express.Router()
-const middleware = require('../middleware/basicRoutes');
+const express = require("express");
+const modules = require("../models");
+const v1Route = express.Router();
+const middleware = require("../middleware/basicRoutes");
 
-
-
-v1Route.param('model', (req, res, next) => {
-     const modelName = req.params.model;
-     if (modules[modelName]) {
-          req.model = modules[modelName];
-          req.modelName = modelName;
-          next();
-     } else {
-          next('Invalid Model');
-     }
+v1Route.param("model", (req, res, next) => {
+  const modelName = req.params.model;
+  if (modules[modelName]) {
+    req.model = modules[modelName];
+    req.modelName = modelName;
+    next();
+  } else {
+    next("Invalid Model");
+  }
 });
 
 // Basic Routes
@@ -28,19 +26,30 @@ v1Route.delete("/v1/:model/:id", middleware.handleDelete);
 v1Route.get("/getallPostUser/:userid", middleware.handleGetAllPostUser);
 v1Route.get("/getAllPostData/:Postid", middleware.handleGetAllPostData);
 
-
-v1Route.get("/getAllPostDataWithReplies", middleware.handleGetAllPostDataWithReplies);
-
-// Get Data between two relation collection and modle
-v1Route.get("/getRelation/:collection/:module/:idCollection", middleware.handleGetRelation);
-
-
-v1Route.get("/getAllPostDataWithReplies",middleware.handleGetAllPostDataWithReplies);
+v1Route.get(
+  "/getAllPostDataWithReplies",
+  middleware.handleGetAllPostDataWithReplies
+);
 
 // Get Data between two relation collection and modle
-v1Route.get("/getRelation/:collection/:module/:idCollection",middleware.handleGetRelation);
+v1Route.get(
+  "/getRelation/:collection/:module/:idCollection",
+  middleware.handleGetRelation
+);
+v1Route.get(
+  "/getChallenge/:idCollection",
+  middleware.handleGetRelationWithComAndLikes
+);
 
+v1Route.get(
+  "/getAllPostDataWithReplies",
+  middleware.handleGetAllPostDataWithReplies
+);
 
-
+// Get Data between two relation collection and modle
+v1Route.get(
+  "/getRelation/:collection/:module/:idCollection",
+  middleware.handleGetRelation
+);
 
 module.exports = v1Route;

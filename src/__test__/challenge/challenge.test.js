@@ -3,8 +3,9 @@ const {newUserCOll,newSequlize,newPostCOll,challenagesCollection,} = require("..
 const { app } = require("../../server");
 const supertest = require("supertest");
 const req = supertest(app);
-try {
-  beforeAll(async () => {
+beforeAll(async () => {
+  try {
+      
     await newSequlize.sync();
 
     await newUserCOll.create({
@@ -44,10 +45,11 @@ try {
       challengeName: null,
       challengeID: 1,
     });
-  });
-} catch (err) {
-  console.log(err, "====================================");
-}
+  } catch (err) {
+    console.log(err);
+    }
+  }); 
+
 
 afterAll(async () => {
   await newSequlize.drop();

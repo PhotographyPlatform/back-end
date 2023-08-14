@@ -6,11 +6,11 @@ const { newSequlize } = require('./src/models/')
 const { start, app } = require('./src/server')
 
 newSequlize.sync().then(() => {
-    start(PORT)
+  start(PORT)
 })
-    .catch((e) => {
-        console.log('error massage:', e.message);
-    })
+  .catch((e) => {
+    console.log('error massage:', e.message);
+  })
 
 newSequlize
   .sync({ alter: true })

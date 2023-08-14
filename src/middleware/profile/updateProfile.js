@@ -1,20 +1,27 @@
-'use strict'
+"use strict";
 
-const { user } = require("../../models")
+const { user } = require("../../models");
 module.exports = async (req, res, next) => {
-    const data = req.data
-    const body = req.body
+  try {
+    const data = req.data;
+    const body = req.body;
     if (body) {
-        if (body.name) {
-            const updateName = await user.findOne({ where: { username: body.name } })
-            updateName === null ? await data.update({ username: body.name }) : next('username is already exits')
-        }
-        await data.update({ password: body.password })
-        await data.update({ birthday: body.birthday })
-        await data.update({ gender: body.gender })
-        console.log(req.image);
-        await data.update({ img: req.image })
-
+      if (body.name) {
+        const updateName = await user.findOne({
+          where: { username: body.name },
+        });
+        updateName === null
+          ? await data.update({ username: body.name })
+          : next("username is already exits");
+      }
+      await data.update({ password: body.password });
+      await data.update({ birthday: body.birthday });
+      await data.update({ gender: body.gender });
+      console.log(req.image);
+      await data.update({ img: req.image });
     }
-    next()
-}
+    next();
+  } catch (err) {
+    next(err);
+  }
+};

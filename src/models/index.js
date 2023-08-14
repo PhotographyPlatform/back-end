@@ -22,7 +22,9 @@ const challenage = require("./challenage/challenage");
 const reply = require("./reply/reply");
 require("dotenv").config();
 
-const DB = process.env.NODE_ENV === "test" ? "sqlite::memory" : process.env.DATABASE_URL;
+const DB =
+  process.env.NODE_ENV === 'test' ? 'sqlite:memory' : process.env.DATABASE_URL;
+
 const DATABASE_CONFIG =
   process.env.NODE_ENV === "production"
     ? {
@@ -53,7 +55,8 @@ const challenages = challenage(newSequlize, DataTypes);
 const replys = reply(newSequlize, DataTypes);
 const report = reportModel(newSequlize, DataTypes);
 
-// Relationship
+// Relationship | user | likes | comments
+
 // |user| one to many |post|
 user.hasMany(post, { foreignKey: "userid", sourceKey: "id" });
 post.belongsTo(user, { foreignKey: "userid", targetKey: "id" });
@@ -71,6 +74,8 @@ user.hasMany(like, { foreignKey: "userid", sourceKey: "id" });
 like.belongsTo(user, { foreignKey: "userid", targetKey: "id" });
 
 // ------------------------------------------------------------------------------------
+// Relationship | User | Story
+
 // user one to many to stories
 user.hasMany(stories, { foreignKey: "userid", sourceKey: "id" });
 stories.belongsTo(user, { foreignKey: "userid", targetKey: "id" });
@@ -78,6 +83,7 @@ stories.belongsTo(user, { foreignKey: "userid", targetKey: "id" });
 stories.hasMany(like, { foreignKey: "storyID", sourceKey: "id" });
 like.belongsTo(stories, { foreignKey: "storyID", targetKey: "id" });
 // ------------------------------------------------------------------------------------
+// Relationship | User | CHat
 
 // A user can send multiple messages (one-to-many relationship)
 user.hasMany(chat, { foreignKey: "senderId", as: "sentMessages" });
@@ -86,6 +92,8 @@ user.hasMany(chat, { foreignKey: "receiverId", as: "receivedMessages" });
 // Each message belongs to a sender (one-to-one relationship)
 chat.belongsTo(user, { foreignKey: "senderId", as: "sender" });
 chat.belongsTo(user, { foreignKey: "receiverId", as: "receiver" });
+
+// ------------------------------------------------------------------------------------
 
 // |user| one to one  |bio|
 user.hasOne(bio, { foreignKey: "userid", targetKey: "id" });
@@ -96,10 +104,8 @@ user.hasMany(report, { foreignKey: "userId", sourceKey: "id" });
 report.belongsTo(user, { foreignKey: "userId", targetKey: "id" });
 
 // ------------------------------------------------------------------------------------
-
 // Follwo Relations
 
-// Follow Relations
 user.belongsToMany(user, {
   as: "Followers",
   through: Followers,
@@ -118,6 +124,7 @@ Followers.belongsTo(user, { foreignKey: "following_id", as: "FollowerUser" });
 Followers.belongsTo(user, { foreignKey: "me_id", as: "FollowedUser" });
 
 // ------------------------------------------------------------------------------------
+// Request Photographer Relations
 
 // request photographer user // post Relations
 user.hasMany(R_PH_Post, { foreignKey: "userid", sourceKey: "id" });
@@ -132,7 +139,6 @@ R_PH_Post.hasMany(req_ph_comment, { foreignKey: "postid", sourceKey: "id" });
 req_ph_comment.belongsTo(R_PH_Post, { foreignKey: "postid", targetKey: "id" });
 
 // // |post| one to many |Likes|
-
 R_PH_Post.hasMany(R_Ph_Likes, { foreignKey: "postid", sourceKey: "id" });
 R_Ph_Likes.belongsTo(R_PH_Post, { foreignKey: "postid", targetKey: "id" });
 
