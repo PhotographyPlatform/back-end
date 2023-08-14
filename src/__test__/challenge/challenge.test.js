@@ -1,10 +1,5 @@
 // const { newSequlize } = require("../models");
-const {
-  newUserCOll,
-  newSequlize,
-  newPostCOll,
-  challenagesCollection,
-} = require("../../models/index");
+const {newUserCOll,newSequlize,newPostCOll,challenagesCollection,} = require("../../models/index");
 const { app } = require("../../server");
 const supertest = require("supertest");
 const req = supertest(app);

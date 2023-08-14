@@ -4,6 +4,7 @@ const modules = require('../../models')
 async function handleComment(req, res, next) {
     try {
         const record = req.body;
+        record["userid"] = req.users.userId;
         const model = modules.newCOmCOll
         const respons = await model.create(record);
         const commentOwner = await modules.user.findByPk(respons.dataValues.userid);
@@ -23,6 +24,7 @@ async function handleComment(req, res, next) {
 async function handleFollowing(req, res, next) {
     try {
         const record = req.body;
+        record["me_id"] = req.users.userId;
         if (record.following_id !== record.me_id) {
             const respons = await modules.FollowersColl.create(record);
             const followingOwner = await modules.user.findByPk(respons.dataValues.following_id);
@@ -40,7 +42,8 @@ async function handleFollowing(req, res, next) {
 
 async function handlePost(req, res, next) {
     try {
-        const record = req.body;
+        let record = req.body;
+        record["userid"] = req.users.userId;
         const respons = await modules.newPostCOll.create(record);
         const postOwner = await modules.user.findByPk(respons.dataValues.userid);
         const followingPostOwner = await modules.Followers.findAll({ where: { following_id: postOwner.dataValues.id } });
@@ -57,6 +60,7 @@ async function handlePost(req, res, next) {
 async function handlelikes(req, res, next) {
     try {
         const record = req.body;
+        record["userid"] = req.users.userId;
         const mod = modules.likeCollection;
         const validLike = await modules.like.findOne({ where: { postid: record.postid, userid: record.userid } })
         if (!validLike) {

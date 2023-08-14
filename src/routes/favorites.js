@@ -3,13 +3,13 @@
 const express = require('express');
 const modules = require('../models/index');
 const favoritesRoute = express.Router();
-
-favoritesRoute.post("/favorites", handleAddToFavorites);
+const isAuth = require('../auth/middleWare/bearer')
+favoritesRoute.post("/favorites", isAuth, handleAddToFavorites);
 
 async function handleAddToFavorites(req, res, next) {
     try {
-        const obj = req.body;
-
+        let obj = req.body;
+        obj["userid"] = req.users.userId;
         const postsAlreadyInFavorites = await modules.favorites.findAll();
 
         const postsIDs = postsAlreadyInFavorites.map(fav => fav.postid);
@@ -17,10 +17,10 @@ async function handleAddToFavorites(req, res, next) {
         let checker = 0;
 
         postsIDs.map(id => {
-            if(id === obj.postid) checker++;
+            if (id === obj.postid) checker++;
         });
 
-        if(checker === 0){
+        if (checker === 0) {
             const data = await modules.favorites.create(obj);
             res.status(201).json({
                 message: req.modelName,
@@ -36,37 +36,37 @@ async function handleAddToFavorites(req, res, next) {
 
 }
 
-favoritesRoute.get('/favorites/:id', handleFavrites);
+favoritesRoute.get('/favorites', isAuth, handleFavrites);
 
 async function handleFavrites(req, res, next) {
     try {
-        const userid = req.params.id;
-        
+        const userid = req.users.userId;
+
         const userFavoritesPostsIDs = await modules.favorites.findAll({
             where: {
-                userid:userid
+                userid: userid
             }
         });
 
         const favoritesPostIDs = userFavoritesPostsIDs.map(item => item.postid);
 
-        const favorites =[];
-        
+        const favorites = [];
+
         for (const post of favoritesPostIDs) {
             console.log(post);
             const posts = await modules.post.findOne({
                 where: {
-                    id:post
+                    id: post
                 }
             });
-         
+
             favorites.push(posts);
         }
-                
+
         res.status(200).json({
-        favorites: favorites
+            favorites: favorites
         });
-                
+
     } catch (err) {
         next(err)
     }

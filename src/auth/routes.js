@@ -35,6 +35,7 @@ authRoutes.post("/signup", sendCode, async (req, res, next) => {
     const codes = req.users;
     codeObj = codes;
     const data = req.body;
+    // if (data.role === null) res.status(400).json(`Can't signup with admin role, Should have premission before !!!`)
     obj = data;
     res.status(200).json(`code has been send to ${req.body.email}`);
   } catch (err) {
@@ -69,7 +70,6 @@ authRoutes.post('/admin/signup', adminAuth, async (req, res, next) => {
       const codes = req.users
       adminCode = codes
       const data = req.body
-      // if (data.role !== null) res.status(400).json(Can't signup with admin role, Should have premission before !!!)
       obj = data;
       res.status(200).json(`code has been send to ${req.body.email}`);
 
