@@ -11,7 +11,7 @@ module.exports = (role) => {
                 next('Access Denied');
             }
         } catch (e) {
-            next('Invalid Login lol', e);
+            next('Invalid Login', e);
         }
     }
 }

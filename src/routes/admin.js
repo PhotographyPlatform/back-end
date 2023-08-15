@@ -18,13 +18,13 @@ adminRoute.post('/admin/challenge', isAuth, acl('admin'), handleAddChallenge);
 //get all the challenges with their posts
 adminRoute.get("/admin/getRelation/:collection/:module/:idCollection", isAuth, acl('admin'),middleware.handleGetRelation);
 
+//get all the posts with their comments nad likes and replies
 adminRoute.get("/admin/getAllPostDataWithReplies", isAuth, acl('admin') ,middleware.handleGetAllPostDataWithReplies);
-
-// Get Data between two relation collection and modle
-adminRoute.get("/admin/getRelation/:collection/:module/:idCollection", isAuth, acl('admin'), middleware.handleGetRelation);
 
 //for users
 adminRoute.get("/admin/getallPostUser/:userid",isAuth, acl('admin'), middleware.handleGetAllPostUser);
+
+//for posts
 adminRoute.get("/admin/getAllPostData/:Postid",isAuth, acl('admin'), middleware.handleGetAllPostData);
 
 adminRoute.param('model', (req, res, next) => {
