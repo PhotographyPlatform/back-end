@@ -86,6 +86,7 @@ async function reportIsValid(userId, actionId, actionType) {
         console.log(err);
     }
 }
+
 router.post('/story', isAuth, storyUpload.single('image'), uploadStory, async (req, res, next) => {
     try {
         const obj = req.body;
@@ -100,6 +101,7 @@ router.post('/story', isAuth, storyUpload.single('image'), uploadStory, async (r
         next(err);
     }
 })
+
 router.post('/createPost', isAuth, storyUpload.single('image'), uploadStory, async (req, res, next) => {
     try {
         const obj = req.body;
