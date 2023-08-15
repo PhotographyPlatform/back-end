@@ -11,7 +11,7 @@ const forgetPassword = require('../middleware/restPass/nodemailer')
 const userProfile = require('../middleware/profile/profile')
 const updateProfile = require('../middleware/profile/updateProfile')
 const handleReport = require('../middleware/handleReport');
-const modules = require('../models');
+const models = require('../models');
 
 const { uploadProfile, profileUpload, uploadStory, storyUpload } = require('../middleware/multer/multer')
 

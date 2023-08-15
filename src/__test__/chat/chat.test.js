@@ -2,9 +2,10 @@
 const { newSequlize } = require("../../models");
 const { newUserCOll } = require("../../models/index");
 const { app } = require("../../server");
+const jwt = require('jsonwebtoken')
 const supertest = require("supertest");
 const req = supertest(app);
-
+const token = jwt.sign({ userId: 1 }, process.env.SECRET || 'hamza');
 beforeAll(async () => {
   try {
 
@@ -29,7 +30,7 @@ afterAll(async () => {
   await newSequlize.drop();
 });
 
-let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjkyMDI0NzYxfQ._kuAsG2EWmJsdrwzvSQ3OFONqSehei1AgQKZvQdIQnM'
+// let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjkyMDI0NzYxfQ._kuAsG2EWmJsdrwzvSQ3OFONqSehei1AgQKZvQdIQnM'
 
 describe("chat test", () => {
 
