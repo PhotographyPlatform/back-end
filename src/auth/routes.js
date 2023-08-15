@@ -22,7 +22,7 @@ authRoutes.get("/login", async (req, res, next) => {
 authRoutes.post("/login", login, async (req, res, next) => {
   try {
     res.status(200).json({
-      message: "user created",
+      message: req.user,
       token: req.user.token,
     });
   } catch (err) {
@@ -67,31 +67,31 @@ authRoutes.post("/signup/confirm", async (req, res, next) => {
 
 authRoutes.post('/admin/signup', adminAuth, async (req, res, next) => {
   try {
-      const codes = req.users
-      adminCode = codes
-      const data = req.body
-      obj = data;
-      res.status(200).json(`code has been send to ${req.body.email}`);
+    const codes = req.users
+    adminCode = codes
+    const data = req.body
+    obj = data;
+    res.status(200).json(`code has been send to ${req.body.email}`);
 
   } catch (err) {
-      next(err);
+    next(err);
   }
 })
 authRoutes.post('/admin/signup/confirm', async (req, res, next) => {
   try {
-      const code = req.body.codes
-      console.log(adminCode);
-      console.log(code);
-      if (code === adminCode) {
-          const createUSer = await modules.newUserCOll.create(obj)
-          obj = null
-          adminCode = null
-          res.status(200).json({ id: createUSer.id, username: createUSer.username, Email: createUSer.email })
-      } else {
-          res.status(500).json('wrong codes')
-      }
+    const code = req.body.codes
+    console.log(adminCode);
+    console.log(code);
+    if (code === adminCode) {
+      const createUSer = await modules.newUserCOll.create(obj)
+      obj = null
+      adminCode = null
+      res.status(200).json({ id: createUSer.id, username: createUSer.username, Email: createUSer.email })
+    } else {
+      res.status(500).json('wrong codes')
+    }
   } catch (err) {
-      next(err);
+    next(err);
   }
 })
 

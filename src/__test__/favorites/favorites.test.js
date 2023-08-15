@@ -3,6 +3,9 @@
 const { app } = require("../../server");
 const supertest = require("supertest");
 const req = supertest(app);
+const jwt = require("jsonwebtoken");
+const token = jwt.sign({ userId: 1 }, process.env.SECRET || 2000);
+
 const {
   newSequlize,
   newUserCOll,
@@ -11,10 +14,12 @@ const {
 } = require("../../models/index");
 
 beforeAll(async () => {
+
   await newSequlize.sync();
 
   //users
   await newUserCOll.create({
+    id: 1,
     username: "sham",
     password: "s123",
     email: "sham@email.com",
@@ -44,8 +49,8 @@ beforeAll(async () => {
 
   //favorites
   await favoritesCollection.create({
-    userid: "1",
-    postid: "2",
+    userid: 1,
+    postid: 2,
   });
 });
 
@@ -55,7 +60,8 @@ afterAll(async () => {
 
 describe("Favorites test", () => {
   it("check if the Favorites route working properly or not", async () => {
-    const response = await req.get("/favorites/1");
+    const response = await req.get("/favorites")
+      .set('Authorization', `Bearer ${ token }`);
     expect(response.status).toBe(200);
     expect(JSON.parse(response.text).favorites[0].id).toBe(2);
   });
