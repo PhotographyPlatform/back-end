@@ -24,17 +24,17 @@ require("dotenv").config();
 
 const DB =
   process.env.NODE_ENV === 'test' ? 'sqlite:memory' : process.env.DATABASE_URL;
-  
+
 const DATABASE_CONFIG =
   process.env.NODE_ENV === "production"
     ? {
-        dialectOptions: {
-          ssl: {
-            require: true,
-            rejectUnauthorized: false,
-          },
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
         },
-      }
+      },
+    }
     : {};
 
 const newSequlize = new Sequelize(DB, DATABASE_CONFIG);
@@ -182,10 +182,10 @@ const replysCollection = new Collection(replys);
 const reportCollection = new Collection(report);
 
 module.exports = {
+  newSequlize,
   post,
   like,
   comment,
-  newSequlize,
   DataTypes,
   newCOmCOll,
   newPostCOll,

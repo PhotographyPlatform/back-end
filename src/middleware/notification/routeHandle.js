@@ -1,16 +1,17 @@
 const { where } = require('sequelize');
 const modules = require('../../models')
 
+
 async function handleComment(req, res, next) {
     try {
         const record = req.body;
+        record["userid"] = req.users.userId;
         const model = modules.newCOmCOll
         const respons = await model.create(record);
         const commentOwner = await modules.user.findByPk(respons.dataValues.userid);
         const postOwner = (await modules.post.findByPk(respons.dataValues.postid)).userid; // Assuming the user with ID "like.postid" exists
 
         if (respons) {
-
             const message = `${commentOwner.username} Add comment on your post`;
             createNotificationRecord(postOwner, commentOwner.id, message, respons.id);
         }
@@ -23,6 +24,7 @@ async function handleComment(req, res, next) {
 async function handleFollowing(req, res, next) {
     try {
         const record = req.body;
+        record["me_id"] = req.users.userId;
         if (record.following_id !== record.me_id) {
             const respons = await modules.FollowersColl.create(record);
             const followingOwner = await modules.user.findByPk(respons.dataValues.following_id);
@@ -32,7 +34,7 @@ async function handleFollowing(req, res, next) {
                 await createNotificationRecord(followingOwner.id, followersOwner.id, message, followersOwner.id);
             }
             res.status(201).json(respons);
-        } else res.status(200).json('you cant follow yourself')
+        } else res.status(400).json('you cant follow yourself')
     } catch (err) {
         next(err)
     }
@@ -40,7 +42,9 @@ async function handleFollowing(req, res, next) {
 
 async function handlePost(req, res, next) {
     try {
-        const record = req.body;
+        let record = req.body;
+        record.imgurl = req.image
+        record["userid"] = req.users.userId;
         const respons = await modules.newPostCOll.create(record);
         const postOwner = await modules.user.findByPk(respons.dataValues.userid);
         const followingPostOwner = await modules.Followers.findAll({ where: { following_id: postOwner.dataValues.id } });
@@ -54,9 +58,11 @@ async function handlePost(req, res, next) {
     }
 }
 
+
 async function handlelikes(req, res, next) {
     try {
         const record = req.body;
+        record["userid"] = req.users.userId;
         const mod = modules.likeCollection;
         const validLike = await modules.like.findOne({ where: { postid: record.postid, userid: record.userid } })
         if (!validLike) {
@@ -71,7 +77,7 @@ async function handlelikes(req, res, next) {
             }
             res.status(201).json(respons);
         } else {
-            res.status(200).json('you already liked this post')
+            res.status(400).json('you already liked this post')
         }
     } catch (err) {
         next(err)
@@ -96,10 +102,35 @@ async function createNotificationRecord(receiverId, senderId, message, actionId)
 
 
 
+async function createPost(record, userId) {
+    try {
+        record["userid"] = userId;
+        const respons = await modules.newPostCOll.create(record);
+        const postOwner = await modules.user.findByPk(respons.dataValues.userid);
+        const followingPostOwner = await modules.Followers.findAll({ where: { following_id: postOwner.dataValues.id } });
+        followingPostOwner.map(ele => {
+            let message = `${postOwner.username} added new photo`;
+            createNotificationRecord(ele.me_id, postOwner.id, message, respons.id);
+        });
+        return respons;
+    } catch (err) {
+        throw err;
+    }
+}
+
+async function handlePostTest(req, res, next) {
+    try {
+        const record = req.body;
+        const userId = req.users.userId;
+        const respons = await createPost(record, userId);
+        res.status(201).json(respons);
+    } catch (err) {
+        next(err);
+    }
+}
 
 
-
-module.exports = { handleComment, handleFollowing, handlePost, handlelikes };
+module.exports = { handleComment, handleFollowing, handlePost, handlelikes, handlePostTest };
 
 
 
