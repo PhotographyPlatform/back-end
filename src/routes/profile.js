@@ -73,7 +73,8 @@ async function handleUserBio(req, res, next) {
 async function handleUserFollowers(req, res, next) {
     try {
         const id = req.users.userId;
-        record = await handleFollowersData(id)
+        let record = await handleFollowersData(id)
+        console.log(record);
         res.status(200).json(record)
     } catch (err) {
         next(err)
@@ -83,7 +84,10 @@ async function handleUserFollowers(req, res, next) {
 async function handleUserFollowing(req, res, next) {
     try {
         const id = req.users.userId
-        record = await handleFollowingData(id)
+        
+        let record = await handleFollowingData(id)
+
+        console.log(record);
         res.status(200).json(record)
     } catch (err) {
         next(err)
@@ -91,8 +95,11 @@ async function handleUserFollowing(req, res, next) {
 }
 
 async function handleFollowingData(id) {
+
     let record = await modules.newUserCOll.following(id, modules.user);
+    console.log(record)
     return record;
+   
 }
 async function handleFollowersData(id) {
     let record = await modules.newUserCOll.followers(id, modules.user);

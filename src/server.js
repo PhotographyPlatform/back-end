@@ -166,6 +166,17 @@ app.get("/chat_test/:id/:id2", (req, res) => {
   res.sendFile(filePath);
 });
 
+app.get('/intentionalError', intentionalError);
+function intentionalError(req, res, next) {
+  req.body = {
+    test: 'test'
+  }
+  next({ message: 'some kind of error :(' });
+}
+
+
+
+
 // error handler
 app.use("*", erorr404);
 app.use(erorr500);
