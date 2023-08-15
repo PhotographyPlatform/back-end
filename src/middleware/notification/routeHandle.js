@@ -69,7 +69,7 @@ async function handlelikes(req, res, next) {
             const likesOwner = await modules.user.findByPk(respons.dataValues.userid);
             // Post Owner
             const postOwner = (await modules.post.findByPk(respons.dataValues.postid)).userid; // Assuming the user with ID "like.postid" exists
-
+            
             if (respons) {
                 const message = `${likesOwner.username} liked your post`;
                 createNotificationRecord(postOwner, likesOwner.id, message, respons.id);

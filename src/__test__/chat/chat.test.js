@@ -1,4 +1,4 @@
-const { json } = require("sequelize");
+
 const { newSequlize } = require("../../models");
 const { newUserCOll } = require("../../models/index");
 const { app } = require("../../server");
@@ -7,7 +7,7 @@ const req = supertest(app);
 
 beforeAll(async () => {
   try {
-    
+
     await newSequlize.sync();
     await newUserCOll.create({
       username: "hamza",
@@ -38,7 +38,7 @@ describe("chat test", () => {
     let data = await req
       .post("/chat/1/2")
       .send({ content: "5 hi from sham to hamza by socket " })
-      .set('Authorization' , `Basic ${token}`)
+      .set('Authorization', `Basic ${token}`)
     let res = JSON.parse(data.text).data.content;
     expect(res).toBe("5 hi from sham to hamza by socket ");
   });
@@ -69,7 +69,7 @@ describe("chat test", () => {
     let data = await req
       .put("/chat/1/1/2")
       .send({ content: "hi from sham to hamza by socket " })
-      .set('Authorization' , `Basic ${token}`);
+      .set('Authorization', `Basic ${token}`);
     let res = JSON.parse(data.text).data.content;
 
     expect(res).toBe("hi from sham to hamza by socket ");
@@ -78,7 +78,7 @@ describe("chat test", () => {
 
   it("get sender and reciver messages ", async () => {
     let data = await req.delete("/chat/1")
-    .set('Authorization' , `Basic ${token}`);
+      .set('Authorization', `Basic ${token}`);
 
     expect(data.statusCode).toBe(204);
   });
