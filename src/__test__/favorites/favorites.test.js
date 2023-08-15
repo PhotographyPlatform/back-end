@@ -4,8 +4,10 @@ const { app } = require("../../server");
 const supertest = require("supertest");
 const req = supertest(app);
 const jwt = require("jsonwebtoken");
+
 const token = jwt.sign({userId: 1}, process.env.SECRET || 2000);
 // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjkyMDI0NzYxfQ._kuAsG2EWmJsdrwzvSQ3OFONqSehei1AgQKZvQdIQnM";
+
 
 const {
   newSequlize,
@@ -20,6 +22,7 @@ beforeAll(async () => {
 
   //users
   await newUserCOll.create({
+
     id:1,
     username: "sham",
     password: "s123",

@@ -4,7 +4,6 @@ const reportModel = (newSequlize, DataTypes) =>
     newSequlize.define('report', {
         userId: {
             type: DataTypes.INTEGER,
-            allowNull: false
         },
         actionId: {
             type: DataTypes.INTEGER,

@@ -1,6 +1,7 @@
 const { where } = require('sequelize');
 const modules = require('../../models')
 
+
 async function handleComment(req, res, next) {
     try {
         const record = req.body;
@@ -33,7 +34,7 @@ async function handleFollowing(req, res, next) {
                 await createNotificationRecord(followingOwner.id, followersOwner.id, message, followersOwner.id);
             }
             res.status(201).json(respons);
-        } else res.status(200).json('you cant follow yourself')
+        } else res.status(400).json('you cant follow yourself')
     } catch (err) {
         next(err)
     }
@@ -42,6 +43,7 @@ async function handleFollowing(req, res, next) {
 async function handlePost(req, res, next) {
     try {
         let record = req.body;
+        record.imgurl = req.image
         record["userid"] = req.users.userId;
         const respons = await modules.newPostCOll.create(record);
         const postOwner = await modules.user.findByPk(respons.dataValues.userid);
@@ -55,6 +57,7 @@ async function handlePost(req, res, next) {
         next(err)
     }
 }
+
 
 async function handlelikes(req, res, next) {
     try {
@@ -74,7 +77,7 @@ async function handlelikes(req, res, next) {
             }
             res.status(201).json(respons);
         } else {
-            res.status(200).json('you already liked this post')
+            res.status(400).json('you already liked this post')
         }
     } catch (err) {
         next(err)
@@ -99,10 +102,35 @@ async function createNotificationRecord(receiverId, senderId, message, actionId)
 
 
 
+async function createPost(record, userId) {
+    try {
+        record["userid"] = userId;
+        const respons = await modules.newPostCOll.create(record);
+        const postOwner = await modules.user.findByPk(respons.dataValues.userid);
+        const followingPostOwner = await modules.Followers.findAll({ where: { following_id: postOwner.dataValues.id } });
+        followingPostOwner.map(ele => {
+            let message = `${postOwner.username} added new photo`;
+            createNotificationRecord(ele.me_id, postOwner.id, message, respons.id);
+        });
+        return respons;
+    } catch (err) {
+        throw err;
+    }
+}
+
+async function handlePostTest(req, res, next) {
+    try {
+        const record = req.body;
+        const userId = req.users.userId;
+        const respons = await createPost(record, userId);
+        res.status(201).json(respons);
+    } catch (err) {
+        next(err);
+    }
+}
 
 
-
-module.exports = { handleComment, handleFollowing, handlePost, handlelikes };
+module.exports = { handleComment, handleFollowing, handlePost, handlelikes, handlePostTest };
 
 
 

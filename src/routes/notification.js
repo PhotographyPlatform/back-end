@@ -1,15 +1,20 @@
 const express = require('express')
 const notifiRoute = express.Router()
 const isAuth = require('../auth/middleWare/bearer')
+const { uploadProfile, profileUpload, uploadStory, storyUpload } = require('../middleware/multer/multer')
+
 require('dotenv').config();
 // notification Route
+
+
 const { handleComment, handleFollowing, handlePost, handlelikes } = require('../middleware/notification/routeHandle')
 
 notifiRoute.post('/v2/comment', isAuth, handleComment);
 
-notifiRoute.post('/v2/follow', isAuth, handleFollowing)
-notifiRoute.post('/v2/post', isAuth, handlePost)
+notifiRoute.post('/notification/follow', isAuth, handleFollowing)
 
-notifiRoute.post('/v2/likes', isAuth, handlelikes);
+notifiRoute.post('/notification/post', isAuth, storyUpload.single('image'), uploadStory, handlePost)
 
-module.exports = notifiRoute;
+notifiRoute.post('/notification/likes', isAuth, handlelikes);
+
+module.exports = notifiRoute
