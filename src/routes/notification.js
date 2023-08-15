@@ -9,7 +9,7 @@ require('dotenv').config();
 
 const { handleComment, handleFollowing, handlePost, handlelikes } = require('../middleware/notification/routeHandle')
 
-notifiRoute.post('/v2/comment', isAuth, handleComment);
+notifiRoute.post('/notification/comment', isAuth, handleComment);
 
 notifiRoute.post('/notification/follow', isAuth, handleFollowing)
 
