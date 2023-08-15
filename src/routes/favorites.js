@@ -4,6 +4,7 @@ const express = require('express');
 const modules = require('../models/index');
 const favoritesRoute = express.Router();
 const isAuth = require('../auth/middleWare/bearer')
+
 favoritesRoute.post("/favorites", isAuth, handleAddToFavorites);
 
 async function handleAddToFavorites(req, res, next) {
@@ -36,11 +37,12 @@ async function handleAddToFavorites(req, res, next) {
 
 }
 
-favoritesRoute.get('/favorites', isAuth, handleFavrites);
+favoritesRoute.get('/favorites', isAuth ,handleFavrites);
 
 async function handleFavrites(req, res, next) {
     try {
         const userid = req.users.userId;
+        // const userid = req.params.id;
 
         const userFavoritesPostsIDs = await modules.favorites.findAll({
             where: {
