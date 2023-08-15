@@ -27,7 +27,7 @@ router.post('/resetPassword/:id', changePass, (req, res) => {
 })
 
 // profile dashboard get profile data
-router.get('/profile', isAuth, userProfile, (req, res) => {
+router.get('/v2/profile', isAuth, userProfile, (req, res) => {
     const data = req.data
     res.status(200).json({
         id: data.id, username: data.username, profileImg: data.img,
@@ -61,7 +61,6 @@ router.post('/story', isAuth, storyUpload.single('image'), uploadStory, async (r
         const obj = req.body;
         obj.storyUrl = req.image
         obj.userid = req.users.userId
-        console.log(obj);
         const data = await models.StoriesColl.create(obj);
         res.status(201).json({
             data
@@ -75,7 +74,6 @@ router.post('/createPost', isAuth, storyUpload.single('image'), uploadStory, asy
         const obj = req.body;
         obj.imgurl = req.image
         obj.userid = req.users.userId
-        console.log(obj);
         const data = await models.newPostCOll.create(obj);
         res.status(201).json({
             data
