@@ -3,6 +3,10 @@
 const { app } = require("../../server");
 const supertest = require("supertest");
 const req = supertest(app);
+const jwt = require("jsonwebtoken");
+const token = jwt.sign({userId: 1}, process.env.SECRET || 2000);
+// const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjkyMDI0NzYxfQ._kuAsG2EWmJsdrwzvSQ3OFONqSehei1AgQKZvQdIQnM";
+
 const {
   newSequlize,
   newUserCOll,
@@ -11,20 +15,22 @@ const {
 } = require("../../models/index");
 
 beforeAll(async () => {
+
   await newSequlize.sync();
 
   //users
   await newUserCOll.create({
+    id:1,
     username: "sham",
     password: "s123",
     email: "sham@email.com",
   });
-
-  await newUserCOll.create({
-    username: "blackangel",
-    password: "s123",
-    email: "blackangel@email.com",
-  });
+  
+    await newUserCOll.create({
+      username: "blackangel",
+      password: "s123",
+      email: "blackangel@email.com",
+    });
 
   //posts
   await newPostCOll.create({
@@ -42,11 +48,6 @@ beforeAll(async () => {
     category: "animal",
   });
 
-  //favorites
-  await favoritesCollection.create({
-    userid: "1",
-    postid: "2",
-  });
 });
 
 afterAll(async () => {
@@ -54,8 +55,23 @@ afterAll(async () => {
 });
 
 describe("Favorites test", () => {
+
+  it("users shoold be able to add a post to their favorites page", async () => {
+    
+    const obj ={
+      userid: 1,
+      postid: 2,
+    }
+    
+    const response = await req.post("/favorites").send(obj).set('Authorization', `Bearer ${token}`);
+    expect(response.status).toBe(201);
+    expect(JSON.parse(response.text)["data"]["userid"]).toBe(1);
+    expect(JSON.parse(response.text)["data"]["postid"]).toBe(2);
+  });
+  
   it("check if the Favorites route working properly or not", async () => {
-    const response = await req.get("/favorites/1");
+    const response = await req.get("/favorites")
+    .set('Authorization', `Bearer ${token}`);
     expect(response.status).toBe(200);
     expect(JSON.parse(response.text).favorites[0].id).toBe(2);
   });
