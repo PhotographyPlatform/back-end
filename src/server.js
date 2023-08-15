@@ -64,47 +64,8 @@ io.on("connection", (socket) => {
   });
 });
 
-// // Notification Socket
-
-// notificationName.on('connection', socket => {
-//     socket.on('join-room', (payload) => {
-//         console.log(payload);
-//         const room = `notification room ${payload.sender} - ${payload.resever}`
-
-//         console.log(room, "from Join room---------------------------1")
-//         console.log()
-//     })
-
-//     socket.on('send-notification', payload => {
-//         console.log(payload)
-//         const room = `notification room ${payload.sender} - ${payload.resever}`
-//         // socket.join(room)
-//         console.log(room, "from Notification---------------------------2")
-//         socket.to(room).emit("send", payload)
-//     })
-
-// })
-
-// const notificationName = io.of('/notification');
-// notificationName.on('connection', socket => {
-//     socket.on('join-room', (payload) => {
-//         // const room = `notification room ${payload.sender} - ${payload.resever}`;
-//         socket.join(payload); // Join the room
-//         console.log(payload);
-//         // notificationName.to(room).emit("send", payload);
-//     });
-
-//     socket.on('send-notification', payload => {
-
-//         console.log(typeof(payload.resever));
-//         socket.join(payload.resever);
-//         notificationName.to(payload.resever).emit("send", payload);
-//     });
-// });
 
 const notificationName = io.of("/notification");
-// notificationName.setMaxListeners(20);
-
 notificationName.on("connection", (socket) => {
   console.log("((notification)) connected with ID of ", socket.id);
   socket.on("notification", async (payload) => {

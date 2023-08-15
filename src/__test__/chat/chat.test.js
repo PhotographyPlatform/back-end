@@ -1,4 +1,4 @@
-const { json } = require("sequelize");
+
 const { newSequlize } = require("../../models");
 const { newUserCOll } = require("../../models/index");
 const { app } = require("../../server");
