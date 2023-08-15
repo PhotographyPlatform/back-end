@@ -32,9 +32,7 @@ afterAll(async () => {
 let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjkyMDI0NzYxfQ._kuAsG2EWmJsdrwzvSQ3OFONqSehei1AgQKZvQdIQnM'
 
 describe("chat test", () => {
-  it("test 1", () => {
-    expect(true).toBe(true);
-  });
+
 
   it("add messages ", async () => {
     let data = await req
@@ -51,6 +49,20 @@ describe("chat test", () => {
 
     let res = JSON.parse(data.text).sendData[0].content;
     expect(res).toBe("5 hi from sham to hamza by socket ");
+  });
+
+  it("get sender and reciver messages ", async () => {
+    let data = await req.post("/chat/2/j")
+      .set('Authorization', `Basic ${token}`);
+
+    expect(data.statusCode).toBe(500);
+  });
+
+  it("get sender and reciver messages ", async () => {
+    let data = await req.delete("/chat/j")
+      .set('Authorization', `Basic ${token}`);
+
+    expect(data.statusCode).toBe(500);
   });
 
   it("get sender and reciver messages ", async () => {

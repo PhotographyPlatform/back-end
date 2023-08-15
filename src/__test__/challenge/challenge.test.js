@@ -5,7 +5,6 @@ const supertest = require("supertest");
 const req = supertest(app);
 beforeAll(async () => {
   try {
-      
     await newSequlize.sync();
 
     await newUserCOll.create({
@@ -25,7 +24,7 @@ beforeAll(async () => {
       brief: "  any thing",
       startDate: null,
       endDate: null,
-      rules: ["rule 1", "rule 2"],
+      // rules: ["rule 1", "rule 2"],
     });
     await challenagesCollection.create({
       imgurl: "img.png",
@@ -33,7 +32,7 @@ beforeAll(async () => {
       brief: "  any thing",
       startDate: null,
       endDate: null,
-      rules: ["rule 1", "rule 2"],
+      // rules: ["rule 1", "rule 2"],
     });
 
     await newPostCOll.create({
@@ -47,9 +46,8 @@ beforeAll(async () => {
     });
   } catch (err) {
     console.log(err);
-    }
-  }); 
-
+  }
+});
 
 afterAll(async () => {
   await newSequlize.drop();
@@ -57,17 +55,28 @@ afterAll(async () => {
 
 describe("challenge test ", () => {
   it("check if the challenge created", async () => {
-    const res = await req.get("/v1/challenagesCollection");
+    const res = await req.get("/v1/challenagesCollection/1");
 
-    console.log(JSON.parse(res.text).data[0].title); //' challenge 1'
+    // console.log(JSON.parse(res.text), "99999999999999999999999"); //' challenge 1'
 
-    expect(JSON.parse(res.text).data[0].title).toBe(" challenge 1");
+    expect(JSON.parse(res.text).data.title).toBe(" challenge 1");
   });
+
   it("check if the challenge created", async () => {
     const res = await req.get("/getRelation/challenagesCollection/posts/1");
 
-    console.log(JSON.parse(res.text).posts[0].contant); // 'for challenge 1'
+    // console.log(JSON.parse(res.text).posts[0].contant); // 'for challenge 1'
 
     expect(JSON.parse(res.text).posts[0].contant).toBe("for challenge 1");
+  });
+
+  it("check if the challenge created", async () => {
+    const res = await req.get("/getChallenge/1");
+
+    console.log(
+      JSON.parse(res.text).posts.length,
+); // 'for challenge 1'
+
+    expect(JSON.parse(res.text).posts.length).toBe(1);
   });
 });
