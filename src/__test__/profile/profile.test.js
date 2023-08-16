@@ -6,6 +6,8 @@ const supertest = require("supertest");
 const req = supertest(app);
 const jwt = require("jsonwebtoken");
 const token = jwt.sign({ userId: 1 }, process.env.SECRET || 2000);
+const fs = require('fs');
+const path = require('path');
 
 
 const {
@@ -63,7 +65,15 @@ describe("GET /profile/userPost", () => {
     const response = await req.get("/profile/userPost/1").set('Authorization', `Bearer ${token}`);
     expect(response.status).toBe(404);
   });
+  test('should return 404 for non-existent user post', async () => {
+    const response = await req.get('/profile/userPost') // Assuming the user post with ID 1 doesn't exist
+    expect(response.status).toBe(500);
+  })
 })
+
+
+
+
 describe("GET /profile/followers", () => {
   test("should return 200", async () => {
     const response = await req.get("/profile/followers").set('Authorization', `Bearer ${token}`);
@@ -77,6 +87,10 @@ describe("GET /profile/following", () => {
     expect(response.status).toBe(200);
     expect(response.body).not.toBeNull();
   });
+  test("failure return 500", async () => {
+    const response = await req.get("/profile/following")
+    expect(response.status).toBe(500);
+  });
 })
 
 
@@ -86,12 +100,20 @@ describe("GET /profile/userData", () => {
     expect(response.status).toBe(200);
     expect(response.body).not.toBeNull();
   });
+  test("failure return 500", async () => {
+    const response = await req.get("/profile/userData")
+    expect(response.status).toBe(500);
+  });
 })
 
 describe("GET /profile/Bio", () => {
   test("should return 200", async () => {
     const response = await req.get("/profile/Bio").set('Authorization', `Bearer ${token}`);
     expect(response.status).toBe(200);
+  });
+  test("failure return 500", async () => {
+    const response = await req.get("/profile/Bio")
+    expect(response.status).toBe(500);
   });
 })
 
@@ -118,4 +140,13 @@ describe("GET /profile/:userid", () => {
     expect(response).toHaveProperty("Bio");
     expect(response).toHaveProperty("UserPost");
   });
+
+  test("failure return 500", async () => {
+    const response = await req.get("/profile")
+    expect(response.status).toBe(500);
+  });
 });
+
+
+
+

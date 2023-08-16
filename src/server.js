@@ -114,7 +114,7 @@ app.use(adminRoute);
 app.use(searchCategoryRoute);
 
 // controller
-app.get("/", (req, res) => {
+app.get("/", (req, res, next) => {
   try {
     res.status(200).send("welcome to home page");
   } catch (err) {
