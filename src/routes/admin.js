@@ -79,6 +79,7 @@ async function handleAddChallenge(req, res, next) {
     try {
         const obj = req.body;
         const respons = await modules.challenagesCollection.create(obj);
+        console.log(respons);
         res.status(201).json(respons);
     } catch (err) {
         next(err)

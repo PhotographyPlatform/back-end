@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,109 +16,110 @@
 
 
 
-body {
-     font-family: Arial, sans-serif;
-     margin: 0;
-     padding: 0;
- }
- 
- .chat-container {
-     max-width: 600px;
-     margin: 0 auto;
-     padding: 20px;
-     border: 1px solid #ccc;
-     border-radius: 5px;
-     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-     margin-top: 20px;
- }
- 
- .chat {
-     display: flex;
-     flex-direction: column;
-     gap: 10px;
- }
- 
- .message {
-     padding: 10px;
-     border-radius: 5px;
-     max-width: 70%;
-     background-color: #f1f0f0;
-     align-self: flex-start;
+          body {
+               font-family: Arial, sans-serif;
+               margin: 0;
+               padding: 0;
+          }
 
- }
- 
- .incoming {
-     background-color: #f1f0f0;
-     align-self: flex-start;
- }
+          .chat-container {
+               max-width: 600px;
+               margin: 0 auto;
+               padding: 20px;
+               border: 1px solid #ccc;
+               border-radius: 5px;
+               box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+               margin-top: 20px;
+          }
 
- 
- .outgoing {
-     background-color: #007bff;
-     color: #fff;
-     align-self: flex-end;
- }
+          .chat {
+               display: flex;
+               flex-direction: column;
+               gap: 10px;
+          }
 
- 
- .input-container {
-     margin-top: 20px;
-     display: flex;
-     gap: 10px;
- }
- 
- input[type="text"] {
-     flex: 1;
-     padding: 10px;
-     border: 1px solid #ccc;
-     border-radius: 5px;
- }
- 
- button {
-     padding: 10px 20px;
-     background-color: #007bff;
-     color: #fff;
-     border: none;
-     border-radius: 5px;
-     cursor: pointer;
- }
- 
- button:hover {
-     background-color: #0056b3;
- }
+          .message {
+               padding: 10px;
+               border-radius: 5px;
+               max-width: 70%;
+               background-color: #f1f0f0;
+               align-self: flex-start;
 
- .input-field{
-    margin-top: 30px;
- }
+          }
 
- .input{
-    width: 400px;
- }
+          .incoming {
+               background-color: #f1f0f0;
+               align-self: flex-start;
+          }
 
- .counter{
-    background-color: red;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: none;
-    cursor: pointer;
-    color: white;
-    text-align: center;
-    margin-left: 10px;
- }
 
- .notifications{
-    margin-left: 10px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    height: 20px;
-    display: flex;
+          .outgoing {
+               background-color: #007bff;
+               color: #fff;
+               align-self: flex-end;
+          }
 
- }
+
+          .input-container {
+               margin-top: 20px;
+               display: flex;
+               gap: 10px;
+          }
+
+          input[type="text"] {
+               flex: 1;
+               padding: 10px;
+               border: 1px solid #ccc;
+               border-radius: 5px;
+          }
+
+          button {
+               padding: 10px 20px;
+               background-color: #007bff;
+               color: #fff;
+               border: none;
+               border-radius: 5px;
+               cursor: pointer;
+          }
+
+          button:hover {
+               background-color: #0056b3;
+          }
+
+          .input-field {
+               margin-top: 30px;
+          }
+
+          .input {
+               width: 400px;
+          }
+
+          .counter {
+               background-color: red;
+               border-radius: 50%;
+               width: 20px;
+               height: 20px;
+               display: none;
+               cursor: pointer;
+               color: white;
+               text-align: center;
+               margin-left: 10px;
+          }
+
+          .notifications {
+               margin-left: 10px;
+               margin-top: 20px;
+               margin-bottom: 20px;
+               height: 20px;
+               display: flex;
+
+          }
      </style>
 </head>
+
 <body>
 
-     
+
      <div class="chat-contianer">
           <div class="chatbox">
 
@@ -142,75 +144,76 @@ body {
      <script>
 
 
-const host = "http://localhost:4001";
-const socket = io.connect(host, { transports: ["websocket"] });
+          const host = "http://localhost:3000";
+          const socket = io.connect(host, { transports: ["websocket"] });
 
 
 
-let btn = document.querySelector(".btn");
+          let btn = document.querySelector(".btn");
 
-let input = document.querySelector(".input");
-let counterEle = document.querySelector(".counter");
-let chatBOx = document.querySelector(".chatbox");
-let chat = document.querySelector(".chat");
+          let input = document.querySelector(".input");
+          let counterEle = document.querySelector(".counter");
+          let chatBOx = document.querySelector(".chatbox");
+          let chat = document.querySelector(".chat");
 
-let sender = window.location.pathname.split("/")[2];
-let reciver = window.location.pathname.split("/")[3];
-let arr = (sender + reciver).split("").sort().join("")
+          let sender = window.location.pathname.split("/")[2];
+          let reciver = window.location.pathname.split("/")[3];
+          let arr = (sender + reciver).split("").sort().join("")
 
-console.log(arr);
-
-
-const obj = {
-  content: "",
-  receiverId: reciver,
-  senderId: sender,
-  counter: 0,
-  read: false,
-  room : arr
-};
-
-socket.emit("joinRoom", obj);
-
-btn.onclick = () => {
-  obj.content = input.value;
-
-  socket.emit("message", obj);
-};
-
-socket.on("notificaton", (count) => {
-  counterEle.style.display = "inline-block";
-  counterEle.innerHTML = count;
-});
-
-socket.on("test", (message) => {
-
-     console.log(message);
-
-     if(message.senderId == sender){
-          let text = document.createElement("div");
-     
-          text.classList.add("message");
-          text.classList.add("outgoing");
-          text.innerText = message.content;
-          chat.append(text);
-     }else{
-          let text = document.createElement("div");
-     
-          text.classList.add("message");
-          text.innerText = message.content;
-          chat.append(text);
-     }
+          console.log(arr);
 
 
-});
+          const obj = {
+               content: "",
+               receiverId: reciver,
+               senderId: sender,
+               counter: 0,
+               read: false,
+               room: arr
+          };
 
-counterEle.onclick = (e) => {
-  counterEle.innerHTML = 0;
-  socket.emit("zero");
-};
+          socket.emit("joinRoom", obj);
+
+          btn.onclick = () => {
+               obj.content = input.value;
+
+               socket.emit("message", obj);
+          };
+
+          socket.on("notificaton", (count) => {
+               counterEle.style.display = "inline-block";
+               counterEle.innerHTML = count;
+          });
+
+          socket.on("test", (message) => {
+
+               console.log(message);
+
+               if (message.senderId == sender) {
+                    let text = document.createElement("div");
+
+                    text.classList.add("message");
+                    text.classList.add("outgoing");
+                    text.innerText = message.content;
+                    chat.append(text);
+               } else {
+                    let text = document.createElement("div");
+
+                    text.classList.add("message");
+                    text.innerText = message.content;
+                    chat.append(text);
+               }
+
+
+          });
+
+          counterEle.onclick = (e) => {
+               counterEle.innerHTML = 0;
+               socket.emit("zero");
+          };
 
 
      </script>
 </body>
+
 </html>
