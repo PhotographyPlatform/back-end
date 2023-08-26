@@ -127,9 +127,18 @@ async function handlePostTest(req, res, next) {
         next(err);
     }
 }
+async function handleAdminMessage(req, res, next) {
+    try {
+        const message = req.body;
+        
+        modules.user
+    } catch (err) {
+        next(err);
+    }
+}
 
 
-module.exports = { handleComment, handleFollowing, handlePost, handlelikes, handlePostTest };
+module.exports = { handleComment, handleFollowing, handlePost, handlelikes, handlePostTest, handleAdminMessage };
 
 
 
