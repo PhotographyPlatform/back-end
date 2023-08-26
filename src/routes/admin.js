@@ -40,7 +40,8 @@ adminRoute.param('model', (req, res, next) => {
 
 // Basic Routes
 adminRoute.get("/admin/:model",isAuth, acl('admin'), middleware.handleGetOne);
-adminRoute.get("/admin/:model/:id",isAuth, acl('admin'), middleware.handleGetAll);
+adminRoute.get("/admin/:model/:id", isAuth, acl('admin'), middleware.handleGetAll);
+// adminRoute.post("/admin/notification/sentMessgae" handleMessage)
 adminRoute.post("/admin/:model",isAuth, acl('admin'), middleware.handleCreate);
 adminRoute.put("/admin/:model/:id",isAuth, acl('admin'), middleware.handleUpdate);
 adminRoute.patch("/admin/:model/:id",isAuth, acl('admin'), middleware.handlePatch);
@@ -85,5 +86,6 @@ async function handleAddChallenge(req, res, next) {
         next(err)
     }
 }
+
 
 module.exports = adminRoute;
