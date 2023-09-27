@@ -30,6 +30,7 @@ const {
   updateNotification,
 } = require("./middleware/notification/modleHandle");
 const deleteRouter = require("./routes/delete.route");
+
 app.use(cors());
 app.use(logger);
 
@@ -64,6 +65,8 @@ io.on("connection", (socket) => {
   });
 });
 
+
+// Notification Socket
 
 const notificationName = io.of("/notification");
 notificationName.on("connection", (socket) => {

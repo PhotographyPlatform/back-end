@@ -2,6 +2,7 @@
 
 const { Sequelize, DataTypes } = require("sequelize");
 const Collection = require("./data-collections");
+
 const commentModel = require("./comments/comment");
 const postModel = require("./post/post");
 const userModel = require("../auth/models/user.model");
@@ -13,6 +14,7 @@ const req_ph_comments = require("./reqPhotographerPost/R_Ph_comment");
 const R_Ph_Likes_Model = require("./reqPhotographerPost/R_Ph_Likes");
 const favoritesModel = require("./favorites/favorites");
 const reportModel = require("./report");
+const categoriesModel = require("./categories");
 
 // const FollowersModel = require('./followers/follower')
 const notificationModel = require("./notifications");
@@ -54,6 +56,8 @@ const favorites = favoritesModel(newSequlize, DataTypes);
 const challenages = challenage(newSequlize, DataTypes);
 const replys = reply(newSequlize, DataTypes);
 const report = reportModel(newSequlize, DataTypes);
+const categories = categoriesModel(newSequlize, DataTypes)
+
 
 // Relationship | user | likes | comments
 
@@ -180,6 +184,8 @@ const favoritesCollection = new Collection(favorites);
 const challenagesCollection = new Collection(challenages);
 const replysCollection = new Collection(replys);
 const reportCollection = new Collection(report);
+const categoriesCollection = new Collection(categories)
+
 
 module.exports = {
   newSequlize,
@@ -216,4 +222,7 @@ module.exports = {
   reportModel,
   report,
   reportCollection,
+  categories,
+  categoriesCollection
+
 };

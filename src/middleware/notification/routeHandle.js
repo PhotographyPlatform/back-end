@@ -44,18 +44,38 @@ async function handlePost(req, res, next) {
         let record = req.body;
         record.imgurl = req.image
         record["userid"] = req.users.userId;
-        const respons = await modules.newPostCOll.create(record);
-        const postOwner = await modules.user.findByPk(respons.dataValues.userid);
-        const followingPostOwner = await modules.Followers.findAll({ where: { following_id: postOwner.dataValues.id } });
-        followingPostOwner.map(ele => {
-            let message = `${postOwner.username} added new photo`;
-            createNotificationRecord(ele.me_id, postOwner.id, message, respons.id);
-        });
-        res.status(201).json(respons);
+        record.category = record.category.trim().toLowerCase().split(/\s*,\s*/);
+
+
+        if (await handleCategory(record.category)) {
+            const respons = await modules.newPostCOll.create(record);
+            // handle Notifications 
+            const postOwner = await modules.user.findByPk(respons.dataValues.userid);
+            const followingPostOwner = await modules.Followers.findAll({ where: { following_id: postOwner.dataValues.id } });
+            followingPostOwner.map(ele => {
+                let message = `${postOwner.username} added new photo`;
+                createNotificationRecord(ele.me_id, postOwner.id, message, respons.id);
+            });
+            res.status(201).json(respons);
+
+        } else {
+            const respons = "Please write the category correctly"
+            res.status(201).json(respons);
+        }
+
+
     } catch (err) {
         next(err)
     }
 }
+
+async function handleCategory(array) {
+    const categoriesData = await modules.categoriesCollection.get();
+    const categoryNames = categoriesData.map(category => category.name);
+    return array.every(item => categoryNames.includes(item));
+}
+
+
 
 
 async function handlelikes(req, res, next) {
@@ -69,7 +89,7 @@ async function handlelikes(req, res, next) {
             const likesOwner = await modules.user.findByPk(respons.dataValues.userid);
             // Post Owner
             const postOwner = (await modules.post.findByPk(respons.dataValues.postid)).userid; // Assuming the user with ID "like.postid" exists
-            
+
             if (respons) {
                 const message = `${likesOwner.username} liked your post`;
                 createNotificationRecord(postOwner, likesOwner.id, message, respons.id);
@@ -130,7 +150,7 @@ async function handlePostTest(req, res, next) {
 async function handleAdminMessage(req, res, next) {
     try {
         const message = req.body;
-        
+
         modules.user
     } catch (err) {
         next(err);
