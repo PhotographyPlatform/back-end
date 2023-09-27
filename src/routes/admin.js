@@ -6,6 +6,7 @@ const adminRoute = express.Router()
 const middleware = require('../middleware/basicRoutes');
 const acl = require('../auth/middleWare/acl');
 const isAuth = require('../auth/middleWare/bearer');
+const { uploadProfile, profileUpload, uploadStory, storyUpload } = require('../middleware/multer/multer')
 
 //admin reports
 adminRoute.get("/admin/report/:id", isAuth, acl('admin'), handleGetOne);
@@ -16,36 +17,43 @@ adminRoute.delete("/admin/report/:id", isAuth, acl('admin'), handleDelete);
 adminRoute.post('/admin/challenge', isAuth, acl('admin'), handleAddChallenge);
 
 //get all the challenges with their posts
-adminRoute.get("/admin/getRelation/:collection/:module/:idCollection", isAuth, acl('admin'),middleware.handleGetRelation);
+adminRoute.get("/admin/getRelation/:collection/:module/:idCollection", isAuth, acl('admin'), middleware.handleGetRelation);
 
 //get all the posts with their comments nad likes and replies
-adminRoute.get("/admin/getAllPostDataWithReplies", isAuth, acl('admin') ,middleware.handleGetAllPostDataWithReplies);
+adminRoute.get("/admin/getAllPostDataWithReplies", isAuth, acl('admin'), middleware.handleGetAllPostDataWithReplies);
 
 //for users
-adminRoute.get("/admin/getallPostUser/:userid",isAuth, acl('admin'), middleware.handleGetAllPostUser);
+adminRoute.get("/admin/getallPostUser/:userid", isAuth, acl('admin'), middleware.handleGetAllPostUser);
 
 //for posts
-adminRoute.get("/admin/getAllPostData/:Postid",isAuth, acl('admin'), middleware.handleGetAllPostData);
+adminRoute.get("/admin/getAllPostData/:Postid", isAuth, acl('admin'), middleware.handleGetAllPostData);
+
+
+// for Categories
+
+adminRoute.post("/admin/addCategory", isAuth, acl('admin'), storyUpload.single('image'), uploadStory, addCategory);
+
+
 
 adminRoute.param('model', (req, res, next) => {
-     const modelName = req.params.model;
-     if (modules[modelName]) {
-          req.model = modules[modelName];
-          req.modelName = modelName;
-          next();
-     } else {
-          next('Invalid Model');
-     }
+    const modelName = req.params.model;
+    if (modules[modelName]) {
+        req.model = modules[modelName];
+        req.modelName = modelName;
+        next();
+    } else {
+        next('Invalid Model');
+    }
 });
 
 // Basic Routes
-adminRoute.get("/admin/:model",isAuth, acl('admin'), middleware.handleGetOne);
+adminRoute.get("/admin/:model", isAuth, acl('admin'), middleware.handleGetOne);
 adminRoute.get("/admin/:model/:id", isAuth, acl('admin'), middleware.handleGetAll);
 // adminRoute.post("/admin/notification/sentMessgae" handleMessage)
-adminRoute.post("/admin/:model",isAuth, acl('admin'), middleware.handleCreate);
-adminRoute.put("/admin/:model/:id",isAuth, acl('admin'), middleware.handleUpdate);
-adminRoute.patch("/admin/:model/:id",isAuth, acl('admin'), middleware.handlePatch);
-adminRoute.delete("/admin/:model/:id",isAuth, acl('admin'), middleware.handleDelete);
+adminRoute.post("/admin/:model", isAuth, acl('admin'), middleware.handleCreate);
+adminRoute.put("/admin/:model/:id", isAuth, acl('admin'), middleware.handleUpdate);
+adminRoute.patch("/admin/:model/:id", isAuth, acl('admin'), middleware.handlePatch);
+adminRoute.delete("/admin/:model/:id", isAuth, acl('admin'), middleware.handleDelete);
 
 async function handleGetOne(req, res, next) {
     try {
@@ -80,9 +88,21 @@ async function handleAddChallenge(req, res, next) {
     try {
         const obj = req.body;
         const respons = await modules.challenagesCollection.create(obj);
-        console.log(respons);
         res.status(201).json(respons);
     } catch (err) {
+        next(err)
+    }
+}
+
+
+async function addCategory(req, res, next) {
+    try {
+        let record = req.body;
+        record.imgurl = req.image
+        const respons = await modules.categoriesCollection.create(record);
+        res.status(201).json(respons);
+    } catch (err) {
+        console.log(err)
         next(err)
     }
 }

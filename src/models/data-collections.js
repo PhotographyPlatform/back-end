@@ -115,6 +115,7 @@ class Collection {
     });
     return { Following: user, Count: user.length };
   }
+  
   async Feeds(id, model) {
     try {
       const records = await this.model.findOne({
