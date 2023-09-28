@@ -99,6 +99,15 @@ notificationName.on("connection", (socket) => {
   });
 });
 
+
+
+
+
+
+
+
+
+
 // using in app
 app.use(express.json());
 app.use(v1Route);
@@ -140,10 +149,12 @@ function intentionalError(req, res, next) {
 
 
 
-
 // error handler
 app.use("*", erorr404);
 app.use(erorr500);
+
+
+
 
 // listing to the server
 function start(PORT) {

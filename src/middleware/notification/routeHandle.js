@@ -49,6 +49,7 @@ async function handlePost(req, res, next) {
 
         if (await handleCategory(record.category)) {
             const respons = await modules.newPostCOll.create(record);
+            
             // handle Notifications 
             const postOwner = await modules.user.findByPk(respons.dataValues.userid);
             const followingPostOwner = await modules.Followers.findAll({ where: { following_id: postOwner.dataValues.id } });

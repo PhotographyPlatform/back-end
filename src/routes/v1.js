@@ -6,6 +6,7 @@ const modules = require("../models");
 const v1Route = express.Router();
 const middleware = require("../middleware/basicRoutes");
 const { where } = require("sequelize");
+const FeedsClass = require('../models/feeds-collection');
 
 v1Route.param("model", (req, res, next) => {
   const modelName = req.params.model;
@@ -27,6 +28,10 @@ v1Route.patch("/v1/:model/:id", middleware.handlePatch);
 v1Route.delete("/v1/:model/:id", middleware.handleDelete);
 v1Route.get("/getallPostUser/:userid", middleware.handleGetAllPostUser);
 v1Route.get("/getAllPostData/:Postid", middleware.handleGetAllPostData);
+
+
+
+
 
 v1Route.get("/suggestPost/:id", async (req, res, next) => {
   try {
@@ -52,8 +57,10 @@ v1Route.get("/suggestPost/:id", async (req, res, next) => {
     })
 
     let postIdLikedBefore = allLike.map(likeRecord => {
+  
       return likeRecord.postid;
     })
+
     let suggestion = postInterested.map(post => {
       if (!postIdLikedBefore.includes(post.id)) {
         console.log(post)
@@ -100,6 +107,26 @@ function findMostFrequentItems(arr) {
   }
   return mostFrequentItems;
 }
+
+
+// Feeds 
+
+v1Route.get("/fullyFeeds/:id", async (req, res, next) => {
+  try {
+
+    const Feeds = new FeedsClass(req.params.id);
+    let record = await Feeds.getAllData();
+
+    res.status(200).json(record);
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+
+
+
 
 
 // this route for get reply form any comment
