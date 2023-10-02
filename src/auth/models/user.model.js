@@ -3,6 +3,18 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 const userModel = (newSequlize, DataTypes) => newSequlize.define('users', {
+     firstName: {
+          type: DataTypes.STRING,
+          allowNull: false,
+     },
+     lastName: {
+          type: DataTypes.STRING,
+          allowNull: false,
+     },
+     address: {
+          type: DataTypes.STRING,
+          allowNull: false,
+     },
      username: {
           type: DataTypes.STRING,
           allowNull: false,
@@ -36,7 +48,7 @@ const userModel = (newSequlize, DataTypes) => newSequlize.define('users', {
      token: {
           type: DataTypes.VIRTUAL,
           get() {
-               return jwt.sign({ userId: this.id, role: this.role}, process.env.SECRET)
+               return jwt.sign({ userId: this.id, role: this.role }, process.env.SECRET)
           }
      },
      birthday: {

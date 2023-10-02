@@ -1,22 +1,18 @@
 'use strict'
 
 const { newUserCOll } = require("../../models");
-const jwt = require('jsonwebtoken')
-const secert = process.env.SECRET
 
 module.exports = async (req, res, next) => {
-    const body = req.body;
-    const newPass = body.newPassword;
-    const confirm = body.confirmPass;
-    if (newPass === confirm) {
+    try {
+        const obj = req.body
         const id = req.params.id
-        const token = await jwt.verify(id, secert)
-        const user = await newUserCOll.get(token)
+        const user = await newUserCOll.get(id)
         if (user) {
-            await user.update({ password: newPass });
+            await user.update({ password: obj.newPassword });
             console.log('Password updated successfully.');
             next();
         } else next('user not found')
+    } catch (e) {
+        console.log(e.message);
     }
-    else next('both password must match')
 }

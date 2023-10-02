@@ -23,7 +23,6 @@ module.exports = async (req, res, next) => {
         const email = req.body.email;
         const validEmail = await newUserCOll.getEmail(email)
         const validUser = await data.user.findOne({ where: { username: req.body.username } })
-        console.log(validUser);
         if (!validUser) {
             if (!validEmail) {
                 // generate 4 random numbers function            
@@ -31,7 +30,6 @@ module.exports = async (req, res, next) => {
                     return Math.floor(1000 + Math.random() * 9000);
                 }
                 const randomNumbers = randomCodes()
-                console.log(randomNumbers);
                 req.users = randomNumbers
                 const mailOptions = {
                     from: user,
@@ -50,7 +48,7 @@ module.exports = async (req, res, next) => {
             } else {
                 res.status(500).send('email is already exits ');
             }
-        } else next('username is already exists')
+        } else res.status(500).send('username is already exits ');
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Server error');
