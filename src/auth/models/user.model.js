@@ -68,9 +68,4 @@ const userModel = (newSequlize, DataTypes) => newSequlize.define('users', {
 })
 
 
-
-
-
-
-
 module.exports = userModel

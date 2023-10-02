@@ -18,4 +18,10 @@ const followerModel = (newSequlize, DataTypes) => newSequlize.define('followers'
      }
 });
 
+
+
+
+
+
+
 module.exports = followerModel

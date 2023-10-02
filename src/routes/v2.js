@@ -71,19 +71,19 @@ router.post('/story', isAuth, storyUpload.single('image'), uploadStory, async (r
     }
 })
 
-router.post('/createPost', isAuth, storyUpload.single('image'), uploadStory, async (req, res, next) => {
-    try {
-        const obj = req.body;
-        obj.imgurl = req.image
-        obj.userid = req.users.userId
-        const data = await models.newPostCOll.create(obj);
-        res.status(201).json({
-            data
-        });
-    } catch (err) {
-        next(err);
-    }
-})
+// router.post('/createPost', isAuth, storyUpload.single('image'), uploadStory, async (req, res, next) => {
+//     try {
+//         const obj = req.body;
+//         obj.imgurl = req.image
+//         obj.userid = req.users.userId
+//         const data = await models.newPostCOll.create(obj);
+//         res.status(201).json({
+//             data
+//         });
+//     } catch (err) {
+//         next(err);
+//     }
+// })
 
 
 module.exports = router

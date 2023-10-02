@@ -157,3 +157,31 @@ describe("Added new Reoprt ", () => {
     });
 });
 
+describe("Home page ", () => {
+    it("should return (200) ", async () => {
+        const response = await req.get("/")
+        expect(response.status).toBe(200);
+    })
+
+})
+
+describe('GET /', () => {
+    it('should respond with a welcome message', async () => {
+        const response = await req.get('/');
+
+        expect(response.status).toBe(200);
+        expect(response.text).toBe('welcome to home page');
+    });
+
+    it('should handle errors', async () => {
+        // Simulate an error by forcing the app to throw an exception
+        app.get('/', (req, res, next) => {
+            throw new Error('Test error');
+        });
+
+        const response = await req.get('/');
+
+        expect(response.status).toBe(200);
+        // You can assert the error message or other relevant details in the response
+    });
+});

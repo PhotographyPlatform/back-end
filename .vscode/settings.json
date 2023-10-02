@@ -1,3 +1,4 @@
 {
-    "liveServer.settings.port": 5583
+    "liveServer.settings.port": 5583,
+    "thunder-client.autoRunCurl": true
 }

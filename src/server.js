@@ -30,6 +30,7 @@ const {
   updateNotification,
 } = require("./middleware/notification/modleHandle");
 const deleteRouter = require("./routes/delete.route");
+
 app.use(cors());
 app.use(logger);
 
@@ -64,47 +65,10 @@ io.on("connection", (socket) => {
   });
 });
 
-// // Notification Socket
 
-// notificationName.on('connection', socket => {
-//     socket.on('join-room', (payload) => {
-//         console.log(payload);
-//         const room = `notification room ${payload.sender} - ${payload.resever}`
-
-//         console.log(room, "from Join room---------------------------1")
-//         console.log()
-//     })
-
-//     socket.on('send-notification', payload => {
-//         console.log(payload)
-//         const room = `notification room ${payload.sender} - ${payload.resever}`
-//         // socket.join(room)
-//         console.log(room, "from Notification---------------------------2")
-//         socket.to(room).emit("send", payload)
-//     })
-
-// })
-
-// const notificationName = io.of('/notification');
-// notificationName.on('connection', socket => {
-//     socket.on('join-room', (payload) => {
-//         // const room = `notification room ${payload.sender} - ${payload.resever}`;
-//         socket.join(payload); // Join the room
-//         console.log(payload);
-//         // notificationName.to(room).emit("send", payload);
-//     });
-
-//     socket.on('send-notification', payload => {
-
-//         console.log(typeof(payload.resever));
-//         socket.join(payload.resever);
-//         notificationName.to(payload.resever).emit("send", payload);
-//     });
-// });
+// Notification Socket
 
 const notificationName = io.of("/notification");
-// notificationName.setMaxListeners(20);
-
 notificationName.on("connection", (socket) => {
   console.log("((notification)) connected with ID of ", socket.id);
   socket.on("notification", async (payload) => {
@@ -135,6 +99,15 @@ notificationName.on("connection", (socket) => {
   });
 });
 
+
+
+
+
+
+
+
+
+
 // using in app
 app.use(express.json());
 app.use(v1Route);
@@ -153,7 +126,7 @@ app.use(adminRoute);
 app.use(searchCategoryRoute);
 
 // controller
-app.get("/", (req, res) => {
+app.get("/", (req, res, next) => {
   try {
     res.status(200).send("welcome to home page");
   } catch (err) {
@@ -176,10 +149,12 @@ function intentionalError(req, res, next) {
 
 
 
-
 // error handler
 app.use("*", erorr404);
 app.use(erorr500);
+
+
+
 
 // listing to the server
 function start(PORT) {
