@@ -24,13 +24,14 @@ module.exports = async (req, res, next) => {
         const email = req.body.email;
         const find = await newUserCOll.getEmail(email);
         if (find) {
+            req.users = find
             const token = await jwt.sign(find.id, secret)
             const mailOptions = {
                 from: user,
                 to: email,
                 subject: 'Reset Password',
                 text: '<p>Here is the link: http://localhost:3000/resetPassword</p>',
-                html: `link to reset your password: http://localhost:3000/resetPassword/${token} <p> or \n Click <a href="http://localhost:3000/resetPassword/${find.id}">here</a> to access the link.</p>`
+                html: `link to reset your password: http://localhost:3000/resetPassword <p> or \n Click <a href="http://localhost:3000/resetPassword/${find.id}">here</a> to access the link.</p>`
             };
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {

@@ -20,7 +20,8 @@ router.get('/v2/home', isAuth, authHome)
 router.get('/home', nonAuthHome)
 
 router.post('/forgetPassword', forgetPassword, (req, res) => {
-    res.status(200).json('Email sent successfully')
+    console.log(req.users, );
+    res.status(200).json(req.users)
 })
 router.post('/resetPassword/:id', changePass, (req, res) => {
     res.status(200).json('password changed successfully')
@@ -36,7 +37,7 @@ router.get('/v2/profile', isAuth, userProfile, (req, res) => {
 })
 
 // profile dashboard updating username---password---gender----birthday
-router.patch('/profile', isAuth, userProfile, profileUpload.single('image'), uploadProfile, updateProfile, (req, res) => {
+router.patch('/profile', isAuth, userProfile, updateProfile, (req, res) => {
 
     res.status(200).json('Profile updated')
 })
