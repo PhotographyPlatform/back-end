@@ -7,6 +7,8 @@ const v1Route = express.Router();
 const middleware = require("../middleware/basicRoutes");
 const { where } = require("sequelize");
 const FeedsClass = require('../models/feeds-collection');
+const isAuth = require('../auth/middleWare/bearer');
+
 
 v1Route.param("model", (req, res, next) => {
   const modelName = req.params.model;
@@ -122,6 +124,125 @@ v1Route.get("/fullyFeeds/:id", async (req, res, next) => {
     next(err);
   }
 });
+
+// get user messeges list 
+
+v1Route.get('/messegeslist/:id', async (req, res , next) => {
+  const id = req.params.id
+  const records = await modules.chat.findAll({
+    where: {
+      [Op.or]: [
+          { senderId: id },
+          { receiverId: id }
+      ]
+  }
+  });
+
+  let arr = []
+
+  records.map(ele => {
+    if (ele.senderId !== id) {
+      if (!arr.includes(ele.receiverId)) {
+        arr.push(ele.receiverId)
+      }
+    }
+    else if (ele.receiverId !== id) {
+      if (!arr.includes(ele.senderId)) { 
+        arr.push(ele.senderId)
+      }
+    }
+  })
+  
+  // records.map(ele => {
+  //   if (ele.senderId !== id) {
+  //     if (!arr.includes(ele.senderId)) {
+  //       arr.push(ele.receiverId)
+  //     }
+  //   }
+
+  //   else if (ele.receiverId !== id) {
+  //     if (!arr.includes(ele.receiverId)) { 
+  //       arr.push(ele.senderId)
+  //     }
+  //   }
+  // })
+
+
+
+  // console.log(records);
+  
+  async function fetchData(arr) {
+    let obj = [];
+  
+    for (const ele of arr) {
+        let data = await modules.user.findByPk(ele);
+        obj.push(data);
+    }
+    return obj
+  }
+
+  res.status(200).json({
+    // data : arr
+    data : await fetchData(arr)
+  })
+
+})
+
+
+v1Route.get('/lastMessage/:id',async (req, res , next) => {
+  try {
+    const id = req.params.id
+    // const id = req.users.userId
+
+    const records = await modules.chat.findAll({
+      where: {
+        [Op.or]: [
+            { senderId: id },
+            { receiverId: id }
+        ]
+    }
+    });
+    let arr = []
+  
+    records.map(ele => {
+      if (ele.senderId !== id) {
+        if (!arr.includes(ele.receiverId)) {
+          console.log(ele.receiverId);
+
+          arr.push(ele.receiverId)
+        }
+      }
+      else if (ele.receiverId !== id) {
+        if (!arr.includes(ele.senderId)) { 
+          console.log(ele.senderId);
+
+          arr.push(ele.senderId)
+        }
+      }
+    })
+
+    async function fetchMessages() {
+      let newArr = []
+      for (const ele of arr) {
+    
+      const res = await modules.newUserCOll.SendandRecieveMessage(id, ele)
+      let msg = [...res.sendData, ...res.resieveData]
+      msg.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      newArr.push({userId : ele , data : msg})
+      }
+      return newArr
+    }
+
+
+    res.status(200).json({
+      // data : arr
+      data : await fetchMessages()
+    })
+
+  } catch (err) {
+       next(err)
+  }
+})
 
 
 

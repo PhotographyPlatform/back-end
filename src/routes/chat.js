@@ -16,6 +16,8 @@ chatRoute.get('/chat/:reciverID', isAuth , async (req, res , next) => {
 })
 
 
+
+
 chatRoute.post('/chat/:senderID/:reciverID',isAuth , async (req, res,  next) => {
      try {
           const content = req.body.content
@@ -36,17 +38,19 @@ chatRoute.post('/chat/:senderID/:reciverID',isAuth , async (req, res,  next) => 
      }
 })
 
-chatRoute.put('/chat/:id/:senderID/:reciverID',isAuth , async (req, res,  next) => {
+chatRoute.put('/chat/:id/:reciverID',isAuth , async (req, res,  next) => {
      try {
           const id = req.params.id
           const content = req.body.content
           const reciverID = req.params.reciverID
-          const senderID = req.params.senderID
+          const senderID = req.users.userId
+
 
           const obj = {
+               read : req.body.read, 
                content: content,
-               receiverId: reciverID,
-               senderId: senderID
+               // receiverId: reciverID,
+               // senderId: senderID,
           }
 
           const data = await chatCollection.update(id, obj)
