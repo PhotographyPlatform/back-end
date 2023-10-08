@@ -127,122 +127,74 @@ v1Route.get("/fullyFeeds/:id", async (req, res, next) => {
 
 // get user messeges list 
 
-v1Route.get('/messegeslist/:id', async (req, res , next) => {
-  const id = req.params.id
-  const records = await modules.chat.findAll({
-    where: {
-      [Op.or]: [
-          { senderId: id },
-          { receiverId: id }
-      ]
-  }
-  });
-
-  let arr = []
-
-  records.map(ele => {
-    if (ele.senderId !== id) {
-      if (!arr.includes(ele.receiverId)) {
-        arr.push(ele.receiverId)
-      }
-    }
-    else if (ele.receiverId !== id) {
-      if (!arr.includes(ele.senderId)) { 
-        arr.push(ele.senderId)
-      }
-    }
-  })
+// v1Route.get('/messegeslist/:id', async (req, res, next) => {
+//   try {
+//     const id = req.params.id
+//     const records = await modules.chat.findAll({
+//       where: {
+//         [Op.or]: [
+//             { senderId: id },
+//             { receiverId: id }
+//         ]
+//     }
+//     });
   
-  // records.map(ele => {
-  //   if (ele.senderId !== id) {
-  //     if (!arr.includes(ele.senderId)) {
-  //       arr.push(ele.receiverId)
-  //     }
-  //   }
-
-  //   else if (ele.receiverId !== id) {
-  //     if (!arr.includes(ele.receiverId)) { 
-  //       arr.push(ele.senderId)
-  //     }
-  //   }
-  // })
-
-
-
-  // console.log(records);
+//     let arr = []
   
-  async function fetchData(arr) {
-    let obj = [];
-  
-    for (const ele of arr) {
-        let data = await modules.user.findByPk(ele);
-        obj.push(data);
-    }
-    return obj
-  }
-
-  res.status(200).json({
-    // data : arr
-    data : await fetchData(arr)
-  })
-
-})
-
-
-v1Route.get('/lastMessage/:id',async (req, res , next) => {
-  try {
-    const id = req.params.id
-    // const id = req.users.userId
-
-    const records = await modules.chat.findAll({
-      where: {
-        [Op.or]: [
-            { senderId: id },
-            { receiverId: id }
-        ]
-    }
-    });
-    let arr = []
-  
-    records.map(ele => {
-      if (ele.senderId !== id) {
-        if (!arr.includes(ele.receiverId)) {
-          console.log(ele.receiverId);
-
-          arr.push(ele.receiverId)
-        }
-      }
-      else if (ele.receiverId !== id) {
-        if (!arr.includes(ele.senderId)) { 
-          console.log(ele.senderId);
-
-          arr.push(ele.senderId)
-        }
-      }
-    })
-
-    async function fetchMessages() {
-      let newArr = []
-      for (const ele of arr) {
+//     // records.map(ele => {
+//     //   if (ele.senderId !== id) {
+//     //     if (!arr.includes(ele.receiverId)) {
+//     //       arr.push(ele.receiverId)
+//     //     }
+//     //   }
+//     //   else if (ele.receiverId !== id) {
+//     //     if (!arr.includes(ele.senderId)) { 
+//     //       arr.push(ele.senderId)
+//     //     }
+//     //   }
+//     // })
     
-      const res = await modules.newUserCOll.SendandRecieveMessage(id, ele)
-      let msg = [...res.sendData, ...res.resieveData]
-      msg.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-      newArr.push({userId : ele , data : msg})
-      }
-      return newArr
-    }
+//     records.map(ele => {
+//       if (ele.senderId !== +id) {
+//         console.log(ele.senderId , 'ele.senderId');
+//         console.log(+id , 'id');
+//         if (!arr.includes(ele.senderId)) {
+//           arr.push(ele.senderId)
+//         }
+//       }
+  
+//       else if (ele.receiverId !== +id) {
+//         if (!arr.includes(ele.receiverId)) { 
+//           arr.push(ele.receiverId)
+//         }
+//       }
+//     })
+    
+//     async function fetchData(arr) {
+//       let obj = [];
+    
+//       for (const ele of arr) {
+//         let data = await modules.user.findByPk(ele);
+//         //
+//         const res = await modules.newUserCOll.SendandRecieveMessage(id, ele)
+//         let msg = [...res.sendData, ...res.resieveData]
+//         msg.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+//         //
+  
+//         obj.push({data , messages : msg});
+//       }
+//       return obj
+//     }
+  
+//     res.status(200).json({
+//       data : await fetchData(arr)
+//     })
+    
+//   } catch (err) {
+//     next(err)
+//   }
+// })
 
-
-    res.status(200).json({
-      // data : arr
-      data : await fetchMessages()
-    })
-
-  } catch (err) {
-       next(err)
-  }
-})
 
 
 
