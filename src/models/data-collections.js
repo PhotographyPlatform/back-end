@@ -101,7 +101,7 @@ class Collection {
     const user = records[0].Followers.map((ele) => {
       return { id: ele.id, name: ele.username };
     });
-    return { followers: user };
+    return { followers: user, Count: user.length };
   }
 
   // fixed the following to return the correct data and take the id from the token

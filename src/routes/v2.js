@@ -9,6 +9,7 @@ const nonAuthHome = require('../middleware/nonAuthHome')
 const changePass = require('../middleware/restPass/changePass')
 const forgetPassword = require('../middleware/restPass/nodemailer')
 const userProfile = require('../middleware/profile/profile')
+const getProfile = require('../middleware/profile/getProfile')
 const updateProfile = require('../middleware/profile/updateProfile')
 const handleReport = require('../middleware/handleReport');
 const models = require('../models');
@@ -20,7 +21,7 @@ router.get('/v2/home', isAuth, authHome)
 router.get('/home', nonAuthHome)
 
 router.post('/forgetPassword', forgetPassword, (req, res) => {
-    console.log(req.users, );
+    console.log(req.users,);
     res.status(200).json(req.users)
 })
 router.post('/resetPassword/:id', changePass, (req, res) => {
@@ -40,6 +41,10 @@ router.get('/v2/profile', isAuth, userProfile, (req, res) => {
 router.patch('/profile', isAuth, userProfile, updateProfile, (req, res) => {
 
     res.status(200).json('Profile updated')
+})
+
+router.get('/profile/:id', isAuth, getProfile, (req, res) => {
+    res.status(200).json(req.data)
 })
 
 router.delete('/comment', isAuth, deleteComment)
