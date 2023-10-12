@@ -84,7 +84,21 @@ chatRoute.get('/messegeslist/:id', async (req, res, next) => {
      } catch (err) {
        next(err)
      }
-   })
+})
+
+chatRoute.get('/allUserMessages',isAuth , async (req, res, next) => {
+     try {
+          const userID = req.users.userId
+
+          const result = await chat.findAll({ where: { receiverId: userID } })
+          res.status(200).json({
+               recievedData : result
+          })
+
+     } catch (err) {
+          next(err)
+     }
+})
 
 
 

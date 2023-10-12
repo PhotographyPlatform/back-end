@@ -63,11 +63,28 @@ io.on("connection", (socket) => {
     console.log(result);
 
     count++;
-    io.to(socket.id).emit("notificaton", count)
-    // socket.broadcast.to(room).emit("notificaton", count)
+    socket.broadcast.to(room).emit("notificaton", count)
+    // io.to(socket.id).emit("notificaton", count)
     // socket.to(room).emit("notificaton", count);
   });
 });
+
+const homeConnection = io.of('/home')
+homeConnection.on('connection', socket => {
+  
+  socket.on("joinHomeRoom", userId => {
+    const room = `userId => ${userId}`;
+    console.log('home log in', room);
+    
+    socket.join(room);
+    socket.on('notificaton', reciver => {
+      
+      socket.broadcast.to(`userId => ${reciver}`).emit("msgNotificaton", 'msgNotificaton' )
+    })
+    
+  } );
+
+})
 
 // io.on("connection", (socket) => {
 //   console.log("connect to the main ", socket.id);
