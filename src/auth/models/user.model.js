@@ -55,7 +55,10 @@ const userModel = (newSequlize, DataTypes) => newSequlize.define('users', {
           type: DataTypes.STRING
      },
      img: {
-          type: DataTypes.BLOB('long')
+          type: DataTypes.STRING
+     },
+     heroImg: {
+          type: DataTypes.STRING
      },
      gender: {
           type: DataTypes.ENUM('male', 'female')

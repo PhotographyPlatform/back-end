@@ -12,6 +12,8 @@ const userProfile = require('../middleware/profile/profile')
 const getProfile = require('../middleware/profile/getProfile')
 const updateProfile = require('../middleware/profile/updateProfile')
 const handleReport = require('../middleware/handleReport');
+const heroImage = require('../middleware/upload/heroimg')
+const profileImage = require('../middleware/upload/profileimg')
 const models = require('../models');
 
 const { uploadProfile, profileUpload, uploadStory, storyUpload } = require('../middleware/multer/multer')
@@ -33,10 +35,20 @@ router.get('/v2/profile', isAuth, userProfile, (req, res) => {
     const data = req.data
     res.status(200).json({
         id: data.id, username: data.username, profileImg: data.img,
+        heroImage: data.heroImg,
         birthday: data.birthday, password: data.password, email: data.email, gender: data.gender
     })
 })
 
+router.post('/heroImage', isAuth, userProfile, profileUpload.single('image'), uploadProfile, heroImage, (req, res) => {
+    res.status(200).json('image uploaded')
+
+})
+
+router.post('/profileImage', isAuth, userProfile, profileUpload.single('image'), uploadProfile, profileImage, (req, res) => {
+    res.status(200).json('image uploaded')
+
+})
 // profile dashboard updating username---password---gender----birthday
 router.patch('/profile', isAuth, userProfile, updateProfile, (req, res) => {
 
