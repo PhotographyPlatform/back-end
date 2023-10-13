@@ -62,6 +62,7 @@ function checkFileType(file, cb) {
 function uploadStory(req, res, next) {
   try {
     cloudinary.uploader.upload(req.file.path, function (result) {
+      console.log(result.secure_url);
       req.image = result.secure_url;
       next();
     });

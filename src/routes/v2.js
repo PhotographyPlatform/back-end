@@ -72,20 +72,20 @@ router.get('/story', isAuth, story, (req, res) => res.status(200).json(req.data)
 router.post("/report", isAuth, handleReport);
 
 
-
-
-router.post('/story', isAuth, storyUpload.single('image'), uploadStory, async (req, res, next) => {
+router.post('/story', isAuth, profileUpload.single('storyUrl'), uploadStory, async (req, res) => {
     try {
-        const obj = req.body;
-        obj.storyUrl = req.image
-        obj.userid = req.users.userId
-        const data = await models.StoriesColl.create(obj);
-        res.status(201).json({
-            data
-        });
+        const image = req.image
+        const data = req.users;
+        const obj = {
+            storyUrl: image,
+            userid: data.userId
+        }
+        await await models.StoriesColl.create(obj);
+        res.status(201).json('story added')
     } catch (err) {
-        next(err);
+        res.status(500).json(err.message)
     }
+
 })
 
 // router.post('/createPost', isAuth, storyUpload.single('image'), uploadStory, async (req, res, next) => {
