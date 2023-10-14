@@ -14,13 +14,15 @@ searchRoute.post('/search', async (req, res, next) => {
           //users
           const usersRecord = await newUserCOll.get();
 
-          const usersResults = usersRecord.filter(user => user.username.includes(searchWord));
+
+     const usersResults = usersRecord.filter(user => user.username.toLowerCase().includes(searchWord.toLowerCase()));
+
 
 
           //posts
           const postsRecord = await newPostCOll.get();
 
-          const postsResults = postsRecord.filter(post => post.title.includes(searchWord));
+     const postsResults = postsRecord.filter(post => post.title.toLowerCase().includes(searchWord.toLowerCase()));
 
 
           const searchResults = {
