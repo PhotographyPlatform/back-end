@@ -22,6 +22,7 @@ class Collection {
     const add = await this.model.create(obj);
     return add;
   }
+
   async update(id, obj) {
     const updated = await this.model.update(obj, { where: { id } });
     const newRecord = await this.get(id);
@@ -101,7 +102,7 @@ class Collection {
     const user = records[0].Followers.map((ele) => {
       return { id: ele.id, name: ele.username };
     });
-    return { followers: user };
+    return { followers: user, Count: user.length };
   }
 
   // fixed the following to return the correct data and take the id from the token
