@@ -6,6 +6,8 @@ const searchCategoryRoute = express.Router();
 const { Op } = require('sequelize');
 
 searchCategoryRoute.get('/searchCategory/:searchword', handleFavrites);
+
+
 searchCategoryRoute.get('/getAllCategory', handleGetAllCategory);
 
 async function handleFavrites(req, res, next) {
@@ -13,15 +15,15 @@ async function handleFavrites(req, res, next) {
         const searchWord = req.params.searchword;
 
         const posts = await modules.post.findAll({
-        where: {
-            category: {
-            [Op.contains]: [searchWord]
+            where: {
+                category: {
+                    [Op.contains]: [searchWord]
+                }
             }
-        }
         });
 
         res.status(200).json({
-        searchResults: posts
+            searchResults: posts
         });
 
     } catch (err) {
