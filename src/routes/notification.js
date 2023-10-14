@@ -7,14 +7,14 @@ require('dotenv').config();
 // notification Route
 
 
-const { handleComment, handleFollowing, handlePost, handlelikes } = require('../middleware/notification/routeHandle')
+const { handleComment, handleFollowing, handlePost, handlelikes } = require('../middleware/notification/routeHandle');
 
 notifiRoute.post('/notification/comment', isAuth, handleComment);
 
-notifiRoute.post('/notification/follow', isAuth, handleFollowing)
+notifiRoute.post('/notification/follow', isAuth, handleFollowing);
 
-notifiRoute.post('/notification/post', isAuth, storyUpload.single('image'), uploadStory, handlePost)
+notifiRoute.post('/notification/post', isAuth, storyUpload.single('image'), uploadStory, handlePost);
 
 notifiRoute.post('/notification/likes', isAuth, handlelikes);
 
-module.exports = notifiRoute
+module.exports = notifiRoute;

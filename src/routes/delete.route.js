@@ -3,15 +3,15 @@ const express = require('express')
 const deleteRouter = express.Router()
 const isAuth = require('../auth/middleWare/bearer')
 const data = require('../models/')
-
+const { Op } = require('sequelize');
 // handle unlike by auth
-deleteRouter.delete('/likes', isAuth, handleLikes)
+deleteRouter.post('/likes', isAuth, handleLikes)
 
 //handle delete comment by auth
-deleteRouter.delete('/comment', isAuth, handleComment)
+deleteRouter.post('/comment', isAuth, handleComment)
 
 // handle delete post by auth
-deleteRouter.delete('/post', isAuth, handlePost)
+deleteRouter.post('/post', isAuth, handlePost)
 
 async function handleLikes(req, res) {
     const id = req.users.userId
@@ -26,17 +26,29 @@ async function handleLikes(req, res) {
 }
 
 async function handleComment(req, res) {
-    const id = req.users.userId
-    const body = req.body
-    const commentid = body.commentid
-    if (body.postid) {
-        const comments = await data.comment.findOne({ where: { postid: body.postid, userid: id, id: commentid } })
+    const id = req.users.userId;
+    const body = req.body;
+    const commentid = body.commentid;
+
+    if (commentid) {
+        const comments = await data.comment.findOne({
+            where: {
+                userid: id,
+                id: commentid
+            }
+        });
+
         if (comments) {
-            await comments.destroy()
-            res.status(204).json('deleted comment')
-        } else res.status(500).json('you did not comment in this post')
-    } else res.status(204).json('postid cannot be null')
+            await comments.destroy();
+            res.status(204).json('Comment deleted successfully');
+        } else {
+            res.status(404).json('Comment not found');
+        }
+    } else {
+        res.status(400).json('commentid must be provided');
+    }
 }
+
 
 async function handlePost(req, res) {
     const id = req.users.userId
