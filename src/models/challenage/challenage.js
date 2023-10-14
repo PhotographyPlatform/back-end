@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: false,
     },
     brief: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     prize: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     startDate: {
       type: DataTypes.DATE,
@@ -19,11 +19,7 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.DATE,
     },
     rules: {
-      type: DataTypes.STRING,
-      set(rules) {
-        let rule = JSON.stringify(rules);
-        this.setDataValue("rules", rule);
-      },
+      type: DataTypes.TEXT,
     },
     imgurl: {
       type: DataTypes.STRING,
