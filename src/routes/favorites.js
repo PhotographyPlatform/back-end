@@ -42,7 +42,6 @@ favoritesRoute.get('/favorites', isAuth ,handleFavrites);
 async function handleFavrites(req, res, next) {
     try {
         const userid = req.users.userId;
-        // const userid = req.params.id;
 
         const userFavoritesPostsIDs = await modules.favorites.findAll({
             where: {
@@ -72,6 +71,20 @@ async function handleFavrites(req, res, next) {
     } catch (err) {
         next(err)
     }
+}
+
+favoritesRoute.delete('/favorites/:id' ,isAuth, removeItem)
+
+async function removeItem(req, res) {
+    const id = req.users.userId
+    const postID = req.params.id
+    if (postID) {
+        const favoritesItem = await modules.favorites.findOne({ where: { postid: postID, userid: id } })
+        if (favoritesItem) {
+            await favoritesItem.destroy()
+            res.status(204).json("unFavorite")
+        } else res.status(500).json('you did not add this post')
+    } else res.status(204).json('postid cannot be null')
 }
 
 module.exports = favoritesRoute;
