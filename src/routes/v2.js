@@ -88,6 +88,33 @@ router.post('/story', isAuth, profileUpload.single('storyUrl'), uploadStory, asy
 
 })
 
+router.get("/getOtherDataUser/:id", isAuth,getOtherDataUser);
+
+async function getOtherDataUser(req, res, next) {
+    try {
+        let mod = models.newUserCOll
+        const id = req.params.id;
+        const data = await mod.get(id);
+        const obj = {
+            id : data.id,
+            firstName : data.firstName,
+            lastName: data.lastName,
+            username: data.username,
+            role: data.role,
+            img: data.img,
+            gender: data.gender,
+            birthday: data.birthday,
+            // token : data.token
+        }
+      res.status(200).json({
+        userInfo : obj
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+
 // router.post('/createPost', isAuth, storyUpload.single('image'), uploadStory, async (req, res, next) => {
 //     try {
 //         const obj = req.body;
