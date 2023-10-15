@@ -41,6 +41,7 @@ async function homeHandler(req, res, next) {
 
 async function unFollowHandler(req, res, next) {
     try {
+
         // if the following id is exists in the body thats mean the user is in their following table and need to delete a folllowing id
         const following_id = req.body.following_id
 
