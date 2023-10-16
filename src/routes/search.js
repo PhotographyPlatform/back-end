@@ -9,27 +9,29 @@ const searchRoute = express.Router()
 searchRoute.post('/search', async (req, res, next) => {
      try {
 
-     const searchWord = req.body.searchWord;
+          const searchWord = req.body.searchWord;
 
-     //users
-     const usersRecord = await newUserCOll.get();
+          //users
+          const usersRecord = await newUserCOll.get();
+
 
      const usersResults = usersRecord.filter(user => user.username.toLowerCase().includes(searchWord.toLowerCase()));
 
 
-     //posts
-     const postsRecord = await newPostCOll.get();
+
+          //posts
+          const postsRecord = await newPostCOll.get();
 
      const postsResults = postsRecord.filter(post => post.title.toLowerCase().includes(searchWord.toLowerCase()));
 
 
-     const searchResults = {
-          users : usersResults,
-          posts : postsResults
-     }
+          const searchResults = {
+               users: usersResults,
+               posts: postsResults
+          }
 
-     res.status(200).json(searchResults)
-  
+          res.status(200).json(searchResults)
+
      } catch (err) {
           next(err)
      }
