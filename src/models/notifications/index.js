@@ -7,6 +7,13 @@ const notificationModel = (newSequlize, DataTypes) => newSequlize.define('notifi
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    actionType: {
+        type: DataTypes.ENUM('comment', 'post', 'follow', "like"),
+        allowNull: false
+    },
+    actionParentId: {
+        type: DataTypes.INTEGER,
+    },
     senderId: {
         type: DataTypes.INTEGER,
         allowNull: false,

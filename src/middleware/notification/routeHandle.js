@@ -12,7 +12,7 @@ async function handleComment(req, res, next) {
 
         if (respons) {
             const message = `${commentOwner.username} Add comment on your post`;
-            createNotificationRecord(postOwner, commentOwner.id, message, respons.id);
+            createNotificationRecord(postOwner, commentOwner.id, message, respons.id, respons.dataValues.postid, 'comment');
         }
         res.status(201).json(respons);
     } catch (err) {
@@ -30,7 +30,7 @@ async function handleFollowing(req, res, next) {
             const followersOwner = await modules.user.findByPk(respons.dataValues.me_id);
             if (respons) {
                 const message = `${followersOwner.username} followed you`;
-                await createNotificationRecord(followingOwner.id, followersOwner.id, message, followersOwner.id);
+                await createNotificationRecord(followingOwner.id, followersOwner.id, message, followersOwner.id, respons.dataValues.following_id, 'follow');
             }
             res.status(201).json(respons);
         } else res.status(400).json('you cant follow yourself')
@@ -49,13 +49,13 @@ async function handlePost(req, res, next) {
 
         if (await handleCategory(record.category)) {
             const respons = await modules.newPostCOll.create(record);
-            
+
             // handle Notifications 
             const postOwner = await modules.user.findByPk(respons.dataValues.userid);
             const followingPostOwner = await modules.Followers.findAll({ where: { following_id: postOwner.dataValues.id } });
             followingPostOwner.map(ele => {
-                let message = `${postOwner.username} added new photo`;
-                createNotificationRecord(ele.me_id, postOwner.id, message, respons.id);
+                let message = `${postOwner.username} added new post`;
+                createNotificationRecord(ele.me_id, postOwner.id, message, respons.id, respons.dataValues.id, 'post');
             });
             res.status(201).json(respons);
 
@@ -93,7 +93,7 @@ async function handlelikes(req, res, next) {
 
             if (respons) {
                 const message = `${likesOwner.username} liked your post`;
-                createNotificationRecord(postOwner, likesOwner.id, message, respons.id);
+                createNotificationRecord(postOwner, likesOwner.id, message, respons.id, respons.dataValues.postid, 'like');
             }
             res.status(201).json(respons);
         } else {
@@ -105,13 +105,17 @@ async function handlelikes(req, res, next) {
 }
 
 
-async function createNotificationRecord(receiverId, senderId, message, actionId) {
+async function createNotificationRecord(receiverId, senderId, message, actionId, actionParentId, actionType) {
     try {
+        // if (senderId === receiverId) return null;
+
         await modules.notificationCollection.create({
             message: message,
             actionId: actionId,
             senderId: senderId,
-            receiverId: receiverId
+            receiverId: receiverId,
+            actionParentId: actionParentId,
+            actionType: actionType
         })
     } catch (err) {
         console.log('There is an error when creating a notification record:: ', err)
