@@ -18,11 +18,6 @@ async function handleUserPost(req, res, next) {
 }
 
 
-
-
-
-
-
 class Feeds extends Collection {
     constructor(userId) {
         super();
@@ -41,7 +36,7 @@ class Feeds extends Collection {
                 modules.comment,
                 modules.like
             )
-            post=[...data.posts];
+            post = [...data.posts];
         }
         return post;
     }
@@ -137,17 +132,18 @@ class Feeds extends Collection {
         return mostFrequentItems;
     }
 
-    async getChllange() {
-        // get all Chllange on the pltform 
-        return await modules.challenagesCollection.get();
-    }
+    // async getChllange() {
+    //     // get all Chllange on the pltform 
+    //     return await modules.challenagesCollection.get();
+    // }
 
     async getAllData() {
         let mergedArray = [];
         let getOtherUserPost = await this.getOtherUserPost();
         let getSuggestPost = await this.getSuggestPost();
-        let getChllange = await this.getChllange();
-        mergedArray = [...getOtherUserPost, ...getSuggestPost, ...getChllange]
+        // let getChllange = await this.getChllange();
+        mergedArray = [...getOtherUserPost, ...getSuggestPost]
+        // , ...getChllange
         return mergedArray;
     }
 

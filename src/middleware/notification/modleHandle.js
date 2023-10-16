@@ -7,7 +7,7 @@ async function getNotificationById(userid) {
     const respons = await modules.notification.findAll({
       where: {
         receiverId: userid,
-        read: false,
+        // read: false,
       },
       // get all notification for userid
     });
@@ -21,7 +21,7 @@ async function updateNotification(payload) {
   try {
     await modules.notificationCollection.update(payload.id, { read: true });
     return "Updated successfully";
-  } catch {
+  } catch (err) {
     console.log("There is an error when updating notifications by ID:: ", err);
   }
 }

@@ -73,6 +73,7 @@ notificationName.on("connection", (socket) => {
   console.log("((notification)) connected with ID of ", socket.id);
   socket.on("notification", async (payload) => {
     try {
+      console.log("User Connection have id : ", payload)
       // Get all notifications for the user ID from the model 'notification'
       const respons = await getNotificationById(payload);
       // Once a new record is created in the notification model, it is sent via emit directly
