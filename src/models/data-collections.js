@@ -112,11 +112,11 @@ class Collection {
       include: { model: model, as: "Following" },
     });
     const user = records[0].Following.map((ele) => {
-      return { id: ele.id, name: ele.username };
+      return { id: ele.id, name: ele.username, img: ele.img };
     });
     return { Following: user, Count: user.length };
   }
-  
+
   async Feeds(id, model) {
     try {
       const records = await this.model.findOne({
@@ -173,7 +173,7 @@ class Collection {
     return data;
   }
 
-  async getUserPost(userid) {
+  async getUserPost(userid, comments, likes) {
     const records = await this.model.findAll({
       where: { userid },
       include: ["comments", "likes"],
