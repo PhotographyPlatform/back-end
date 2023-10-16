@@ -47,6 +47,8 @@ io.on("connection", (socket) => {
     console.log(room, " joined");
   });
 
+  socket.emit('userSocket' , socket.id)
+
   let count = 0;
   socket.on("zero", () => {
     count = 0;
@@ -61,9 +63,57 @@ io.on("connection", (socket) => {
     console.log(result);
 
     count++;
-    socket.to(room).emit("notificaton", count);
+    socket.broadcast.to(room).emit("notificaton", count)
+    // io.to(socket.id).emit("notificaton", count)
+    // socket.to(room).emit("notificaton", count);
   });
 });
+
+const homeConnection = io.of('/home')
+homeConnection.on('connection', socket => {
+  
+  socket.on("joinHomeRoom", userId => {
+    const room = `userId => ${userId}`;
+    console.log('home log in', room);
+    
+    socket.join(room);
+    socket.on('notificaton', reciver => {
+      
+      socket.broadcast.to(`userId => ${reciver}`).emit("msgNotificaton", 'msgNotificaton' )
+    })
+    
+  } );
+
+})
+
+// io.on("connection", (socket) => {
+//   console.log("connect to the main ", socket.id);
+
+//   socket.on("joinRoom", (message) => {
+//     const room = `room users ${message.room}`;
+//     socket.join(room);
+//     console.log(room, " joined");
+//   });
+
+//   let count = 0;
+//   socket.on("zero", () => {
+//     count = 0;
+//   });
+
+//   socket.on("message", async (data) => {
+//     const room = `room users ${data.room}`;
+//     io.to(room).emit("test", data);
+
+//     const result = await chatCollection.create(data);
+
+//     console.log(result);
+
+//     count++;
+//     io.to(socket.id).emit("notificaton", count)
+//     // socket.broadcast.to(room).emit("notificaton", count)
+//     // socket.to(room).emit("notificaton", count);
+//   });
+// });
 
 
 // Notification Socket
@@ -138,6 +188,10 @@ app.get("/", (req, res, next) => {
 app.get("/chat_test/:id/:id2", (req, res) => {
   const filePath = path.join(__dirname, "..", "socketAssets", "sender.html");
   res.sendFile(filePath);
+});
+
+app.get("/chat/:id/:id2", (req, res) => {
+  
 });
 
 app.get('/intentionalError', intentionalError);

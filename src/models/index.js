@@ -87,7 +87,7 @@ stories.belongsTo(user, { foreignKey: "userid", targetKey: "id" });
 stories.hasMany(like, { foreignKey: "storyID", sourceKey: "id" });
 like.belongsTo(stories, { foreignKey: "storyID", targetKey: "id" });
 // ------------------------------------------------------------------------------------
-// Relationship | User | CHat
+// Relationship | User | Chat
 
 // A user can send multiple messages (one-to-many relationship)
 user.hasMany(chat, { foreignKey: "senderId", as: "sentMessages" });
@@ -223,6 +223,7 @@ module.exports = {
   report,
   reportCollection,
   categories,
-  categoriesCollection
+  categoriesCollection,
+  chat
 
 };
