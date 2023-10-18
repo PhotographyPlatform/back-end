@@ -66,7 +66,53 @@ async function deleteComment(req, res) {
 }
 
 // story 
+
 router.get('/story', isAuth, story, (req, res) => res.status(200).json(req.data))
+
+router.get("/getallPostUser", isAuth, async (req, res) => {
+    try {
+        const id = req.users.userId;
+        const theRecord = await models.newUserCOll.readAll(
+            id,
+            models.post,
+            models.comment,
+            models.like
+        );
+        res.status(200).json(theRecord);
+    } catch (err) {
+        next(err);
+    }
+}
+);
+
+router.delete('/story/:id', isAuth, async (req, res) => {
+    try {
+        const id = req.params.id
+        const data = req.users
+        if (data) {
+            await models.stories.destroy({ where: { id } })
+            res.status(204).json(req.data)
+        }
+    } catch (e) {
+        res.status(500).json(e.message)
+    }
+
+})
+
+router.get('/story/:id', isAuth, async (req, res) => {
+    try {
+        const id = req.params.id
+        const record = await models.newUserCOll.getRelation(id, models.stories)
+        const getData = {
+            img: record.img, firstName: record.firstName, lastName: record.lastName, stories: record.stories
+        }
+        res.status(200).json(getData)
+    } catch (e) {
+        res.status(500).json(e.message)
+    }
+
+})
+
 
 //report
 router.post("/report", isAuth, handleReport);
