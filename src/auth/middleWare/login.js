@@ -12,6 +12,7 @@ module.exports = async (req, res, next) => {
           const decode = base.decode(header)
           const [username, password] = decode.split(":")
           const validUser = await user.findOne({ where: { username: username } })
+          console.log(validUser);
           if (validUser !== null) {
                const validPass = await bcrypt.compare(password, validUser.password)
                if (validPass) {

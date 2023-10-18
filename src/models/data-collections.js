@@ -100,7 +100,7 @@ class Collection {
       include: { model: model, as: "Followers" },
     });
     const user = records[0].Followers.map((ele) => {
-      return { id: ele.id, name: ele.username };
+      return { id: ele.id, name: ele.username, img: ele.img };
     });
     return { followers: user, Count: user.length };
   }
