@@ -123,16 +123,19 @@ class Collection {
         where: { id },
         include: { association: "Following" },
       });
-
+      
+      console.log(records, 'GGGGGGGGGGGGGGGGGGGGGG');
       const userPosts = await Promise.all(
         records.Following.map(async (ele) => {
           const userid = ele.id;
-          const userPost = await model.findOne({ where: { userid } });
-          return { id: ele.id, name: ele.username, profile: ele.img, userPost };
+          const userPost = await model.findAll({ where: { userid } });
+          return userPost;
         })
       );
 
-      return userPosts;
+      const onlyPosts = [].concat(...userPosts);
+
+      return onlyPosts;
     } catch (error) {
       console.error(error);
       throw error;

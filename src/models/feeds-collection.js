@@ -43,112 +43,110 @@ class Feeds extends Collection {
             )
             post=[...data.posts];
         }
+        // console.log(post, '!!!!!!!!!!!!!!!!!!!!!!!111111');
         return post;
     }
 
-    async getSuggestPost() {
-        // by user behaviour buld on  like on the post 
-        try {
-            const id = this.userId;
-            let allLike = await modules.like.findAll({ where: { userid: id } });
-            let interested = [];
-            for (const item of allLike) {
-                await modules.post.findByPk(item.dataValues.postid).then(data => {
-                    interested.push(data.dataValues.category);
-                })
-                interested = [].concat(...interested).filter(item => item !== null);
-            }
+    // async getSuggestPost() {
+    //     // by user behaviour buld on  like on the post 
+    //     try {
+    //         const id = this.userId;
+    //         let allLike = await modules.like.findAll({ where: { userid: id } });
+    //         let interested = [];
+    //         for (const item of allLike) {
+    //             await modules.post.findByPk(item.dataValues.postid).then(data => {
+    //                 interested.push(data.dataValues.category);
+    //             })
+    //             interested = [].concat(...interested).filter(item => item !== null);
+    //         }
 
-            let FrequentCategory = this.findMostFrequentItems(interested)
+    //         let FrequentCategory = this.findMostFrequentItems(interested)
 
-            let postInterested = await modules.post.findAll({
-                where: {
-                    category: {
-                        [Op.contains]: FrequentCategory
-                    }
-                }
-            })
+    //         let postInterested = await modules.post.findAll({
+    //             where: {
+    //                 category: {
+    //                     [Op.contains]: FrequentCategory
+    //                 }
+    //             }
+    //         })
 
-            let postIdLikedBefore = allLike.map(likeRecord => {
-                return likeRecord.postid;
-            })
-
-
-            let suggestion = [];
-
-            for (let item of postInterested) {
-                if (!postIdLikedBefore.includes(item.id)) {
-                    let data = await modules.newUserCOll.readAll(
-                        item.id,
-                        modules.post,
-                        modules.comment,
-                        modules.like
-                    )
-                    suggestion.push(data);
-                }
-            }
+    //         let postIdLikedBefore = allLike.map(likeRecord => {
+    //             return likeRecord.postid;
+    //         })
 
 
-            // let suggestion = postInterested.map(post => {
-            //     if (!postIdLikedBefore.includes(post.id)) {
-            //         console.log(post)
-            //         return (post);
-            //     }
-            // })
-            suggestion = suggestion.filter(item => item !== null && item !== undefined);
+    //         let suggestion = [];
 
-            suggestion = suggestion.filter(item => item.dataValues.userid !== this.userId);
+    //         for (let item of postInterested) {
+    //             if (!postIdLikedBefore.includes(item.id)) {
+    //                 let data = await modules.newUserCOll.readAll(
+    //                     item.id,
+    //                     modules.post,
+    //                     modules.comment,
+    //                     modules.like
+    //                 )
+    //                 suggestion.push(data);
+    //             }
+    //         }
 
 
+    //         // let suggestion = postInterested.map(post => {
+    //         //     if (!postIdLikedBefore.includes(post.id)) {
+    //         //         console.log(post)
+    //         //         return (post);
+    //         //     }
+    //         // })
+    //         suggestion = suggestion.filter(item => item !== null && item !== undefined);
 
+    //         suggestion = suggestion.filter(item => item.dataValues.userid !== this.userId);
 
-            return suggestion;
+    //         return suggestion;
 
-        } catch (err) {
-            console.log(err);
-        }
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
 
-    }
-    findMostFrequentItems(arr) {
-        const frequencyMap = {};
-        // Create a frequency map
-        arr.forEach(item => {
-            if (frequencyMap[item]) {
-                frequencyMap[item]++;
-            } else {
-                frequencyMap[item] = 1;
-            }
-        });
+    // }
+    // findMostFrequentItems(arr) {
+    //     const frequencyMap = {};
+    //     // Create a frequency map
+    //     arr.forEach(item => {
+    //         if (frequencyMap[item]) {
+    //             frequencyMap[item]++;
+    //         } else {
+    //             frequencyMap[item] = 1;
+    //         }
+    //     });
 
-        // Find the maximum frequency
-        let maxFrequency = 0;
-        for (const item in frequencyMap) {
-            if (frequencyMap[item] > maxFrequency) {
-                maxFrequency = frequencyMap[item];
-            }
-        }
-        // Find items with the maximum frequency
-        const mostFrequentItems = [];
-        for (const item in frequencyMap) {
-            if (frequencyMap[item] === maxFrequency) {
-                mostFrequentItems.push(item);
-            }
-        }
-        return mostFrequentItems;
-    }
+    //     // Find the maximum frequency
+    //     let maxFrequency = 0;
+    //     for (const item in frequencyMap) {
+    //         if (frequencyMap[item] > maxFrequency) {
+    //             maxFrequency = frequencyMap[item];
+    //         }
+    //     }
+    //     // Find items with the maximum frequency
+    //     const mostFrequentItems = [];
+    //     for (const item in frequencyMap) {
+    //         if (frequencyMap[item] === maxFrequency) {
+    //             mostFrequentItems.push(item);
+    //         }
+    //     }
+    //     return mostFrequentItems;
+    // }
 
-    async getChllange() {
-        // get all Chllange on the pltform 
-        return await modules.challenagesCollection.get();
-    }
+    // async getChllange() {
+    //     // get all Chllange on the pltform 
+    //     return await modules.challenagesCollection.get();
+    // }
 
     async getAllData() {
-        let mergedArray = [];
+        // let mergedArray = [];
         let getOtherUserPost = await this.getOtherUserPost();
-        let getSuggestPost = await this.getSuggestPost();
-        let getChllange = await this.getChllange();
-        mergedArray = [...getOtherUserPost, ...getSuggestPost, ...getChllange]
-        return mergedArray;
+        // let getSuggestPost = await this.getSuggestPost();
+        // let getChllange = await this.getChllange();
+        // mergedArray = [...getOtherUserPost, ...getSuggestPost, ...getChllange]
+        return getOtherUserPost;
     }
 
 }
