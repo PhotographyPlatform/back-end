@@ -53,6 +53,7 @@ adminRoute.get("/admin/:model/:id", isAuth, acl('admin'), middleware.handleGetAl
 adminRoute.post("/admin/:model", isAuth, acl('admin'), middleware.handleCreate);
 adminRoute.put("/admin/:model/:id", isAuth, acl('admin'), middleware.handleUpdate);
 adminRoute.patch("/admin/:model/:id", isAuth, acl('admin'), middleware.handlePatch);
+
 adminRoute.delete("/admin/:model/:id", isAuth, acl('admin'), middleware.handleDelete);
 
 async function handleGetOne(req, res, next) {

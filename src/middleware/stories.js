@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken')
 module.exports = async (req, res, next) => {
     const id = req.users.userId
     const record = await data.newUserCOll.getRelation(id, data.stories)
-    const getData = [{ id: record.id, username: record.username, Stories: record.stories }]
+    const getData = record.stories
     req.data = getData
     next()
 }

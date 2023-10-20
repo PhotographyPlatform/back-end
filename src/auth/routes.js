@@ -21,7 +21,6 @@ authRoutes.get("/login", async (req, res, next) => {
 });
 
 authRoutes.post("/login", login, async (req, res, next) => {
-  console.log();
   try {
     res.status(200).json(req.user);
   } catch (err) {

@@ -1,27 +1,29 @@
 
-const port = 3000;
+const port = 3002;
 const nameSpacehost = `http://localhost:${port}/notification`;
 let userId = null
 
 let inputText = document.querySelector('.id-input');
 
 inputText.onchange = () => {
+
     const socket = io.connect(nameSpacehost, { transports: ['websocket'] });
 
     userId = parseInt(inputText.value);
     console.log(inputText.value)
-    socket.emit("notification", userId);
+
+    socket.emit("notification", userId);              // ID 
     const notificationEvent = `notification-${userId}`;
 
     // socket.emit("notification", userid);
-    socket.on(notificationEvent, (payload) => {
+    socket.on(notificationEvent, (payload) => {       // reseve notification
         console.log(payload);
         socket.emit("update", payload);
     })
 
 
     socket.on(`newRecord-${notificationEvent}`, payload => {
-        console.log(payload);
+        console.log(payload);                        // reseve notification
     })
 
 

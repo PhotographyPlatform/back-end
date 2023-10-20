@@ -18,11 +18,6 @@ async function handleUserPost(req, res, next) {
 }
 
 
-
-
-
-
-
 class Feeds extends Collection {
     constructor(userId) {
         super();
@@ -41,7 +36,7 @@ class Feeds extends Collection {
                 modules.comment,
                 modules.like
             )
-            post=[...data.posts];
+            post = [...data.posts];
         }
         // console.log(post, '!!!!!!!!!!!!!!!!!!!!!!!111111');
         return post;
@@ -147,6 +142,7 @@ class Feeds extends Collection {
         // let getChllange = await this.getChllange();
         // mergedArray = [...getOtherUserPost, ...getSuggestPost, ...getChllange]
         return getOtherUserPost;
+
     }
 
 }
