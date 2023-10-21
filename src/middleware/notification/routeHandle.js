@@ -107,7 +107,7 @@ async function handlelikes(req, res, next) {
 
 async function createNotificationRecord(receiverId, senderId, message, actionId, actionParentId, actionType) {
     try {
-        // if (senderId === receiverId) return null;
+        if (senderId === receiverId) return null;
 
         await modules.notificationCollection.create({
             message: message,
